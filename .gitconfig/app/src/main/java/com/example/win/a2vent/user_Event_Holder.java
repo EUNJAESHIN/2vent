@@ -1,6 +1,7 @@
 package com.example.win.a2vent;
 
 import android.graphics.Paint;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,11 +14,13 @@ import android.widget.TextView;
 
 public class user_Event_Holder extends RecyclerView.ViewHolder {
 
+    public View view;
     public ImageView imageView;
     public TextView textView1,textView2,textView3,textView4,textView5;
 
     public user_Event_Holder(View itemView) {
         super(itemView);
+        view = itemView.findViewById(R.id.cardview);
         imageView = (ImageView) itemView.findViewById(R.id.cardview_image);
         textView1 = (TextView) itemView.findViewById(R.id.cardview_text1);
         textView2 = (TextView) itemView.findViewById(R.id.cardview_text2);

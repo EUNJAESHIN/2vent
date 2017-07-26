@@ -40,6 +40,7 @@ import java.util.ArrayList;
 public class user_Event_Main extends AppCompatActivity {
     private String TAG = "getEventDB";
     private final String TAG_JSON = "Event";
+    private final String TAG_NUM = "event_number";
     private final String TAG_NAME = "event_name";
     private final String TAG_TYPE = "event_type";
     private final String TAG_URI = "event_URI";
@@ -47,8 +48,6 @@ public class user_Event_Main extends AppCompatActivity {
     private final String TAG_DISPRICE = "event_dis_price";
     private final String TAG_STARTDAY = "event_startday";
     private final String TAG_ENDDAY = "event_endday";
-
-    static RecyclerView mRecyclerView; // 어댑터에서 쓸 인스턴스
 
     UserEventMainBinding binding_UserMain;
     Context mContext;
@@ -65,14 +64,13 @@ public class user_Event_Main extends AppCompatActivity {
         set_TabHost(this);
 
         mContext = getApplicationContext();
-        mRecyclerView = binding_UserMain.rviewContent1;
 
         getEventDB = new getEventDB();
         getEventDB.execute(GlobalData.getURL() + "2ventGetEventAll.php"); // AsyncTask 실행
     }
 
     public void onClick_Accountinfo(View v) {
-        Intent GoUserinfo = new Intent(this ,user_Info.class);
+        Intent GoUserinfo = new Intent(this, user_Info.class);
         startActivity(GoUserinfo);
     }
 
@@ -214,6 +212,7 @@ public class user_Event_Main extends AppCompatActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject item = jsonArray.getJSONObject(i);
 
+                int event_number = item.getInt(TAG_NUM);
                 String event_name = item.getString(TAG_NAME);
                 event_type = item.getInt(TAG_TYPE);
                 String event_URI = item.getString(TAG_URI);
@@ -223,21 +222,21 @@ public class user_Event_Main extends AppCompatActivity {
                 String event_endday = item.getString(TAG_ENDDAY);
 
                 // 전체 항목에는 모두 저장
-                category_All.add(new user_Event_Item(event_name, event_URI,
+                category_All.add(new user_Event_Item(event_number, event_name, event_URI,
                         event_price, event_dis_price, event_startday, event_endday));
 
                 // 카테고리 분류해서 각각 저장
                 if (event_type == 0) {
-                    category_Culture.add(new user_Event_Item(event_name, event_URI,
+                    category_Culture.add(new user_Event_Item(event_number, event_name, event_URI,
                             event_price, event_dis_price, event_startday, event_endday));
                 } else if (event_type == 1) {
-                    category_Meal.add(new user_Event_Item(event_name, event_URI,
+                    category_Meal.add(new user_Event_Item(event_number, event_name, event_URI,
                             event_price, event_dis_price, event_startday, event_endday));
                 } else if (event_type == 2) {
-                    category_Beauty.add(new user_Event_Item(event_name, event_URI,
+                    category_Beauty.add(new user_Event_Item(event_number, event_name, event_URI,
                             event_price, event_dis_price, event_startday, event_endday));
                 } else if (event_type == 3) {
-                    category_Fashion.add(new user_Event_Item(event_name, event_URI,
+                    category_Fashion.add(new user_Event_Item(event_number, event_name, event_URI,
                             event_price, event_dis_price, event_startday, event_endday));
                 }
             }

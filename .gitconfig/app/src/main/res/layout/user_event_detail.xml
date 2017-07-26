@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_detail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="25dp">
+
+            <TextView
+                android:id="@+id/tv_detail1"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_detail2"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_weight="1"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_detail3"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_weight="1"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_detail4"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_weight="1"
+                android:textSize="16sp" />
+
+            <!-- event_payment -->
+            <TextView
+                android:id="@+id/tv_detail5"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_detail6"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_detail7"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_detail8"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_detail9"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/tv_detail10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:textSize="28sp" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="3"
+                android:background="#ffea00"
+                android:onClick="onClick_withdrawal"
+                android:text="응모"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

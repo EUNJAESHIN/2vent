@@ -52,7 +52,8 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".user_Info"></activity>
+        <activity android:name=".user_Info" />
+        <activity android:name=".user_Event_Detail"></activity>
     </application>
 
 </manifest>

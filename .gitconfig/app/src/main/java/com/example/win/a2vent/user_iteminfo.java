@@ -34,36 +34,27 @@ import java.net.URL;
  */
 
 public class user_iteminfo extends AppCompatActivity {
-    private TextView tv_name;
-    private TextView tv_discount;
-    private TextView tv_money;
-    private TextView tv_start;
-    private TextView tv_end;
-    private TextView tv_people;
+    private TextView tv_name,tv_discount,tv_money,tv_start,tv_end,tv_people;
     private ImageView iv_image;
-    private Button bt_do;
-    private Button bt_back;
-
+    private Button bt_do,bt_back;
     private int event_type;
-
-    private Bitmap mBitmap;
-
     private int event_number = 0;
     private String com_number;
+
+    private Bitmap mBitmap;
 
     putEntry putEntry;
     getEventInfo getEventInfo;
     infoImageDown infoImageDown;
 
-
     //테스트 용 변수
+    //TODO 유저DB의 값 받아오기 필요
     private String testid = "2";
     private String testname = "2";
     private String testaddr = "동대구로";
     private String testbirthday = "1993-02-14";
     private String testsex = "1";
     private String testphone = "01035208543";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,13 +85,7 @@ public class user_iteminfo extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
 
-
-    //버튼 리스너
     class ButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -112,7 +97,6 @@ public class user_iteminfo extends AppCompatActivity {
                     if (event_type == 0) {
 
                         putEntry = new putEntry();
-                        Log.i("이벤트값", Integer.toString(event_number));
                         putEntry.execute(Integer.toString(event_number), testid, testname, testaddr,
                                 testbirthday, testsex, testphone, Integer.toString(event_type), com_number);
                     } else {
@@ -123,10 +107,8 @@ public class user_iteminfo extends AppCompatActivity {
                     break;
             }
         }
-    }
+    } //버튼 리스너
 
-
-    //이벤트 상세정보 받아오기
     private class getEventInfo extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
@@ -191,7 +173,7 @@ public class user_iteminfo extends AppCompatActivity {
         try {
             jsonObject = new JSONObject(s);
 
-            JSONArray jsonArray = jsonObject.getJSONArray("eventInfo");
+            JSONArray jsonArray = jsonObject.getJSONArray("EventInfo");
 
             for (int i = 0; i < jsonArray.length(); i++) {
 
@@ -232,24 +214,19 @@ public class user_iteminfo extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
+    } //이벤트 상세정보 받아오기
 
-    //이미지 다운로드
     private class infoImageDown extends AsyncTask<String, String, Bitmap> {
         Bitmap mBitmap;
-
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
 
-
         protected Bitmap doInBackground(String... args) {
             InputStream inputStream = null;
             try {
-
-
                 URL url = new URL(GlobalData.getURL() + "php1.php");
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
@@ -267,10 +244,8 @@ public class user_iteminfo extends AppCompatActivity {
 
                 httpURLConnection.connect();
 
-
                 mBitmap = BitmapFactory
                         .decodeStream(httpURLConnection.getInputStream());
-
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -281,25 +256,18 @@ public class user_iteminfo extends AppCompatActivity {
         }
 
         protected void onPostExecute(Bitmap image) {
-
             if (image != null) {
-
                 iv_image.setImageBitmap(image);
                 iv_image.setAdjustViewBounds(true);
-
             }
-
-
         }
-    }
 
-    //응모형일때 이벤트 참여시 사용자 데이터 보냄
+    } //이미지 다운로드
+
     private class putEntry extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-
         }
 
         protected String doInBackground(String... args) {
@@ -357,7 +325,7 @@ public class user_iteminfo extends AppCompatActivity {
             }
         }
 
-    }
+    } //응모형일때 이벤트 참여시 사용자 데이터 보냄
 
     @Override
     protected void onDestroy() {

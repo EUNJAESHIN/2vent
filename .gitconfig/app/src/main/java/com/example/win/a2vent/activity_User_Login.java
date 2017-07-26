@@ -166,6 +166,7 @@ public class activity_User_Login extends AppCompatActivity {
 
     } // 회원 DB값 비교 AsyncTask
 
+
     @Override
     protected void onDestroy() {
         if (loginDB != null) {
