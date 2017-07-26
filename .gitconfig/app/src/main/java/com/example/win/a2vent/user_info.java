@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.win.a2vent.databinding.UserInfoBinding;
 
@@ -33,6 +35,11 @@ public class user_Info extends AppCompatActivity {
 
         getUserInfo = new getUserInfo();
         getUserInfo.execute(GlobalData.getURL() + "2ventGetUserInfo.php");
+    }
+
+    public void onClick_withdrawal(View v) {
+        Toast.makeText(this, "누르면 회원 탈퇴", Toast.LENGTH_SHORT).show();
+        //TODO : 회원 탈퇴
     }
 
     private class getUserInfo extends AsyncTask<String, Void, String> {
@@ -104,7 +111,7 @@ public class user_Info extends AppCompatActivity {
             }
         }
 
-    } // EventDB 받는 AsyncTask
+    } // UserDB 받는 AsyncTask
 
     private void setUserInfo() {
 
@@ -145,7 +152,7 @@ public class user_Info extends AppCompatActivity {
         } catch (JSONException e) {
             Log.d(TAG, "addItemInCategory Error : ", e);
         }
-    } // JSON 데이터를 카테고리에 저장
+    } // JSON 데이터를 텍스트뷰에 표시
 
     @Override
     protected void onDestroy() {
