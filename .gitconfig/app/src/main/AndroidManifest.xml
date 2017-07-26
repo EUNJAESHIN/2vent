@@ -18,7 +18,6 @@
     <!-- 네트 워크 상태 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -26,7 +25,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".owner_Event_Main"></activity>
+        <activity android:name=".owner_Event_Main" />
         <activity android:name=".activity_User_Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,13 +35,12 @@
         </activity>
         <activity android:name=".activity_User_Join" />
         <activity android:name=".user_Event_Main" />
-        <activity android:name=".owner_AddStore"></activity>
-        <activity android:name=".owner_AddStore_webView"></activity>
-        <activity android:name=".owner_Event_Form"></activity>
-        <activity android:name=".user_map"></activity>
-        <activity android:name=".user_payment"></activity>
-        <activity android:name=".user_iteminfo"></activity>
-
+        <activity android:name=".owner_AddStore" />
+        <activity android:name=".owner_AddStore_webView" />
+        <activity android:name=".owner_Event_Form" />
+        <activity android:name=".user_map" />
+        <activity android:name=".user_payment" />
+        <activity android:name=".user_iteminfo" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -53,6 +51,8 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
+        <activity android:name=".user_Info"></activity>
     </application>
 
 </manifest>

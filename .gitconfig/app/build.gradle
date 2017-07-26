@@ -31,6 +31,9 @@ dependencies {
 
     //    compile 'com.naver.maps.open:naver-map-api:2.1.2@aar'
 
+    compile files('libs/picasso-2.5.2.jar')
+    compile files('libs/libDaumMapAndroid.jar')
+
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:25.3.1'
@@ -39,9 +42,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.gordonwong:material-sheet-fab:1.2.1'
     compile 'gun0912.ted:tedpermission:1.0.3'
-    compile files('libs/picasso-2.5.2.jar')
-    compile files('libs/libDaumMapAndroid.jar')
-    compile 'com.google.maps.android:android-maps-utils:0.4+'
+    compile 'com.google.maps.android:android-maps-utils:0.4.+'
     testCompile 'junit:junit:4.12'
-
 }

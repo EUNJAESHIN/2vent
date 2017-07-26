@@ -38,15 +38,15 @@ import java.util.ArrayList;
  */
 
 public class user_Event_Main extends AppCompatActivity {
-    private static String TAG = "JSON으로 데이터 가져오기";
-    private static final String TAG_JSON = "Event";
-    private static final String TAG_NAME = "event_name";
-    private static final String TAG_TYPE = "event_type";
-    private static final String TAG_URI = "event_URI";
-    private static final String TAG_PRICE = "event_price";
-    private static final String TAG_DISPRICE = "event_dis_price";
-    private static final String TAG_STARTDAY = "event_startday";
-    private static final String TAG_ENDDAY = "event_endday";
+    private String TAG = "getEventDB";
+    private final String TAG_JSON = "Event";
+    private final String TAG_NAME = "event_name";
+    private final String TAG_TYPE = "event_type";
+    private final String TAG_URI = "event_URI";
+    private final String TAG_PRICE = "event_price";
+    private final String TAG_DISPRICE = "event_dis_price";
+    private final String TAG_STARTDAY = "event_startday";
+    private final String TAG_ENDDAY = "event_endday";
 
     static RecyclerView mRecyclerView; // 어댑터에서 쓸 인스턴스
 
@@ -72,7 +72,8 @@ public class user_Event_Main extends AppCompatActivity {
     }
 
     public void onClick_Accountinfo(View v) {
-        Toast.makeText(user_Event_Main.this, "이거 누르면 계정정보로", Toast.LENGTH_SHORT).show();
+        Intent GoUserinfo = new Intent(this ,user_Info.class);
+        startActivity(GoUserinfo);
     }
 
     public void onClick_goMap(View v) {
