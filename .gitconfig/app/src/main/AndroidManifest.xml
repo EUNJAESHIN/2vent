@@ -41,6 +41,8 @@
         <activity android:name=".user_map" />
         <activity android:name=".user_payment" />
         <activity android:name=".user_iteminfo" />
+        <activity android:name=".user_Info" />
+        <activity android:name=".user_Event_Detail" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -52,8 +54,6 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".user_Info" />
-        <activity android:name=".user_Event_Detail"></activity>
     </application>
 
 </manifest>

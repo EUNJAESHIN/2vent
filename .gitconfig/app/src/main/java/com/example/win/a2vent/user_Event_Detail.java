@@ -2,9 +2,12 @@ package com.example.win.a2vent;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.win.a2vent.databinding.UserEventDetailBinding;
 import com.squareup.picasso.Picasso;
@@ -39,6 +42,10 @@ public class user_Event_Detail extends AppCompatActivity {
 
         getEventInfo = new getEventInfo();
         getEventInfo.execute(Integer.toString(event_number));
+    }
+
+    public void onClick_participation(View v) {
+        Toast.makeText(this, "응모 성공", Toast.LENGTH_SHORT).show();
     }
 
     private class getEventInfo extends AsyncTask<String, String, String> {
@@ -120,11 +127,15 @@ public class user_Event_Detail extends AppCompatActivity {
 
                 Picasso.with(this).load(GlobalData.getURL() + event_URI)
                         .placeholder(R.drawable.event_default).into(binding_UserDetail.ivDetail);
-                binding_UserDetail.tvDetail1.setText("이벤트명 : " + event_name);
-                binding_UserDetail.tvDetail2.
-                        append("정상가 : " + event_price + "할인가 : " + event_dis_price);
-                binding_UserDetail.tvDetail3.setText(event_startday + " " + event_starttime);
-                binding_UserDetail.tvDetail4.setText(event_endday + " " + event_endtime);
+                binding_UserDetail.tvDetail1.append(event_name);
+                binding_UserDetail.tvDetail2.append(event_price);
+                binding_UserDetail.tvDetail2.setPaintFlags
+                        (binding_UserDetail.tvDetail2.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                binding_UserDetail.tvDetail3.append(event_dis_price);
+                binding_UserDetail.tvDetail4.append(event_startday + " " + event_starttime +
+                        " ~\n                   " + event_endday + " " + event_endtime);
+
+                binding_UserDetail.tvDetail10.append(event_people);
 
 //                if (event_type == 0) {
 //                    bt_do.setText("응모하기");

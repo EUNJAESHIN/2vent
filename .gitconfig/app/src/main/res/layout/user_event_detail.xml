@@ -33,27 +33,38 @@
                 android:id="@+id/tv_detail1"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:textSize="16sp" />
+                android:text="이벤트명 : "
+                android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/tv_detail2"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:layout_weight="1"
-                android:textSize="16sp" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_detail3"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_weight="1"
-                android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/tv_detail2"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_weight="1"
+                    android:text="정상가 : "
+                    android:textColor="#9c9a9a"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_detail3"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_weight="1"
+                    android:text="할인가 : "
+                    android:textColor="#fd3c3c"
+                    android:textSize="20sp" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_detail4"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:layout_weight="1"
+                android:text="할인 기간 : "
                 android:textSize="16sp" />
 
             <!-- event_payment -->
@@ -102,14 +113,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="7"
-                android:textSize="28sp" />
+                android:text="남은 자리 : "
+                android:textSize="24sp" />
 
             <Button
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_weight="3"
                 android:background="#ffea00"
-                android:onClick="onClick_withdrawal"
+                android:onClick="onClick_participation"
                 android:text="응모"
                 android:textSize="24sp" />
 
