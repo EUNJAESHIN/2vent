@@ -17,7 +17,7 @@
                 android:id="@+id/iv_detail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitCenter" />
+                android:scaleType="fitXY" />
 
         </LinearLayout>
 
@@ -63,40 +63,39 @@
             <TextView
                 android:id="@+id/tv_detail4"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="37dp"
                 android:text="할인 기간 : "
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
-            <!-- event_payment -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:orientation="vertical"></LinearLayout>
+
+            <!-- event_target -->
             <TextView
                 android:id="@+id/tv_detail5"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:textSize="16sp" />
+                android:layout_height="35dp"
+                android:text="연령 제한 "
+                android:textSize="18sp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_detail6"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:textSize="16sp" />
+                android:layout_height="35dp"
+                android:text="성별 제한 : "
+                android:textSize="18sp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_detail7"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tv_detail8"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tv_detail9"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:textSize="16sp" />
+                android:layout_height="35dp"
+                android:text="지역 : "
+                android:textSize="18sp"
+                android:visibility="gone" />
 
         </LinearLayout>
 
@@ -114,16 +113,17 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="7"
                 android:text="남은 자리 : "
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
             <Button
+                android:id="@+id/bt_detail"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_weight="3"
                 android:background="#ffea00"
                 android:onClick="onClick_participation"
-                android:text="응모"
-                android:textSize="24sp" />
+                android:text=""
+                android:textSize="20sp" />
 
         </LinearLayout>
 

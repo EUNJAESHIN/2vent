@@ -34,49 +34,49 @@
                 android:id="@+id/tv_info1"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_info2"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_info3"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_info4"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_info5"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_info6"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_info7"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_info8"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
         </LinearLayout>
 
@@ -94,7 +94,7 @@
                 android:onClick="onClick_withdrawal"
                 android:text="탈퇴"
                 android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
         </LinearLayout>
 
