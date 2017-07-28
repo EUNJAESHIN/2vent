@@ -139,13 +139,15 @@ public class user_Event_Main extends AppCompatActivity {
             try {
                 URL url = new URL(serverURL);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                // URL 요청 후 응답받기
 
-                httpURLConnection.setReadTimeout(5000);
-                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setReadTimeout(5000); // 읽기 타임아웃
+                httpURLConnection.setConnectTimeout(5000); // 연결 타임아웃
                 httpURLConnection.connect();
 
                 int responseStatusCode = httpURLConnection.getResponseCode();
                 Log.d(TAG, "response code - " + responseStatusCode);
+                // * HTTP 상태코드 200 (성공), 403 (금지됨), 404 (찾을 수 없음) 등
 
                 InputStream inputStream;
                 if (responseStatusCode == HttpURLConnection.HTTP_OK) {
@@ -155,14 +157,25 @@ public class user_Event_Main extends AppCompatActivity {
                 }
 
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                /*
+                InputStreamReader / OutputStreamWriter 는 바이트 스트림에서 문자 스트림으로,
+                또는 문자 스트림에서 바이트 스트림으로의 변환을 제공하는 입출력 스트림이다.
+                바이트를 읽어서 지정된 문자 인코딩에 따라 문자로 변환하는데 사용한다.
+                 */
+
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                /*
+                BufferedReader / BufferedWriter는 문자 입력 스트림으로부터 문자를 읽어 들이거나
+                문자 출력 스트림으로 문자를 내보낼 때 버퍼링을 함으로써 문자, 문자 배열,
+                문자열 라인 등을 보다 효율적으로 처리할 수 있도록 해준다.
+                 */
 
                 StringBuilder sb = new StringBuilder();
                 String line;
 
                 while ((line = bufferedReader.readLine()) != null) {
                     sb.append(line);
-                }
+                };
                 bufferedReader.close();
 
                 return sb.toString().trim();

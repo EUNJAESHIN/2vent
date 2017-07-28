@@ -125,15 +125,15 @@ public class activity_User_Join extends AppCompatActivity {
 
                 httpURLConnection.setReadTimeout(5000);
                 httpURLConnection.setConnectTimeout(5000);
-                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setRequestMethod("POST"); // 응답을 POST방식으로 설정 (Default는 GET)
                 //httpURLConnection.setRequestProperty("content-type", "application/json");
-                httpURLConnection.setDoInput(true);
-                httpURLConnection.connect();
+                httpURLConnection.setDoInput(true); // InputStream에서 응답 헤더와 메시지를 읽도록 설정
+                httpURLConnection.connect(); // 연결
 
                 OutputStream outputStream = httpURLConnection.getOutputStream();
-                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.write(postParameters.getBytes("UTF-8")); // POST 파라미터를 바이트단위로 UTF8 인코딩하여 요청
                 outputStream.flush();
-                outputStream.close();
+                outputStream.close(); // 스트림 버퍼 비우고 닫음
 
                 int responseStatusCode = httpURLConnection.getResponseCode();
                 Log.d("DB", "POST response code - " + responseStatusCode);
@@ -153,6 +153,7 @@ public class activity_User_Join extends AppCompatActivity {
 
                 while ((line = bufferedReader.readLine()) != null) {
                     sb.append(line);
+                    // readline()으로 한 줄 씩 읽고 line에 저장해 StringBuilder에 담음
                 }
                 bufferedReader.close();
 
