@@ -52,7 +52,7 @@ public class user_Event_Detail extends AppCompatActivity {
         } else if (event_type == 1) {
             Toast.makeText(this, "결제 성공", Toast.LENGTH_SHORT).show();
         }
-        //TODO : 응모나 결제시 entry에 DB값 입력
+        //TODO : 응모나 결제시 entry에 DB값 입력하는데 유저정보 받아와야 함
     }
 
     private class getEventInfo extends AsyncTask<String, String, String> {

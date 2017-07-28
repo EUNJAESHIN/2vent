@@ -10,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -65,6 +66,14 @@ public class user_Event_Adapter extends RecyclerView.Adapter<user_Event_Holder> 
                 intent_goDetail.putExtra("event_number", mItems.get(position).event_number);
                 // Intent에 event_number값을 담rl
                 context.startActivity(intent_goDetail);
+            }
+        });
+
+        holder.view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(context, "롱 클릭", Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
 
