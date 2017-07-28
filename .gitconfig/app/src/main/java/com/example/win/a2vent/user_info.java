@@ -1,6 +1,5 @@
 package com.example.win.a2vent;
 
-import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -16,15 +15,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 
 public class user_Info extends AppCompatActivity {
     private String TAG = "getUserInfo";
-    String mJsonString;
     UserInfoBinding binding_UserInfo;
     getUserInfo getUserInfo;
 
@@ -34,7 +35,7 @@ public class user_Info extends AppCompatActivity {
         binding_UserInfo = DataBindingUtil.setContentView(this, R.layout.user_info);
 
         getUserInfo = new getUserInfo();
-        getUserInfo.execute(GlobalData.getURL() + "2ventGetUserInfo.php");
+        getUserInfo.execute(GlobalData.getLogin_ID());
     }
 
     public void onClick_withdrawal(View v) {
@@ -43,80 +44,71 @@ public class user_Info extends AppCompatActivity {
     }
 
     private class getUserInfo extends AsyncTask<String, Void, String> {
-        ProgressDialog progressDialog;
-        String errorString = null;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            progressDialog = ProgressDialog.show(user_Info.this,
-                    "Please Wait", null, true, true);
         }
 
         @Override
         protected String doInBackground(String... params) {
-            String serverURL = params[0];
-
+            StringBuilder sb = null;
             try {
-                URL url = new URL(serverURL);
+                URL url = new URL(GlobalData.getURL() + "2ventGetUserInfo.php");
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
 
-                httpURLConnection.setReadTimeout(5000);
-                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+
+                OutputStream os = httpURLConnection.getOutputStream();
+
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF8"));
+                writer.write("id=" + params[0]);
+                writer.flush();
+                writer.close();
+                os.close();
+
                 httpURLConnection.connect();
 
-                int responseStatusCode = httpURLConnection.getResponseCode();
-                Log.d(TAG, "response code - " + responseStatusCode);
+                BufferedReader br = new BufferedReader
+                        (new InputStreamReader(httpURLConnection.getInputStream(), "UTF8"));
 
-                InputStream inputStream;
-                if (responseStatusCode == HttpURLConnection.HTTP_OK) {
-                    inputStream = httpURLConnection.getInputStream();
-                } else {
-                    inputStream = httpURLConnection.getErrorStream();
-                }
-
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-                StringBuilder sb = new StringBuilder();
-                String line;
-
-                while ((line = bufferedReader.readLine()) != null) {
+                sb = new StringBuilder();
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    if (sb.length() > 0) {
+                        sb.append("\n");
+                    }
                     sb.append(line);
                 }
-                bufferedReader.close();
 
-                return sb.toString().trim();
-            } catch (Exception e) {
-                Log.d(TAG, "getEventDB Error : ", e);
-                errorString = e.toString();
-
-                return null;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            return sb.toString();
         }
 
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-
-            progressDialog.dismiss();
             Log.d(TAG, "response  - " + result);
 
             if (result == null) {
 
             } else {
-                mJsonString = result;
-                setUserInfo();
+                setUserInfo(result);
             }
         }
 
     } // UserDB 받는 AsyncTask
 
-    private void setUserInfo() {
+    private void setUserInfo(String result) {
 
         try {
-            JSONObject jsonObject = new JSONObject(mJsonString);
+            JSONObject jsonObject = new JSONObject(result);
             JSONArray jsonArray = jsonObject.getJSONArray("User");
 
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -131,28 +123,27 @@ public class user_Info extends AppCompatActivity {
                 String phone = item.getString("phone");
                 String account_number = item.getString("account_number");
 
-                if (id.equals(GlobalData.getLogin_ID())) {
-                    binding_UserInfo.tvInfo1.append("아이디  : " + id);
-                    binding_UserInfo.tvInfo2.append("비밀번호 : " + pw);
-                    binding_UserInfo.tvInfo3.append("성명 : " + name);
-                    binding_UserInfo.tvInfo4.append("주소 : " + addr);
-                    binding_UserInfo.tvInfo5.append("생년월일 : " + birthday);
-                    if(sex.equals("0")) {
-                        binding_UserInfo.tvInfo6.append("성별 : 여성");
-                    } else if (sex.equals("1")) {
-                        binding_UserInfo.tvInfo6.append("성별 : 남성");
-                    } else {
-                        binding_UserInfo.tvInfo6.append("성별 : ");
-                    }
-                    binding_UserInfo.tvInfo7.append("전화번호 : " + phone);
-                    binding_UserInfo.tvInfo8.append("계좌번호 : " + account_number);
+                binding_UserInfo.tvInfo1.append("아이디  : " + id);
+                binding_UserInfo.tvInfo2.append("비밀번호 : " + pw);
+                binding_UserInfo.tvInfo3.append("성명 : " + name);
+                binding_UserInfo.tvInfo4.append("주소 : " + addr);
+                binding_UserInfo.tvInfo5.append("생년월일 : " + birthday);
+                if (sex.equals("0")) {
+                    binding_UserInfo.tvInfo6.append("성별 : 여성");
+                } else if (sex.equals("1")) {
+                    binding_UserInfo.tvInfo6.append("성별 : 남성");
+                } else {
+                    binding_UserInfo.tvInfo6.append("성별 : ");
                 }
+                binding_UserInfo.tvInfo7.append("전화번호 : " + phone);
+                binding_UserInfo.tvInfo8.append("계좌번호 : " + account_number);
+
             }
 
         } catch (JSONException e) {
-            Log.d(TAG, "addItemInCategory Error : ", e);
+            Log.d(TAG, "setUserInfo Error : ", e);
         }
-    } // JSON 데이터를 텍스트뷰에 표시
+    } // 유저정보 JSON 데이터를 텍스트뷰에 표시
 
     @Override
     protected void onDestroy() {

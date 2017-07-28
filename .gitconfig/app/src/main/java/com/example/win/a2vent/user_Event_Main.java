@@ -1,7 +1,6 @@
 package com.example.win.a2vent;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -12,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.TabHost;
-import android.widget.Toast;
 
 import com.example.win.a2vent.databinding.UserEventMainBinding;
 
@@ -51,7 +49,6 @@ public class user_Event_Main extends AppCompatActivity {
 
     UserEventMainBinding binding_UserMain;
     Context mContext;
-    String mJsonString;
     RecyclerView.Adapter rAdapter1, rAdapter2, rAdapter3, rAdapter4, rAdapter5;
     ArrayList category_All, category_Culture, category_Meal, category_Beauty, category_Fashion;
     getEventDB getEventDB;
@@ -128,15 +125,11 @@ public class user_Event_Main extends AppCompatActivity {
     } // TabWidget 설정
 
     private class getEventDB extends AsyncTask<String, Void, String> {
-        ProgressDialog progressDialog;
         String errorString = null;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            progressDialog = ProgressDialog.show(user_Event_Main.this,
-                    "Please Wait", null, true, true);
         }
 
         @Override
@@ -184,21 +177,18 @@ public class user_Event_Main extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-
-            progressDialog.dismiss();
             Log.d(TAG, "response  - " + result);
 
             if (result == null) {
 
             } else {
-                mJsonString = result;
-                addItemInCategory();
+                addItemInCategory(result);
             }
         }
 
     } // EventDB 받는 AsyncTask
 
-    private void addItemInCategory() {
+    private void addItemInCategory(String result) {
         category_All = new ArrayList<>();
         category_Culture = new ArrayList<>();
         category_Meal = new ArrayList<>();
@@ -206,7 +196,7 @@ public class user_Event_Main extends AppCompatActivity {
         category_Fashion = new ArrayList<>();
 
         try {
-            JSONObject jsonObject = new JSONObject(mJsonString);
+            JSONObject jsonObject = new JSONObject(result);
             JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
 
             for (int i = 0; i < jsonArray.length(); i++) {

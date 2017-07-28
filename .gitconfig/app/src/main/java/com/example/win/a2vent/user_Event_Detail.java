@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -27,7 +28,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class user_Event_Detail extends AppCompatActivity {
-
+    private String TAG = "getEventDetail";
     UserEventDetailBinding binding_UserDetail;
     getEventInfo getEventInfo;
     int event_number, event_type;
@@ -39,6 +40,7 @@ public class user_Event_Detail extends AppCompatActivity {
 
         Intent intent_getEventinfo = getIntent();
         event_number = intent_getEventinfo.getExtras().getInt("event_number");
+        // Intent에 담긴 event_number값 받기
 
         getEventInfo = new getEventInfo();
         getEventInfo.execute(Integer.toString(event_number));
@@ -50,6 +52,7 @@ public class user_Event_Detail extends AppCompatActivity {
         } else if (event_type == 1) {
             Toast.makeText(this, "결제 성공", Toast.LENGTH_SHORT).show();
         }
+        //TODO : 응모나 결제시 entry에 DB값 입력
     }
 
     private class getEventInfo extends AsyncTask<String, String, String> {
@@ -58,7 +61,7 @@ public class user_Event_Detail extends AppCompatActivity {
             super.onPreExecute();
         }
 
-        protected String doInBackground(String... args) {
+        protected String doInBackground(String... params) {
             StringBuilder sb = null;
             try {
                 URL url = new URL(GlobalData.getURL() + "2ventGetEventOnItemInfo.php");
@@ -71,14 +74,15 @@ public class user_Event_Detail extends AppCompatActivity {
                 OutputStream os = httpURLConnection.getOutputStream();
 
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF8"));
-                writer.write("event_number=" + args[0]);
+                writer.write("event_number=" + params[0]);
                 writer.flush();
                 writer.close();
                 os.close();
 
                 httpURLConnection.connect();
 
-                BufferedReader br = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream(), "UTF8")); //캐릭터셋 설정
+                BufferedReader br = new BufferedReader
+                        (new InputStreamReader(httpURLConnection.getInputStream(), "UTF8"));
 
                 sb = new StringBuilder();
                 String line = null;
@@ -99,7 +103,7 @@ public class user_Event_Detail extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-
+            Log.d(TAG, "response - " + result);
             if (result == null) {
 
             } else {
@@ -107,12 +111,12 @@ public class user_Event_Detail extends AppCompatActivity {
             }
         }
 
-    }
+    } // EventDB 받는 AsyncTask
 
-    public void setEventDetail(String s) {
-        JSONObject jsonObject = null;
+    public void setEventDetail(String result) {
+
         try {
-            jsonObject = new JSONObject(s);
+            JSONObject jsonObject = new JSONObject(result);
             JSONArray jsonArray = jsonObject.getJSONArray("EventInfo");
 
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -173,7 +177,23 @@ public class user_Event_Detail extends AppCompatActivity {
             }
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.d(TAG, "setEventDetail Error : ", e);
         }
+    } // 이벤트 상세정보 JSON 데이터를 텍스트뷰에 표시
+
+    @Override
+    protected void onDestroy() {
+        if (getEventInfo != null) {
+            getEventInfo.cancel(true);
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        if (getEventInfo != null) {
+            getEventInfo.cancel(true);
+        }
+        super.onPause();
     }
 }

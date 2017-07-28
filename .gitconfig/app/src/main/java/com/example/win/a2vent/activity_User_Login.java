@@ -19,7 +19,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-
 /**
  * Created by EUNJAESHIN on 2017-07-10.
  * 로그인 부분 (첫 액티비티)

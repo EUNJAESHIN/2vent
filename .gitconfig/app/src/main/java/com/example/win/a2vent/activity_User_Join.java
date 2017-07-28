@@ -21,7 +21,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-
 /**
  * Created by EUNJAESHIN on 2017-07-10.
  * 회원가입 부분
@@ -73,7 +72,6 @@ public class activity_User_Join extends AppCompatActivity {
                 });
 
     }
-
 
     public void onClick_joinOK(View view) {
         try {
