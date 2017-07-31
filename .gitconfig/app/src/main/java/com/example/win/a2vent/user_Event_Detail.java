@@ -31,7 +31,9 @@ public class user_Event_Detail extends AppCompatActivity {
     private String TAG = "getEventDetail";
     UserEventDetailBinding binding_UserDetail;
     getEventInfo getEventInfo;
+    putEntry putEntry;
     int event_number, event_type;
+    String com_number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +45,16 @@ public class user_Event_Detail extends AppCompatActivity {
         // Intent에 담긴 event_number값 받기
 
         getEventInfo = new getEventInfo();
+        putEntry = new putEntry();
         getEventInfo.execute(Integer.toString(event_number));
     }
 
     public void onClick_participation(View v) {
         if (event_type == 0) { // 0:응모형 1:결제형
-            Toast.makeText(this, "응모 성공", Toast.LENGTH_SHORT).show();
+            putEntry.execute(Integer.toString(event_number), GlobalData.getLogin_ID(), "신은재",
+                    "용학로 336", "19930214", "1", "01000000000", Integer.toString(event_type), com_number);
         } else if (event_type == 1) {
-            Toast.makeText(this, "결제 성공", Toast.LENGTH_SHORT).show();
+
         }
         //TODO : 응모나 결제시 entry에 DB값 입력하는데 유저정보 받아와야 함
     }
@@ -138,6 +142,7 @@ public class user_Event_Detail extends AppCompatActivity {
                 int event_maxage = item.getInt("event_maxage");
                 int event_sex = item.getInt("event_sex");
                 String event_area = item.getString("event_area");
+                com_number = item.getString("com_number");
 
                 Picasso.with(this).load(GlobalData.getURL() + event_URI)
                         .placeholder(R.drawable.event_default).into(binding_UserDetail.ivDetail);
@@ -181,10 +186,75 @@ public class user_Event_Detail extends AppCompatActivity {
         }
     } // 이벤트 상세정보 JSON 데이터를 텍스트뷰에 표시
 
+    private class putEntry extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        protected String doInBackground(String... args) {
+            StringBuilder sb = null;
+
+            try {
+                URL url = new URL(GlobalData.getURL() + "2ventAddEntry.php");
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+
+                OutputStream os = httpURLConnection.getOutputStream();
+
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF8"));
+                writer.write("&event_number=" + args[0] + "&id=" + args[1] + "&entry_name=" + args[2]
+                        + "&entry_addr=" + args[3] + "&entry_birthday=" + args[4] + "&entry_sex="
+                        + args[5] + "&entry_phone=" + args[6] + "&entry_type=" + args[7]
+                        + "&com_number=" + args[8]);
+                writer.flush();
+                writer.close();
+                os.close();
+
+                httpURLConnection.connect();
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream(), "UTF8")); //캐릭터셋 설정
+
+                sb = new StringBuilder();
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    if (sb.length() > 0) {
+                        sb.append("\n");
+                    }
+                    sb.append(line);
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return sb.toString();
+        }
+
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.d("echo", s);
+            if (s.equals("성공")) {
+                Toast.makeText(user_Event_Detail.this, "응모/결제 완료", Toast.LENGTH_SHORT).show();
+            } else if (s.equals("중복 에러")) {
+                Toast.makeText(user_Event_Detail.this, "이미 참가한 이벤트입니다", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(user_Event_Detail.this, "응모/결제 오류", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    } //응모형일때 이벤트 참여시 사용자 데이터 보냄
+
     @Override
     protected void onDestroy() {
         if (getEventInfo != null) {
             getEventInfo.cancel(true);
+        } else if (putEntry != null) {
+            putEntry.cancel(true);
         }
         super.onDestroy();
     }
@@ -193,6 +263,8 @@ public class user_Event_Detail extends AppCompatActivity {
     protected void onPause() {
         if (getEventInfo != null) {
             getEventInfo.cancel(true);
+        } else if (putEntry != null) {
+            putEntry.cancel(true);
         }
         super.onPause();
     }

@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static android.content.ContentValues.TAG;
-import static com.example.win.a2vent.activity_User_Login.savedID;
 
 /**
  * Created by win on 2017-07-06.
@@ -64,8 +63,6 @@ public class owner_Event_Main extends AppCompatActivity implements NavigationVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding_OwnerMain = DataBindingUtil.setContentView(this, R.layout.owner_event_main);
-
-        Log.d("savedID : ",savedID);
 
         mContext = getApplicationContext();
 
@@ -241,9 +238,9 @@ public class owner_Event_Main extends AppCompatActivity implements NavigationVie
                 String com_URI = item.getString("com_URI");
                 String id = item.getString("id");
 
-                Log.d(savedID,id);
+                Log.d("Login ID -"+GlobalData.getLogin_ID(),id);
 
-                if (savedID.equals(id)) { // equals 객체의 내용 자체를 비교하지만 == 연산자는 대상의 주소값을 비교한다
+                if (GlobalData.getLogin_ID().equals(id)) { // equals 객체의 내용 자체를 비교하지만 == 연산자는 대상의 주소값을 비교한다
                     if (com_category.equals("0")) {
                         my_company.add(new owner_Addstore_Item(com_number, com_name, com_addr,
                                 com_manager, "문화", com_URI, id));

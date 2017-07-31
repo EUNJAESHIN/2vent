@@ -48,7 +48,6 @@ public class user_iteminfo extends AppCompatActivity {
     infoImageDown infoImageDown;
 
     //테스트 용 변수
-    //TODO 유저DB의 값 받아오기 필요
     private String testid = "2";
     private String testname = "2";
     private String testaddr = "동대구로";

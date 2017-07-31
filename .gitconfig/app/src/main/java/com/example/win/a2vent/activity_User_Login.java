@@ -27,7 +27,6 @@ import java.net.URL;
 public class activity_User_Login extends AppCompatActivity {
 
     private long backKeyPressedTime = 0;
-    public static String savedID; // 저장용
     String sId, sPw;
     ActivityUserLoginBinding binding_userLogin;
     loginDB loginDB;
@@ -147,13 +146,11 @@ public class activity_User_Login extends AppCompatActivity {
             if (result.equals("0")) {
                 Toast.makeText(activity_User_Login.this, "Account Error", Toast.LENGTH_SHORT).show();
             } else if (result.equals("1")) {
-                savedID = binding_userLogin.eTextLoginId.getText().toString();
-                GlobalData.setLogin_ID(savedID);
+                GlobalData.setLogin_ID(binding_userLogin.eTextLoginId.getText().toString());
                 Intent intent_userLogin = new Intent(activity_User_Login.this, user_Event_Main.class);
                 startActivity(intent_userLogin);
             } else if (result.equals("2")) {
-                savedID = binding_userLogin.eTextLoginId.getText().toString();
-                GlobalData.setLogin_ID(savedID);
+                GlobalData.setLogin_ID(binding_userLogin.eTextLoginId.getText().toString());
                 Intent intent_managerLogin = new Intent(activity_User_Login.this, owner_Event_Main.class);
                 startActivity(intent_managerLogin);
             } else {
