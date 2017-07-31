@@ -261,7 +261,7 @@ public class owner_AddStore extends AppCompatActivity implements View.OnClickLis
                     Log.e("맞나?", com_addr);
 
 
-                    ID = GlobalData.getLogin_ID();
+                    ID = GlobalData.getUserID();
                     com_manager = v_com_manager.getSelectedItem().toString();
                     com_URI = file_name;
 

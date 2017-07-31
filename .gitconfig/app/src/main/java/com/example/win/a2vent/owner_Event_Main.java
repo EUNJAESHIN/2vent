@@ -238,9 +238,9 @@ public class owner_Event_Main extends AppCompatActivity implements NavigationVie
                 String com_URI = item.getString("com_URI");
                 String id = item.getString("id");
 
-                Log.d("Login ID -"+GlobalData.getLogin_ID(),id);
+                Log.d("Login ID -"+GlobalData.getUserID(),id);
 
-                if (GlobalData.getLogin_ID().equals(id)) { // equals 객체의 내용 자체를 비교하지만 == 연산자는 대상의 주소값을 비교한다
+                if (GlobalData.getUserID().equals(id)) { // equals 객체의 내용 자체를 비교하지만 == 연산자는 대상의 주소값을 비교한다
                     if (com_category.equals("0")) {
                         my_company.add(new owner_Addstore_Item(com_number, com_name, com_addr,
                                 com_manager, "문화", com_URI, id));

@@ -1,7 +1,6 @@
 package com.example.win.a2vent;
 
 import android.graphics.Paint;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;

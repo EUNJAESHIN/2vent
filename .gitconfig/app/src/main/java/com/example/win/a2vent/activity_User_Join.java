@@ -14,13 +14,6 @@ import android.widget.Toast;
 
 import com.example.win.a2vent.databinding.ActivityUserJoinBinding;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 /**
  * Created by EUNJAESHIN on 2017-07-10.
  * 회원가입 부분
@@ -30,7 +23,7 @@ public class activity_User_Join extends AppCompatActivity {
 
     ActivityUserJoinBinding binding_userJoin;
     String sex, user_type;
-    String id, pw, name, addr, birth, phone, accountnumber; // 회원가입 시 사용될 String 변수
+    String id, pw, name, addr, birthday, phone, account_number; // 회원가입 시 사용될 String 변수
     JoinDB joinDB;
 
     @Override
@@ -79,15 +72,15 @@ public class activity_User_Join extends AppCompatActivity {
             pw = binding_userJoin.eTextJoinPw.getText().toString();
             name = binding_userJoin.eTextJoinName.getText().toString();
             addr = binding_userJoin.eTextJoinAddr.getText().toString();
-            birth = binding_userJoin.eTextJoinBirth.getText().toString();
+            birthday = binding_userJoin.eTextJoinBirth.getText().toString();
             phone = binding_userJoin.eTextJoinPhone.getText().toString();
-            accountnumber = binding_userJoin.eTextJoinAccountnumber.getText().toString();
+            account_number = binding_userJoin.eTextJoinAccountnumber.getText().toString();
         } catch (NullPointerException e) {
             Log.e("Join Error : ", e.getMessage());
         }
 
         joinDB = new JoinDB();
-        joinDB.execute(id, pw, name, addr, birth, sex, phone, user_type, accountnumber);
+        joinDB.execute(id, pw, name, addr, birthday, sex, phone, user_type, account_number);
     } // 회원가입 버튼
 
     class JoinDB extends AsyncTask<String, Void, String> {
@@ -112,7 +105,7 @@ public class activity_User_Join extends AppCompatActivity {
                 serverConnector.addPostData("pw", params[1]);
                 serverConnector.addPostData("name", params[2]);
                 serverConnector.addPostData("addr", params[3]);
-                serverConnector.addPostData("birth", params[4]);
+                serverConnector.addPostData("birthday", params[4]);
                 serverConnector.addPostData("sex", params[5]);
                 serverConnector.addPostData("phone", params[6]);
                 serverConnector.addPostData("user_type", params[7]);

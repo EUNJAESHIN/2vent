@@ -273,7 +273,7 @@ public class owner_Event_Form extends AppCompatActivity {
         invisiblePayment();
 
         GetData getData = new GetData();
-        getData.execute(GlobalData.getLogin_ID());
+        getData.execute(GlobalData.getUserID());
 
         if ((getIntent()) != null) {
             try {
@@ -448,7 +448,7 @@ public class owner_Event_Form extends AppCompatActivity {
             String _sex;
             String _area;
             String _com_number = strComNo;
-            String _id = GlobalData.getLogin_ID();
+            String _id = GlobalData.getUserID();
 
             if (!uploadImgPath.equals("")) {
                 _URI = "event_img/" + _id + "/" + _name + ".jpg";

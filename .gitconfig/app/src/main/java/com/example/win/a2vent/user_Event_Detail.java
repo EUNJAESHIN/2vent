@@ -17,20 +17,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+/**
+ * Created by EUNJAESHIN on 2017-07-27.
+ * 이벤트 상세정보 부분
+ */
 
 public class user_Event_Detail extends AppCompatActivity {
     private String TAG = "getEventDetail";
     UserEventDetailBinding binding_UserDetail;
-    getEventInfo getEventInfo;
+    GetEventInfo getEventInfo;
     PutEntry putEntry;
     int event_number, event_type;
     String com_number;
@@ -44,65 +39,53 @@ public class user_Event_Detail extends AppCompatActivity {
         event_number = intent_getEventinfo.getExtras().getInt("event_number");
         // Intent에 담긴 event_number값 받기
 
-        getEventInfo = new getEventInfo();
+        getEventInfo = new GetEventInfo();
         putEntry = new PutEntry();
         getEventInfo.execute(Integer.toString(event_number));
     }
 
     public void onClick_participation(View v) {
         if (event_type == 0) { // 0:응모형 1:결제형
-            putEntry.execute(Integer.toString(event_number), GlobalData.getLogin_ID(), "신은재",
-                    "19930214", "용학로 336", "1", "01000000000", Integer.toString(event_type), com_number);
+            putEntry.execute(Integer.toString(event_number),
+                    GlobalData.getUserID(),
+                    GlobalData.getUserName(),
+                    GlobalData.getUserAddr(),
+                    GlobalData.getUserBirth(),
+                    GlobalData.getUserSex(),
+                    GlobalData.getUserPhone(),
+                    Integer.toString(event_type),
+                    com_number);
         } else if (event_type == 1) {
 
         }
         //TODO : 응모나 결제시 entry에 DB값 입력하는데 유저정보 받아와야 함
     }
 
-    private class getEventInfo extends AsyncTask<String, String, String> {
+    private class GetEventInfo extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
 
         protected String doInBackground(String... params) {
-            StringBuilder sb = null;
+            String serverURL = "2ventGetEventOnItemInfo.php";
+
             try {
-                URL url = new URL(GlobalData.getURL() + "2ventGetEventOnItemInfo.php");
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                httpURLConnection.setRequestMethod("POST");
+                ServerConnector serverConnector = new ServerConnector(serverURL);
 
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setDoInput(true);
+                serverConnector.addPostData("event_number", params[0]);
 
-                OutputStream os = httpURLConnection.getOutputStream();
+                serverConnector.addDelimiter();
+                serverConnector.writePostData();
+                serverConnector.finish();
 
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF8"));
-                writer.write("event_number=" + params[0]);
-                writer.flush();
-                writer.close();
-                os.close();
+                return serverConnector.response();
 
-                httpURLConnection.connect();
+            } catch (Exception e) {
+                Log.d("DB", "GetEventInfo Error ", e);
 
-                BufferedReader br = new BufferedReader
-                        (new InputStreamReader(httpURLConnection.getInputStream(), "UTF8"));
-
-                sb = new StringBuilder();
-                String line = null;
-                while ((line = br.readLine()) != null) {
-                    if (sb.length() > 0) {
-                        sb.append("\n");
-                    }
-                    sb.append(line);
-                }
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+                return new String("Error: " + e.getMessage());
             }
-            return sb.toString();
         }
 
         protected void onPostExecute(String result) {
@@ -201,8 +184,8 @@ public class user_Event_Detail extends AppCompatActivity {
                 serverConnector.addPostData("event_number", params[0]);
                 serverConnector.addPostData("id", params[1]);
                 serverConnector.addPostData("entry_name", params[2]);
-                serverConnector.addPostData("entry_birthday", params[3]);
-                serverConnector.addPostData("entry_addr", params[4]);
+                serverConnector.addPostData("entry_addr", params[3]);
+                serverConnector.addPostData("entry_birthday", params[4]);
                 serverConnector.addPostData("entry_sex", params[5]);
                 serverConnector.addPostData("entry_phone", params[6]);
                 serverConnector.addPostData("entry_type", params[7]);
@@ -228,7 +211,7 @@ public class user_Event_Detail extends AppCompatActivity {
             if (result.equals("성공")) {
                 Toast.makeText(user_Event_Detail.this, "응모/결제 완료", Toast.LENGTH_SHORT).show();
             } else if (result.equals("중복 에러")) {
-                Toast.makeText(user_Event_Detail.this, "이미 참가한 이벤트입니다", Toast.LENGTH_SHORT).show();
+                Toast.makeText(user_Event_Detail.this, "이미 참여한 이벤트입니다", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(user_Event_Detail.this, "응모/결제 오류", Toast.LENGTH_SHORT).show();
             }
