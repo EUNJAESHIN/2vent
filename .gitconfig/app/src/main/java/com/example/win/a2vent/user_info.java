@@ -31,7 +31,7 @@ public class user_Info extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreates(savedInstanceState);
+        super.onCreate(savedInstanceState);
         binding_UserInfo = DataBindingUtil.setContentView(this, R.layout.user_info);
 
         getUserInfo = new GetUserInfo();
