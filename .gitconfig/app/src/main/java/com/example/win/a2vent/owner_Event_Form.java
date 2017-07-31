@@ -41,26 +41,21 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Array;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 /**
  * Created by win on 2017-07-10.
@@ -91,8 +86,8 @@ public class owner_Event_Form extends AppCompatActivity {
 
     private static final int REQ_CODE_SELECT_IMAGE = 100;
     private String absolutePath;
-    private static String uploadImgPath = "";
-    private static File filePath;
+    private String uploadImgPath = "";
+    private File filePath;
     private ImageView imgContents;
 
     private Switch swConditions;
@@ -105,6 +100,9 @@ public class owner_Event_Form extends AppCompatActivity {
     private Spinner spinLocation;
 
     private Button btnAddSubmit, btnAddTemp, btnAddCancel;
+
+    private int mEvent_number;
+    private boolean flagUpdate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,15 +220,12 @@ public class owner_Event_Form extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 switch (checkedId) {
                     case R.id.rbMale:
-                        Toast.makeText(owner_Event_Form.this, rbMale.getText().toString(), Toast.LENGTH_SHORT).show();
                         sex = 1;
                         break;
                     case R.id.rbFemale:
-                        Toast.makeText(owner_Event_Form.this, rbFemale.getText().toString(), Toast.LENGTH_SHORT).show();
                         sex = 0;
                         break;
                     case R.id.rbAllSex:
-                        Toast.makeText(owner_Event_Form.this, rbAllSex.getText().toString(), Toast.LENGTH_SHORT).show();
                         sex = 2;
                         break;
                 }
@@ -279,11 +274,29 @@ public class owner_Event_Form extends AppCompatActivity {
 
         GetData getData = new GetData();
         getData.execute(GlobalData.getLogin_ID());
+
+        if ((getIntent()) != null) {
+            try {
+                Intent intent = getIntent();
+                mEvent_number = Integer.parseInt(intent.getStringExtra("event_number"));
+
+                GetTempEvent getTempEvent = new GetTempEvent();
+                getTempEvent.execute(String.valueOf(mEvent_number));
+
+                flagUpdate = true;
+
+                Log.d(TAG, "flagUpdate: " + flagUpdate);
+            } catch (NumberFormatException e) {
+
+            }
+        }
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+
+        this.finish();
     }
 
     @Override
@@ -410,6 +423,7 @@ public class owner_Event_Form extends AppCompatActivity {
         status = 1;
         String msg = checkInputTempData();
         input(msg);
+        Log.d(TAG, "event_number: " + mEvent_number);
     }
 
     private void input(String msg) {
@@ -436,7 +450,7 @@ public class owner_Event_Form extends AppCompatActivity {
             String _com_number = strComNo;
             String _id = GlobalData.getLogin_ID();
 
-            if (uploadImgPath != "") {
+            if (!uploadImgPath.equals("")) {
                 _URI = "event_img/" + _id + "/" + _name + ".jpg";
             } else {
                 _URI = "";
@@ -455,7 +469,18 @@ public class owner_Event_Form extends AppCompatActivity {
             }
 
             InsertData inputTask = new InsertData();
-            inputTask.execute(_name, _type, _stats, _URI, _price, _dis_price, _people, _startday, _endday, _starttime, _endtime, _payment, _target, _minage, _maxage, _sex, _area, _com_number, _id);
+            if (flagUpdate) {
+                inputTask.execute(_name, _type, _stats, _URI, _price, _dis_price, _people, _startday,
+                        _endday, _starttime, _endtime, _payment, _target, _minage, _maxage, _sex, _area,
+                        _com_number, _id, String.valueOf(mEvent_number));
+            } else {
+                inputTask.execute(_name, _type, _stats, _URI, _price, _dis_price, _people, _startday,
+                        _endday, _starttime, _endtime, _payment, _target, _minage, _maxage, _sex, _area,
+                        _com_number, _id, "");
+            }
+
+
+
         }
     }
 
@@ -487,7 +512,7 @@ public class owner_Event_Form extends AppCompatActivity {
                     return "참가 나이를 확인하세요";
                 }
             }
-        } else if (uploadImgPath == "") {
+        } else if (uploadImgPath.equals("")) {
             return "이미지를 등록하세요";
         }
 
@@ -630,7 +655,7 @@ public class owner_Event_Form extends AppCompatActivity {
         }
     }
 
-    private static void saveBitmapToJPEG(Bitmap bitmap, String folder, String name) {
+    private void saveBitmapToJPEG(Bitmap bitmap, String folder, String name) {
         String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath();
         String folder_name = "/" + folder + "/";
         String file_name = name;
@@ -702,133 +727,51 @@ public class owner_Event_Form extends AppCompatActivity {
             String event_area = params[16];
             String com_number = params[17];
             String id = params[18];
+            String event_number = params[19];
 
-            String serverURL = GlobalData.getURL() + "2ventAddevent.php";
+            String phpPage = "2ventAddevent.php";
 
             try {
 
-                // 데이터 구분문자
-                String boundary = "^******^";
+                ServerConnector serverConnector = new ServerConnector(phpPage);
 
-                // 데이터 경계선
-                String delimiter = "\r\n--" + boundary + "\r\n";
+                serverConnector.addPostData("event_name", event_name);
+                serverConnector.addPostData("event_type", event_type);
+                serverConnector.addPostData("event_stats", event_stats);
+                serverConnector.addPostData("event_URI", event_URI);
+                serverConnector.addPostData("event_price", event_price);
+                serverConnector.addPostData("event_dis_price", event_dis_price);
+                serverConnector.addPostData("event_people", event_people);
+                serverConnector.addPostData("event_startday", event_startday);
+                serverConnector.addPostData("event_endday", event_endday);
+                serverConnector.addPostData("event_starttime", event_starttime);
+                serverConnector.addPostData("event_endtime", event_endtime);
+                serverConnector.addPostData("event_payment", event_payment);
+                serverConnector.addPostData("event_target", event_target);
+                serverConnector.addPostData("event_minage", event_minage);
+                serverConnector.addPostData("event_maxage", event_maxage);
+                serverConnector.addPostData("event_sex", event_sex);
+                serverConnector.addPostData("event_area", event_area);
+                serverConnector.addPostData("com_number", com_number);
+                serverConnector.addPostData("id", id);
+                serverConnector.addPostData("event_number", event_number);
 
-                StringBuffer postDataBuilder = new StringBuffer();
-
-                // 커넥션 생성 및 설정
-                URL url = new URL(serverURL);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setConnectTimeout(5000);
-                conn.setReadTimeout(5000);
-                conn.setUseCaches(false);
-                conn.setDoOutput(true);
-                conn.setRequestMethod("POST");
-                conn.setRequestProperty("Connection", "Keep_Alive");
-                conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-
-                // 추가하고 싶은 Key & Value 추가
-                // Key & Value를 추가한 후 꼭 경계선을 삽입해줘야 데이터를 구분할 수 있다.
-                postDataBuilder.append(delimiter);
-                postDataBuilder.append(setValue("event_name", event_name));
-                postDataBuilder.append(delimiter);
-                postDataBuilder.append(setValue("event_type", event_type));
-                postDataBuilder.append(delimiter);
-                postDataBuilder.append(setValue("event_stats", event_stats));
-                postDataBuilder.append(delimiter);
-                postDataBuilder.append(setValue("event_URI", event_URI));
-                postDataBuilder.append(delimiter);
-                postDataBuilder.append(setValue("event_price", event_price));
-                postDataBuilder.append(delimiter);
-                postDataBuilder.append(setValue("event_dis_price", event_dis_price));
-                postDataBuilder.append(delimiter);
-                postDataBuilder.append(setValue("event_people", event_people));
-                postDataBuilder.append(delimiter);
-                postDataBuilder.append(setValue("event_startday", event_startday));
-                postDataBuilder.append(delimiter);
-                postDataBuilder.append(setValue("event_endday", event_endday));
-                postDataBuilder.append(delimiter);
-                postDataBuilder.append(setValue("event_starttime", event_starttime));
-                postDataBuilder.append(delimiter);
-                postDataBuilder.append(setValue("event_endtime", event_endtime));
-                postDataBuilder.append(delimiter);
-                postDataBuilder.append(setValue("event_payment", event_payment));
-                postDataBuilder.append(delimiter);
-                postDataBuilder.append(setValue("event_target", event_target));
-                postDataBuilder.append(delimiter);
-                postDataBuilder.append(setValue("event_minage", event_minage));
-                postDataBuilder.append(delimiter);
-                postDataBuilder.append(setValue("event_maxage", event_maxage));
-                postDataBuilder.append(delimiter);
-                postDataBuilder.append(setValue("event_sex", event_sex));
-                postDataBuilder.append(delimiter);
-                postDataBuilder.append(setValue("event_area", event_area));
-                postDataBuilder.append(delimiter);
-                postDataBuilder.append(setValue("com_number", com_number));
-                postDataBuilder.append(delimiter);
-                postDataBuilder.append(setValue("id", id));
-                postDataBuilder.append(delimiter);
-
-                DataOutputStream out = new DataOutputStream(new BufferedOutputStream((conn.getOutputStream())));
-
-                if (uploadImgPath != "") {
+                if (!uploadImgPath.equals("")) {
                     // 파일 첨부
                     Log.d(TAG, "uploadedPath: " + uploadImgPath);
-                    postDataBuilder.append(setFile("uploaded_file", uploadImgPath));
-                    postDataBuilder.append("\r\n");
+                    serverConnector.addFileData("uploaded_file", uploadImgPath);
 
-                    Log.d(TAG, "data: " + postDataBuilder.toString());
                     // 전송 작업 시작
-                    FileInputStream in = new FileInputStream(uploadImgPath);
-
-                    out.writeUTF(postDataBuilder.toString());
-
-                    // 파일 복사 작업 시작
-                    int maxBufferSize = 1024;
-                    int bufferSize = Math.min(in.available(), maxBufferSize);
-                    byte[] buffer = new byte[bufferSize];
-
-                    // 버퍼 크기만큼 파일로부터 바이트 데이터를 읽는다
-                    int byteRead = in.read(buffer, 0, bufferSize);
-
-                    // 전송
-                    while (byteRead > 0) {
-                        out.write(buffer);
-                        bufferSize = Math.min(in.available(), maxBufferSize);
-                        byteRead = in.read(buffer, 0, bufferSize);
-                    }
-
-                    out.writeBytes(delimiter);
-                    out.flush();
-                    out.close();
-                    in.close();
+                    serverConnector.writeFileData(uploadImgPath);
+                    serverConnector.finish();
                 } else {
-                    Log.d(TAG, "data: " + postDataBuilder.toString());
-                    out.writeUTF(postDataBuilder.toString());
-                    out.flush();
-                    out.close();
+                    serverConnector.addDelimiter();
+                    serverConnector.writePostData();
+                    serverConnector.finish();
                 }
 
-                int responseStatusCode = conn.getResponseCode();
-                Log.d(TAG, "POST response code - " + responseStatusCode);
+                return serverConnector.response();
 
-                InputStream inputStream;
-                if (responseStatusCode == conn.HTTP_OK) {
-                    inputStream = conn.getInputStream();
-                } else {
-                    inputStream = conn.getErrorStream();
-                }
-
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                StringBuilder sb = new StringBuilder();
-                String line;
-
-                while ((line = bufferedReader.readLine()) != null) {
-                    sb.append(line);
-                }
-                bufferedReader.close();
-
-                return sb.toString();
             } catch (NullPointerException e) {
                 return new String("NullPoint: " + e.getMessage());
             } catch (Exception e) {
@@ -847,32 +790,16 @@ public class owner_Event_Form extends AppCompatActivity {
             Log.d(TAG, "POST response - " + result);
 
             if (result.equals("SQL문 처리 성공")) {
-                etFixedPrice.setText(null);
-                etDiscount.setText(null);
-                etLimitPersons.setText(null);
-                etStartDateYear.setText(null);
-                etStartDateMonth.setText(null);
-                etStartDateDay.setText(null);
-                etStartHour.setText(null);
-                etStartMin.setText(null);
-                etEndDateYear.setText(null);
-                etEndDateMonth.setText(null);
-                etEndDateDay.setText(null);
-                etEndHour.setText(null);
-                etEndMin.setText(null);
-                etEventName.setText(null);
-                etMinimumAge.setText(null);
-                etMaximumAge.setText(null);
-                imgContents.setImageResource(R.mipmap.ic_launcher);
+                switch (status) {
+                    case 0:
+                        Toast.makeText(owner_Event_Form.this, "등록이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1:
+                        Toast.makeText(owner_Event_Form.this, "임시저장 되었습니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                owner_Event_Form.this.onBackPressed();
             }
-        }
-
-        public String setValue(String key, String value) {
-            return "Content-Disposition: form-data; name=\"" + key + "\"\r\n\r\n" + value;
-        }
-
-        public String setFile(String key, String fileName) {
-            return "Content-Disposition: form-data; name=\"" + key + "\";filename=\"" + fileName + "\"\r\n";
         }
     }
 
@@ -923,66 +850,16 @@ public class owner_Event_Form extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             try {
-                StringBuffer postDataBuilder = new StringBuffer();
+                ServerConnector serverConnector = new ServerConnector("2ventGetStoreName.php");
 
-                // 데이터 구분문자
-                String boundary = "^******^";
+                serverConnector.addPostData("id", params[0]);
+                serverConnector.addDelimiter();
 
-                // 데이터 경계선
-                String delimiter = "\r\n--" + boundary + "\r\n";
+                serverConnector.writePostData();
+                serverConnector.finish();
 
-                StringBuffer postDataBuiler = new StringBuffer();
+                return serverConnector.response();
 
-                // 커넥션 생성 및 설정
-                String serverURL = GlobalData.getURL() + "2ventGetStoreName.php";
-                URL url = new URL(serverURL);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setConnectTimeout(5000);
-                conn.setReadTimeout(5000);
-                conn.setUseCaches(false);
-                conn.setDoOutput(true);
-                conn.setDoInput(true);
-                conn.setRequestMethod("POST");
-                conn.setRequestProperty("Connection", "Keep_Alive");
-                conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-
-                // 추가하고 싶은 Key & Value 추가
-                // Key & Value를 추가한 후 꼭 경계선을 삽입해줘야 데이터를 구분할 수 있다.
-                postDataBuilder.append(delimiter);
-                postDataBuilder.append(setValue("id", params[0]));
-                postDataBuilder.append(delimiter);
-
-                DataOutputStream out = new DataOutputStream(new BufferedOutputStream((conn.getOutputStream())));
-
-                Log.d(TAG, "data: " + postDataBuilder.toString());
-                out.writeUTF(postDataBuilder.toString());
-                out.flush();
-                out.close();
-
-                int responseStatusCode = conn.getResponseCode();
-                Log.d(TAG, "POST response code - " + responseStatusCode);
-
-                InputStream inputStream;
-                if (responseStatusCode == conn.HTTP_OK) {
-                    inputStream = conn.getInputStream();
-                } else {
-                    inputStream = conn.getErrorStream();
-                }
-
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                StringBuilder sb = new StringBuilder();
-                String line;
-
-                while ((line = bufferedReader.readLine()) != null) {
-                    if (sb.length() > 0) {
-                        sb.append("\n");
-                    }
-                    sb.append(line);
-                }
-                bufferedReader.close();
-
-                return sb.toString();
             } catch (NullPointerException e) {
                 return new String("NullPoint: " + e.getMessage());
             } catch (Exception e) {
@@ -995,10 +872,6 @@ public class owner_Event_Form extends AppCompatActivity {
             super.onPostExecute(result);
             Log.d(TAG, "json : " + result);
             jsonParser(result);
-        }
-
-        public String setValue(String key, String value) {
-            return "Content-Disposition: form-data; name=\"" + key + "\"\r\n\r\n" + value;
         }
 
         public void jsonParser(String str) {
@@ -1068,6 +941,207 @@ public class owner_Event_Form extends AppCompatActivity {
 
                 }
             });
+        }
+    }
+
+    private class GetTempEvent extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String phpPage = "2ventGetTempEvent.php";
+
+            try {
+                ServerConnector serverConnector = new ServerConnector(phpPage);
+
+                serverConnector.addPostData("event_number", params[0]);
+                serverConnector.addDelimiter();
+
+                serverConnector.writePostData();
+                serverConnector.finish();
+
+                return serverConnector.response();
+
+            } catch (NullPointerException e) {
+                return new String("NullPoint: " + e.getMessage());
+            } catch (Exception e) {
+                return new String("Error: " + e.getMessage());
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            if (result == null) {
+
+            } else {
+                setTempData(result);
+            }
+        }
+
+        private void setTempData(String result) {
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                JSONArray jsonArray = jsonObject.getJSONArray("TempEvent");
+
+                JSONObject item;
+                String event_name = null, event_type = null, event_stats = null, event_URI = null, event_price = null, event_dis_price = null,
+                        event_people = null, event_startday = null, event_endday = null, event_starttime = null, event_endtime = null,
+                        event_payment = null, event_target = null, event_minage = null, event_maxage = null, event_sex = null,
+                        event_area = null, com_name = null;
+
+                String tmp_year, tmp_month, tmp_day, tmp_hour, tmp_min;
+                DecimalFormat format = new DecimalFormat("###,###");
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    item = jsonArray.getJSONObject(i);
+
+                    event_name = item.getString("event_name");
+                    event_type = item.getString("event_type");
+                    event_stats = item.getString("event_stats");
+                    event_URI = item.getString("event_URI");
+                    event_price = item.getString("event_price");
+                    event_dis_price = item.getString("event_dis_price");
+                    event_people = item.getString("event_people");
+                    event_startday = item.getString("event_startday");
+                    event_endday = item.getString("event_endday");
+                    event_starttime = item.getString("event_starttime");
+                    event_endtime = item.getString("event_endtime");
+                    event_payment = item.getString("event_payment");
+                    event_target = item.getString("event_target");
+                    event_minage = item.getString("event_minage");
+                    event_maxage = item.getString("event_maxage");
+                    event_sex = item.getString("event_sex");
+                    event_area = item.getString("event_area");
+                    com_name = item.getString("com_name");
+                }
+
+                if (event_type.equals("0")) {
+                    rgType.check(R.id.rbTypeEnter);
+                    invisiblePayment();
+                    type = 0;
+                } else if (event_type.equals("1")) {
+                    rgType.check(R.id.rbTypePay);
+                    visiblePayment();
+                    type = 1;
+                }
+
+                for (int j = 0; j < arrListStore.size(); j++) {
+                    if (arrListStore.get(j) == com_name) {
+                        spinStore.setSelection(j);
+                    }
+                }
+
+                etFixedPrice.setText(format.format(Long.parseLong(event_price)));
+                etDiscount.setText(format.format(Long.parseLong(event_dis_price)));
+                etLimitPersons.setText(format.format(Long.parseLong(event_people)));
+
+                StringTokenizer tokenDay;
+                StringTokenizer tokenTime;
+
+                if (!event_startday.equals("0000-00-00")) {
+                    tokenDay = new StringTokenizer(event_startday, "-");
+
+                    try {
+                        tmp_year = tokenDay.nextToken();
+                        tmp_month = tokenDay.nextToken();
+                        tmp_day = tokenDay.nextToken();
+
+                        etStartDateYear.setText(tmp_year);
+                        etStartDateMonth.setText(tmp_month);
+                        etStartDateDay.setText(tmp_day);
+                    } catch (NoSuchElementException e) {
+
+                    }
+                }
+
+                if (!event_starttime.equals("00:00:00")) {
+                    tokenTime = new StringTokenizer(event_starttime, ":");
+
+                    try {
+                        tmp_hour = tokenTime.nextToken();
+                        tmp_min = tokenTime.nextToken();
+
+                        etStartHour.setText(tmp_hour);
+                        etStartMin.setText(tmp_min);
+                    } catch (NoSuchElementException e) {
+
+                    }
+                }
+
+                if (!event_endday.equals("0000-00-00")) {
+                    tokenDay = new StringTokenizer(event_endday, "-");
+
+                    try {
+                        tmp_year = tokenDay.nextToken();
+                        tmp_month = tokenDay.nextToken();
+                        tmp_day = tokenDay.nextToken();
+
+                        etEndDateYear.setText(tmp_year);
+                        etEndDateMonth.setText(tmp_month);
+                        etEndDateDay.setText(tmp_day);
+                    } catch (NoSuchElementException e) {
+
+                    }
+                }
+
+                if (!event_endtime.equals("00:00:00")) {
+                    tokenTime = new StringTokenizer(event_endtime, ":");
+
+                    try {
+                        tmp_hour = tokenTime.nextToken();
+                        tmp_min = tokenTime.nextToken();
+
+                        etEndHour.setText(tmp_hour);
+                        etEndMin.setText(tmp_min);
+                    } catch (NoSuchElementException e) {
+
+                    }
+                }
+
+                etEventName.setText(event_name);
+
+                Log.d(TAG, "event_URI: " + event_URI);
+                if (!event_URI.equals("")) {
+                    Picasso.with(getApplicationContext()).load(GlobalData.getURL() + event_URI)
+                            .placeholder(R.drawable.event_default).into(imgContents);
+                    uploadImgPath = event_URI;
+                } else {
+                    uploadImgPath = "";
+                }
+
+                if (event_target.equals("0")) {
+                    swConditions.setChecked(false);
+                    inActiveContents();
+                } else if (event_target.equals("1")) {
+                    swConditions.setChecked(true);
+                    activeContents();
+                    if (!event_minage.equals("0")) etMinimumAge.setText(event_minage);
+                    if (!event_maxage.equals("0")) etMaximumAge.setText(event_maxage);
+                    if (event_sex.equals("0")) {
+                        rgSex.check(R.id.rbFemale);
+                    } else if (event_sex.equals("1")) {
+                        rgSex.check(R.id.rbMale);
+                    } else if (event_sex.equals("2")) {
+                        rgSex.check(R.id.rbAllSex);
+                    }
+                    if (!event_area.equals("")) {
+                        for (int i = 0; i < spinLocation.getCount(); i++) {
+                            if (spinLocation.getItemAtPosition(i).equals(event_area)) {
+                                spinLocation.setSelection(i);
+                            }
+                        }
+                    }
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

@@ -103,64 +103,29 @@ public class activity_User_Join extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-
-            String id = (String) params[0];
-            String pw = (String) params[1];
-            String name = (String) params[2];
-            String addr = (String) params[3];
-            String birth = (String) params[4];
-            String sex = (String) params[5];
-            String phone = (String) params[6];
-            String user_type = (String) params[7];
-            String account_number = (String) params[8];
-
-            String serverURL = GlobalData.getURL() + "2ventRegister.php";
-            String postParameters = "&id=" + id + "&pw=" + pw + "&name=" + name +
-                    "&addr=" + addr + "&birthday=" + birth + "&sex=" + sex + "&phone=" + phone +
-                    "&user_type=" + user_type + "&account_number=" + account_number;
+            String serverURL = "2ventRegister.php";
 
             try {
-                URL url = new URL(serverURL);
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                ServerConnector serverConnector = new ServerConnector(serverURL);
 
-                httpURLConnection.setReadTimeout(5000);
-                httpURLConnection.setConnectTimeout(5000);
-                httpURLConnection.setRequestMethod("POST"); // 응답을 POST방식으로 설정 (Default는 GET)
-                //httpURLConnection.setRequestProperty("content-type", "application/json");
-                httpURLConnection.setDoInput(true); // InputStream에서 응답 헤더와 메시지를 읽도록 설정
-                httpURLConnection.connect(); // 연결
+                serverConnector.addPostData("id", params[0]);
+                serverConnector.addPostData("pw", params[1]);
+                serverConnector.addPostData("name", params[2]);
+                serverConnector.addPostData("addr", params[3]);
+                serverConnector.addPostData("birth", params[4]);
+                serverConnector.addPostData("sex", params[5]);
+                serverConnector.addPostData("phone", params[6]);
+                serverConnector.addPostData("user_type", params[7]);
+                serverConnector.addPostData("account_number", params[8]);
 
-                OutputStream outputStream = httpURLConnection.getOutputStream();
-                outputStream.write(postParameters.getBytes("UTF-8")); // POST 파라미터를 바이트단위로 UTF8 인코딩하여 요청
-                outputStream.flush();
-                outputStream.close(); // 스트림 버퍼 비우고 닫음
+                serverConnector.addDelimiter();
+                serverConnector.writePostData();
+                serverConnector.finish();
 
-                int responseStatusCode = httpURLConnection.getResponseCode();
-                Log.d("DB", "POST response code - " + responseStatusCode);
-
-                InputStream inputStream;
-                if (responseStatusCode == HttpURLConnection.HTTP_OK) {
-                    inputStream = httpURLConnection.getInputStream();
-                } else {
-                    inputStream = httpURLConnection.getErrorStream();
-                }
-
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-                StringBuilder sb = new StringBuilder();
-                String line = null;
-
-                while ((line = bufferedReader.readLine()) != null) {
-                    sb.append(line);
-                    // readline()으로 한 줄 씩 읽고 line에 저장해 StringBuilder에 담음
-                }
-                bufferedReader.close();
-
-                return sb.toString();
+                return serverConnector.response();
 
             } catch (Exception e) {
-                Log.d("DB", "InsertData: Error ", e);
+                Log.d("DB", "JoinDB Error ", e);
 
                 return new String("Error: " + e.getMessage());
             }

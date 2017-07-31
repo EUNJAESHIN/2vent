@@ -31,7 +31,7 @@ public class user_Event_Detail extends AppCompatActivity {
     private String TAG = "getEventDetail";
     UserEventDetailBinding binding_UserDetail;
     getEventInfo getEventInfo;
-    putEntry putEntry;
+    PutEntry putEntry;
     int event_number, event_type;
     String com_number;
 
@@ -45,14 +45,14 @@ public class user_Event_Detail extends AppCompatActivity {
         // Intent에 담긴 event_number값 받기
 
         getEventInfo = new getEventInfo();
-        putEntry = new putEntry();
+        putEntry = new PutEntry();
         getEventInfo.execute(Integer.toString(event_number));
     }
 
     public void onClick_participation(View v) {
         if (event_type == 0) { // 0:응모형 1:결제형
             putEntry.execute(Integer.toString(event_number), GlobalData.getLogin_ID(), "신은재",
-                    "용학로 336", "19930214", "1", "01000000000", Integer.toString(event_type), com_number);
+                    "19930214", "용학로 336", "1", "01000000000", Integer.toString(event_type), com_number);
         } else if (event_type == 1) {
 
         }
@@ -186,61 +186,48 @@ public class user_Event_Detail extends AppCompatActivity {
         }
     } // 이벤트 상세정보 JSON 데이터를 텍스트뷰에 표시
 
-    private class putEntry extends AsyncTask<String, String, String> {
+    private class PutEntry extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
 
-        protected String doInBackground(String... args) {
-            StringBuilder sb = null;
+        protected String doInBackground(String... params) {
+            String serverURL = "2ventAddEntry.php";
 
             try {
-                URL url = new URL(GlobalData.getURL() + "2ventAddEntry.php");
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                httpURLConnection.setRequestMethod("POST");
+                ServerConnector serverConnector = new ServerConnector(serverURL);
 
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setDoInput(true);
+                serverConnector.addPostData("event_number", params[0]);
+                serverConnector.addPostData("id", params[1]);
+                serverConnector.addPostData("entry_name", params[2]);
+                serverConnector.addPostData("entry_birthday", params[3]);
+                serverConnector.addPostData("entry_addr", params[4]);
+                serverConnector.addPostData("entry_sex", params[5]);
+                serverConnector.addPostData("entry_phone", params[6]);
+                serverConnector.addPostData("entry_type", params[7]);
+                serverConnector.addPostData("com_number", params[8]);
 
-                OutputStream os = httpURLConnection.getOutputStream();
+                serverConnector.addDelimiter();
+                serverConnector.writePostData();
+                serverConnector.finish();
 
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF8"));
-                writer.write("&event_number=" + args[0] + "&id=" + args[1] + "&entry_name=" + args[2]
-                        + "&entry_addr=" + args[3] + "&entry_birthday=" + args[4] + "&entry_sex="
-                        + args[5] + "&entry_phone=" + args[6] + "&entry_type=" + args[7]
-                        + "&com_number=" + args[8]);
-                writer.flush();
-                writer.close();
-                os.close();
+                return serverConnector.response();
 
-                httpURLConnection.connect();
+            } catch (Exception e) {
+                Log.d("DB", "PutEntry Error ", e);
 
-                BufferedReader br = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream(), "UTF8")); //캐릭터셋 설정
-
-                sb = new StringBuilder();
-                String line = null;
-                while ((line = br.readLine()) != null) {
-                    if (sb.length() > 0) {
-                        sb.append("\n");
-                    }
-                    sb.append(line);
-                }
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+                return new String("Error: " + e.getMessage());
             }
-            return sb.toString();
         }
 
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            Log.d("echo", s);
-            if (s.equals("성공")) {
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.d("echo", result);
+
+            if (result.equals("성공")) {
                 Toast.makeText(user_Event_Detail.this, "응모/결제 완료", Toast.LENGTH_SHORT).show();
-            } else if (s.equals("중복 에러")) {
+            } else if (result.equals("중복 에러")) {
                 Toast.makeText(user_Event_Detail.this, "이미 참가한 이벤트입니다", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(user_Event_Detail.this, "응모/결제 오류", Toast.LENGTH_SHORT).show();

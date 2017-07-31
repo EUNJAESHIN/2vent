@@ -27,14 +27,14 @@ import java.net.URL;
 public class user_Info extends AppCompatActivity {
     private String TAG = "getUserInfo";
     UserInfoBinding binding_UserInfo;
-    getUserInfo getUserInfo;
+    GetUserInfo getUserInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreates(savedInstanceState);
         binding_UserInfo = DataBindingUtil.setContentView(this, R.layout.user_info);
 
-        getUserInfo = new getUserInfo();
+        getUserInfo = new GetUserInfo();
         getUserInfo.execute(GlobalData.getLogin_ID());
     }
 
@@ -43,7 +43,7 @@ public class user_Info extends AppCompatActivity {
         //TODO : 회원 탈퇴
     }
 
-    private class getUserInfo extends AsyncTask<String, Void, String> {
+    private class GetUserInfo extends AsyncTask<String, Void, String> {
 
         @Override
         protected void onPreExecute() {
@@ -52,43 +52,24 @@ public class user_Info extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            StringBuilder sb = null;
+            String serverURL = "2ventGetUserInfo.php";
+
             try {
-                URL url = new URL(GlobalData.getURL() + "2ventGetUserInfo.php");
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                httpURLConnection.setRequestMethod("POST");
+                ServerConnector serverConnector = new ServerConnector(serverURL);
 
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setDoInput(true);
+                serverConnector.addPostData("id", params[0]);
 
-                OutputStream os = httpURLConnection.getOutputStream();
+                serverConnector.addDelimiter();
+                serverConnector.writePostData();
+                serverConnector.finish();
 
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF8"));
-                writer.write("id=" + params[0]);
-                writer.flush();
-                writer.close();
-                os.close();
+                return serverConnector.response();
 
-                httpURLConnection.connect();
+            } catch (Exception e) {
+                Log.d("DB", "GetUserInfo Error ", e);
 
-                BufferedReader br = new BufferedReader
-                        (new InputStreamReader(httpURLConnection.getInputStream(), "UTF8"));
-
-                sb = new StringBuilder();
-                String line = null;
-                while ((line = br.readLine()) != null) {
-                    if (sb.length() > 0) {
-                        sb.append("\n");
-                    }
-                    sb.append(line);
-                }
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+                return new String("Error: " + e.getMessage());
             }
-            return sb.toString();
         }
 
         @Override

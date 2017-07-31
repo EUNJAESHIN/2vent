@@ -29,7 +29,7 @@ public class activity_User_Login extends AppCompatActivity {
     private long backKeyPressedTime = 0;
     String sId, sPw;
     ActivityUserLoginBinding binding_userLogin;
-    loginDB loginDB;
+    LoginDB loginDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class activity_User_Login extends AppCompatActivity {
             Log.e("onClick_login Error :", e.getMessage());
         }
 
-        loginDB = new loginDB();
+        loginDB = new LoginDB();
         loginDB.execute(sId, sPw);
     }
 
@@ -69,7 +69,7 @@ public class activity_User_Login extends AppCompatActivity {
         }
     } // 백키 2번해야 종료
 
-    class loginDB extends AsyncTask<String, Void, String> {
+    class LoginDB extends AsyncTask<String, Void, String> {
         ProgressDialog progressDialog;
 
         @Override
@@ -82,55 +82,22 @@ public class activity_User_Login extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-
-            String id = (String) params[0];
-            String pw = (String) params[1];
-
-            String serverURL = GlobalData.getURL() + "2ventLogin.php";
-            String postParameters = "&id=" + id + "&pw=" + pw;
+            String serverURL = "2ventLogin.php";
 
             try {
-                URL url = new URL(serverURL);
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                ServerConnector serverConnector = new ServerConnector(serverURL);
 
-                httpURLConnection.setReadTimeout(5000);
-                httpURLConnection.setConnectTimeout(5000);
-                httpURLConnection.setRequestMethod("POST");
-                //httpURLConnection.setRequestProperty("content-type", "application/json");
-                httpURLConnection.setDoInput(true);
-                httpURLConnection.connect();
+                serverConnector.addPostData("id", params[0]);
+                serverConnector.addPostData("pw", params[1]);
 
-                OutputStream outputStream = httpURLConnection.getOutputStream();
-                outputStream.write(postParameters.getBytes("UTF-8"));
-                outputStream.flush();
-                outputStream.close();
+                serverConnector.addDelimiter();
+                serverConnector.writePostData();
+                serverConnector.finish();
 
-                int responseStatusCode = httpURLConnection.getResponseCode();
-                Log.d("DB", "POST response code - " + responseStatusCode);
-
-                InputStream inputStream;
-                if (responseStatusCode == HttpURLConnection.HTTP_OK) {
-                    inputStream = httpURLConnection.getInputStream();
-                } else {
-                    inputStream = httpURLConnection.getErrorStream();
-                }
-
-
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-                StringBuilder sb = new StringBuilder();
-                String line = null;
-
-                while ((line = bufferedReader.readLine()) != null) {
-                    sb.append(line);
-                }
-                bufferedReader.close();
-
-                return sb.toString();
+                return serverConnector.response();
 
             } catch (Exception e) {
-                Log.d("DB", "loginDB Error : ", e);
+                Log.d("DB", "LoginDB Error : ", e);
 
                 return new String("Error: " + e.getMessage());
             }
