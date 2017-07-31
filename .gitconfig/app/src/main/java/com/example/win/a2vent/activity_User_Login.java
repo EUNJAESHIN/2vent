@@ -76,7 +76,7 @@ public class activity_User_Login extends AppCompatActivity {
             super.onPreExecute();
 
             progressDialog = ProgressDialog.show(activity_User_Login.this,
-                    "Please Wait", null, true, true);
+                    "Signing in", null, true, true);
         }
 
         @Override
@@ -105,7 +105,6 @@ public class activity_User_Login extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-
             progressDialog.dismiss();
 
 //            2ventLogin.php의 결과값과 비교하여 로그인 성공 및 실패
@@ -116,7 +115,7 @@ public class activity_User_Login extends AppCompatActivity {
                 Intent intent_userLogin = new Intent(activity_User_Login.this, user_Event_Main.class);
                 startActivity(intent_userLogin);
             } else if (result.equals("2")) {
-                GlobalData.setUserData(binding_userLogin.eTextLoginId.getText().toString());
+                getUserInfo.execute(binding_userLogin.eTextLoginId.getText().toString());
                 Intent intent_managerLogin = new Intent(activity_User_Login.this, owner_Event_Main.class);
                 startActivity(intent_managerLogin);
             } else {
@@ -129,10 +128,14 @@ public class activity_User_Login extends AppCompatActivity {
     } // 회원 DB값 비교 AsyncTask
 
     private class GetUserInfo extends AsyncTask<String, Void, String> {
+        ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
+            progressDialog = ProgressDialog.show(activity_User_Login.this,
+                    "Processing data", null, true, true);
         }
 
         @Override
@@ -160,6 +163,8 @@ public class activity_User_Login extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            progressDialog.dismiss();
+
             Log.d("GetUserInfo", "response  - " + result);
 
             if (result == null) {

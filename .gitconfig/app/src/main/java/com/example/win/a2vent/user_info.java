@@ -1,6 +1,8 @@
 package com.example.win.a2vent;
 
+import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,11 +17,30 @@ import com.example.win.a2vent.databinding.UserInfoBinding;
 
 public class user_Info extends AppCompatActivity {
     UserInfoBinding binding_UserInfo;
+    AlertDialog.Builder builder_WithdrawalAlert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding_UserInfo = DataBindingUtil.setContentView(this, R.layout.user_info);
+
+        builder_WithdrawalAlert = new AlertDialog.Builder(user_Info.this);
+        builder_WithdrawalAlert
+                .setTitle("회원 탈퇴")
+                .setMessage("\n 탈퇴 시, 참여한 모든 이벤트가 취소됩니다. \n 탈퇴하시겠습니까?")
+                .setCancelable(true)
+                .setPositiveButton("탈퇴", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(user_Info.this, "탈퇴 처리", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(user_Info.this, "탈퇴 취소", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
         binding_UserInfo.tvInfo1.append("아이디  : " + GlobalData.getUserID());
         binding_UserInfo.tvInfo2.append("비밀번호 : " + GlobalData.getUserPW());
@@ -38,8 +59,10 @@ public class user_Info extends AppCompatActivity {
 
     }
 
-    public void onClick_withdrawal(View v) {
-        Toast.makeText(this, "누르면 회원 탈퇴", Toast.LENGTH_SHORT).show();
+    public void onClick_Withdrawal(View v) {
+        AlertDialog dialog_WithdrawalAlert = builder_WithdrawalAlert.create();
+        dialog_WithdrawalAlert.show();
+
         //TODO : 회원 탈퇴
     }
 
