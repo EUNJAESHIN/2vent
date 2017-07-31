@@ -68,7 +68,7 @@ public class activity_User_Login extends AppCompatActivity {
         }
     } // 백키 2번해야 종료
 
-    class LoginDB extends AsyncTask<String, Void, String> {
+    private class LoginDB extends AsyncTask<String, Void, String> {
         ProgressDialog progressDialog;
 
         @Override

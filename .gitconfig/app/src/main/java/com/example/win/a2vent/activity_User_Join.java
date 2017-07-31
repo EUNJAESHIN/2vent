@@ -83,7 +83,7 @@ public class activity_User_Join extends AppCompatActivity {
         joinDB.execute(id, pw, name, addr, birthday, sex, phone, user_type, account_number);
     } // 회원가입 버튼
 
-    class JoinDB extends AsyncTask<String, Void, String> {
+    private class JoinDB extends AsyncTask<String, Void, String> {
         ProgressDialog progressDialog;
 
         @Override
