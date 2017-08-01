@@ -58,7 +58,7 @@ public class user_Event_Detail extends AppCompatActivity {
                     com_number);
         } else if (event_type == 1) {
             Toast.makeText(user_Event_Detail.this, "결제 미구현", Toast.LENGTH_SHORT).show();
-            //TODO 결제 부분
+            //TODO 결제 부분 미구현
         }
     }
 
@@ -156,6 +156,7 @@ public class user_Event_Detail extends AppCompatActivity {
                 }
 
                 binding_UserDetail.tvDetail10.append(event_people);
+                //TODO 참여 시 people 감소, 취소 or 탈퇴했을때 people 다시 증가
 
                 //type이 응모형인지 결제형 이벤트인지 구분해서 버튼 텍스트 변경
                 if (event_type == 0) {
@@ -208,9 +209,11 @@ public class user_Event_Detail extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             Log.d("echo", result);
-
             if (result.equals("성공")) {
-                Toast.makeText(user_Event_Detail.this, "응모/결제 완료", Toast.LENGTH_SHORT).show();
+                Toast.makeText(user_Event_Detail.this, "참여 완료", Toast.LENGTH_SHORT).show();
+                finish();
+            } else if (result.equals("남은 자리 없음")) {
+                Toast.makeText(user_Event_Detail.this, "이미 모집이 완료된 이벤트입니다", Toast.LENGTH_SHORT).show();
             } else if (result.equals("중복 에러")) {
                 Toast.makeText(user_Event_Detail.this, "이미 참여한 이벤트입니다", Toast.LENGTH_SHORT).show();
             } else {

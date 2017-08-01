@@ -63,7 +63,6 @@ public class activity_User_Login extends AppCompatActivity {
             return;
         }
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-            finish(); // 액티비티 종료 (onDestroy() 호출)
             android.os.Process.killProcess(android.os.Process.myPid()); // 현재 프로세스 및 서비스 종료
         }
     } // 백키 2번해야 종료

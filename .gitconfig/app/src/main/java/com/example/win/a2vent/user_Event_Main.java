@@ -86,7 +86,7 @@ public class user_Event_Main extends AppCompatActivity {
             return;
         }
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-            finish();
+            finish(); // 액티비티 종료 (정확하게는 onDestroy() 호출)
         }
     } // 백키 2번 로그아웃
 
