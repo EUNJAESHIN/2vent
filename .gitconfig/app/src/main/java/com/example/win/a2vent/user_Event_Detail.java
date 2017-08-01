@@ -221,7 +221,7 @@ public class user_Event_Detail extends AppCompatActivity {
             }
         }
 
-    } //응모형일때 이벤트 참여시 사용자 데이터 보냄
+    } // 응모형일때 이벤트 참여시 사용자 데이터 보냄
 
     @Override
     protected void onDestroy() {
