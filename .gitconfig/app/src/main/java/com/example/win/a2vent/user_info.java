@@ -44,7 +44,7 @@ public class user_Info extends AppCompatActivity {
                 .setNegativeButton("취소", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(user_Info.this, "탈퇴 취소", Toast.LENGTH_SHORT).show();
+
                     }
                 });
 

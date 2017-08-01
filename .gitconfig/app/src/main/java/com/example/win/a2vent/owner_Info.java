@@ -45,7 +45,7 @@ public class owner_Info extends AppCompatActivity {
                 .setNegativeButton("취소", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(owner_Info.this, "탈퇴 취소", Toast.LENGTH_SHORT).show();
+
                     }
                 });
 
@@ -66,7 +66,7 @@ public class owner_Info extends AppCompatActivity {
 
     }
 
-    public void onClick_Withdrawal(View v) {
+    public void onClick_owner_Withdrawal(View v) {
         AlertDialog dialog_WithdrawalAlert = builder_WithdrawalAlert.create();
         dialog_WithdrawalAlert.show();
     } // 탈퇴 버튼

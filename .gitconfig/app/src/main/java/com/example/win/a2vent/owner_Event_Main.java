@@ -121,17 +121,12 @@ public class owner_Event_Main extends AppCompatActivity implements NavigationVie
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-
-        if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+        } else if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
             backKeyPressedTime = System.currentTimeMillis();
             Toast.makeText(owner_Event_Main.this,
                     "'뒤로' 버튼을 한번 더 누르면 로그아웃", Toast.LENGTH_SHORT).show();
             return;
-        }
-        if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+        } else if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
             finish();
         }
     } // 백키 2번 로그아웃
