@@ -12,6 +12,12 @@
         android:background="@color/colorPrimary"
         android:minHeight="?attr/actionBarSize">
 
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:onClick="onClick_owner_Accountinfo"
+            android:src="@drawable/ic_account" />
     </android.support.v7.widget.Toolbar>
 
     <android.support.design.widget.FloatingActionButton

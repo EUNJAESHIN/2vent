@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.TabHost;
+import android.widget.Toast;
 
 import com.example.win.a2vent.databinding.UserEventMainBinding;
 
@@ -47,6 +48,7 @@ public class user_Event_Main extends AppCompatActivity {
     private final String TAG_STARTDAY = "event_startday";
     private final String TAG_ENDDAY = "event_endday";
 
+    private long backKeyPressedTime = 0;
     UserEventMainBinding binding_UserMain;
     Context mContext;
     RecyclerView.Adapter rAdapter1, rAdapter2, rAdapter3, rAdapter4, rAdapter5;
@@ -75,6 +77,18 @@ public class user_Event_Main extends AppCompatActivity {
         Intent intent = new Intent(this, user_map.class);
         startActivity(intent);
     }
+
+    public void onBackPressed() {
+        if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+            backKeyPressedTime = System.currentTimeMillis();
+            Toast.makeText(user_Event_Main.this,
+                    "'뒤로' 버튼을 한번 더 누르면 로그아웃", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+            finish();
+        }
+    } // 백키 2번 로그아웃
 
     public void set_TabHost(Activity a) {
         TabHost tabHost = (TabHost) findViewById(R.id.tabHost_usermain);

@@ -13,7 +13,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -35,9 +34,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by win on 2017-07-06.
@@ -49,6 +45,8 @@ public class owner_Event_Main extends AppCompatActivity implements NavigationVie
     private static final String TAG_JSON = "Company";
     String mJsonString;
     private int nType = 1;
+
+    private long backKeyPressedTime = 0;
 
     Context mContext;
     FloatingActionButton fab;
@@ -113,6 +111,11 @@ public class owner_Event_Main extends AppCompatActivity implements NavigationVie
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    public void onClick_owner_Accountinfo(View v) {
+        Intent GoOwnerinfo = new Intent(this, owner_Info.class);
+        startActivity(GoOwnerinfo);
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -121,7 +124,17 @@ public class owner_Event_Main extends AppCompatActivity implements NavigationVie
         } else {
             super.onBackPressed();
         }
-    }
+
+        if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+            backKeyPressedTime = System.currentTimeMillis();
+            Toast.makeText(owner_Event_Main.this,
+                    "'뒤로' 버튼을 한번 더 누르면 로그아웃", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+            finish();
+        }
+    } // 백키 2번 로그아웃
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -238,7 +251,7 @@ public class owner_Event_Main extends AppCompatActivity implements NavigationVie
                 String com_URI = item.getString("com_URI");
                 String id = item.getString("id");
 
-                Log.d("Login ID -"+GlobalData.getUserID(),id);
+                Log.d("Login ID -" + GlobalData.getUserID(), id);
 
                 if (GlobalData.getUserID().equals(id)) { // equals 객체의 내용 자체를 비교하지만 == 연산자는 대상의 주소값을 비교한다
                     if (com_category.equals("0")) {

@@ -20,7 +20,7 @@ public class owner_AddStore_webView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.owner__addstore_webview);
+        setContentView(R.layout.owner_addstore_webview);
 
         // WebView 초기화
         init_webView();

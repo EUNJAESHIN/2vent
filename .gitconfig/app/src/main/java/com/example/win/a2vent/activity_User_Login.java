@@ -34,6 +34,7 @@ public class activity_User_Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding_userLogin = DataBindingUtil.setContentView(this, R.layout.activity_user_login);
 
+        GlobalData.setUserData(null,null,null,null,null,null,null,null);
     }
 
     public void onClick_login(View view) {
@@ -62,9 +63,8 @@ public class activity_User_Login extends AppCompatActivity {
             return;
         }
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-            Toast.makeText(activity_User_Login.this,
-                    "'뒤로' 버튼을 한번 더 누르시면 종료됩니다", Toast.LENGTH_SHORT).cancel();
-            finish();
+            finish(); // 액티비티 종료 (onDestroy() 호출)
+            android.os.Process.killProcess(android.os.Process.myPid()); // 현재 프로세스 및 서비스 종료
         }
     } // 백키 2번해야 종료
 
