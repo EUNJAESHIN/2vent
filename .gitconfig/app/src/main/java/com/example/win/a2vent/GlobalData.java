@@ -45,15 +45,16 @@ public class GlobalData {
         return UserAccountNum;
     }
 
-    public static void setUserData(String... args) {
-        UserID = args[0];
-        UserPW = args[1];
-        UserName = args[2];
-        UserAddr = args[3];
-        UserBirth = args[4];
-        UserSex = args[5];
-        UserPhone = args[6];
-        UserAccountNum = args[7];
+    public static void setUserData(String id,String pw, String name, String addr, String birth,
+                                   String sex, String phone, String acc) {
+        UserID = id;
+        UserPW = pw;
+        UserName = name;
+        UserAddr = addr;
+        UserBirth = birth;
+        UserSex = sex;
+        UserPhone = phone;
+        UserAccountNum = acc;
     }
 
 }

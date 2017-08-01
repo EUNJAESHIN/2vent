@@ -40,11 +40,12 @@ public class user_Event_Detail extends AppCompatActivity {
         // Intent에 담긴 event_number값 받기
 
         getEventInfo = new GetEventInfo();
-        putEntry = new PutEntry();
         getEventInfo.execute(Integer.toString(event_number));
     }
 
     public void onClick_participation(View v) {
+        putEntry = new PutEntry();
+
         if (event_type == 0) { // 0:응모형 1:결제형
             putEntry.execute(Integer.toString(event_number),
                     GlobalData.getUserID(),
@@ -56,9 +57,9 @@ public class user_Event_Detail extends AppCompatActivity {
                     Integer.toString(event_type),
                     com_number);
         } else if (event_type == 1) {
-
+            Toast.makeText(user_Event_Detail.this, "결제 미구현", Toast.LENGTH_SHORT).show();
+            //TODO 결제 부분
         }
-        //TODO : 응모나 결제시 entry에 DB값 입력하는데 유저정보 받아와야 함
     }
 
     private class GetEventInfo extends AsyncTask<String, String, String> {
