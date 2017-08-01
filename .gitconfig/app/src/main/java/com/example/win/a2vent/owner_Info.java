@@ -16,7 +16,7 @@ import com.example.win.a2vent.databinding.OwnerInfoBinding;
 
 /**
  * Created by EUNJAESHIN on 2017-07-26.
- * 사용자 상세정보 부분
+ * 사업자(판매자) 상세정보 부분
  */
 
 public class owner_Info extends AppCompatActivity {
