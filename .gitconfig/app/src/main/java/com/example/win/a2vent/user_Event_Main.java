@@ -26,6 +26,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import static com.example.win.a2vent.activity_User_Login.actList;
+
 /**
  * Created by EUNJAESHIN on 2017-07-10.
  * 사용자 메인 화면
@@ -59,6 +61,7 @@ public class user_Event_Main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        actList.add(this);
         binding_UserMain = DataBindingUtil.setContentView(this, R.layout.user_event_main);
         set_TabHost(this);
 
@@ -86,6 +89,10 @@ public class user_Event_Main extends AppCompatActivity {
             return;
         }
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+            Intent intent_Logout = new Intent(user_Event_Main.this, activity_User_Login.class);
+            for(int i=0; i<actList.size(); i++)
+                actList.get(i).finish();
+            startActivity(intent_Logout);
             finish(); // 액티비티 종료 (정확하게는 onDestroy() 호출)
         }
     } // 백키 2번 로그아웃

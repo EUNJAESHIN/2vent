@@ -35,6 +35,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import static com.example.win.a2vent.activity_User_Login.actList;
+
 /**
  * Created by win on 2017-07-06.
  */
@@ -60,6 +62,7 @@ public class owner_Event_Main extends AppCompatActivity implements NavigationVie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        actList.add(this);
         binding_OwnerMain = DataBindingUtil.setContentView(this, R.layout.owner_event_main);
 
         mContext = getApplicationContext();
@@ -127,7 +130,11 @@ public class owner_Event_Main extends AppCompatActivity implements NavigationVie
                     "'뒤로' 버튼을 한번 더 누르면 로그아웃", Toast.LENGTH_SHORT).show();
             return;
         } else if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-            finish();
+            Intent intent_Logout = new Intent(owner_Event_Main.this, activity_User_Login.class);
+            for(int i=0; i<actList.size(); i++)
+                actList.get(i).finish();
+            startActivity(intent_Logout);
+            finish(); // 액티비티 종료 (정확하게는 onDestroy() 호출)
         }
     } // 백키 2번 로그아웃
 
@@ -292,4 +299,5 @@ public class owner_Event_Main extends AppCompatActivity implements NavigationVie
         }
         super.onPause();
     }
+
 }

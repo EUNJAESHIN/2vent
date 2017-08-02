@@ -133,6 +133,7 @@ public class activity_User_Join extends AppCompatActivity {
 //            2ventRegister.php의 echo(result)와 비교하여 회원가입 성공 및 실패
             if (result.equals("회원가입 성공!")) {
                 Intent intent_Joindone = new Intent(activity_User_Join.this, activity_User_Login.class);
+                finish();
                 startActivity(intent_Joindone);
                 Toast.makeText(activity_User_Join.this, "가입 성공!", Toast.LENGTH_SHORT).show();
             } else if (result.equals("아이디가 존재합니다")) {

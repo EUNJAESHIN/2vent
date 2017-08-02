@@ -17,6 +17,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static com.example.win.a2vent.activity_User_Login.actList;
+
 /**
  * Created by EUNJAESHIN on 2017-07-27.
  * 이벤트 상세정보 부분
@@ -33,6 +35,7 @@ public class user_Event_Detail extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        actList.add(this);
         binding_UserDetail = DataBindingUtil.setContentView(this, R.layout.user_event_detail);
 
         Intent intent_getEventinfo = getIntent();

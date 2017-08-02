@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.example.win.a2vent.databinding.UserInfoBinding;
 
+import static com.example.win.a2vent.activity_User_Login.actList;
+
 /**
  * Created by EUNJAESHIN on 2017-07-26.
  * 사용자 상세정보 부분
@@ -27,6 +29,7 @@ public class user_Info extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        actList.add(this);
         binding_UserInfo = DataBindingUtil.setContentView(this, R.layout.user_info);
 
         builder_WithdrawalAlert = new AlertDialog.Builder(user_Info.this);
@@ -110,10 +113,12 @@ public class user_Info extends AppCompatActivity {
             progressDialog.dismiss();
 
             if (result.equals("탈퇴 처리 완료")) {
-                finish();
                 Intent intent_Leavingdone = new Intent(user_Info.this, activity_User_Login.class);
+                for(int i=0; i<actList.size(); i++)
+                    actList.get(i).finish();
                 startActivity(intent_Leavingdone);
-                Toast.makeText(user_Info.this, "탈퇴 되었습니다.", Toast.LENGTH_SHORT).show();
+                finish();
+                Toast.makeText(user_Info.this, "탈퇴 되었습니다", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(user_Info.this, "Withdrawal Error", Toast.LENGTH_SHORT).show();
             }
@@ -137,4 +142,5 @@ public class user_Info extends AppCompatActivity {
         }
         super.onPause();
     }
+
 }

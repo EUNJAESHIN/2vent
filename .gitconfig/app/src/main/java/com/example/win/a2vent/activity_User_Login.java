@@ -1,5 +1,6 @@
 package com.example.win.a2vent;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -16,12 +17,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * Created by EUNJAESHIN on 2017-07-10.
  * 로그인 부분 (첫 액티비티)
+ *
+ * 스택에 쌓인 액티비티 모두 종료하기 (2017-08-02)
+ * 참고 http://neoroid.tistory.com/201
  */
 
 public class activity_User_Login extends AppCompatActivity {
+
+    public static ArrayList<Activity> actList = new ArrayList<Activity>();
 
     private long backKeyPressedTime = 0;
     String sId, sPw;
@@ -63,6 +71,9 @@ public class activity_User_Login extends AppCompatActivity {
             return;
         }
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+            for(int i=0; i<actList.size(); i++)
+                actList.get(i).finish();
+            finish();
             android.os.Process.killProcess(android.os.Process.myPid()); // 현재 프로세스 및 서비스 종료
         }
     } // 백키 2번해야 종료
@@ -112,11 +123,17 @@ public class activity_User_Login extends AppCompatActivity {
             } else if (result.equals("1")) {
                 getUserInfo.execute(binding_userLogin.eTextLoginId.getText().toString());
                 Intent intent_userLogin = new Intent(activity_User_Login.this, user_Event_Main.class);
+                for(int i=0; i<actList.size(); i++)
+                    actList.get(i).finish();
                 startActivity(intent_userLogin);
+                finish();
             } else if (result.equals("2")) {
                 getUserInfo.execute(binding_userLogin.eTextLoginId.getText().toString());
                 Intent intent_managerLogin = new Intent(activity_User_Login.this, owner_Event_Main.class);
+                for(int i=0; i<actList.size(); i++)
+                    actList.get(i).finish();
                 startActivity(intent_managerLogin);
+                finish();
             } else {
                 Toast.makeText(activity_User_Login.this, "Account Error", Toast.LENGTH_SHORT).show();
             }
