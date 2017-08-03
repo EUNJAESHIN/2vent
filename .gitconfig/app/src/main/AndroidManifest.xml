@@ -25,24 +25,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".owner_Event_Main" />
-        <activity android:name=".activity_User_Login">
+        <activity android:name=".Activity_User_Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity_User_Join" />
-        <activity android:name=".user_Event_Main" />
-        <activity android:name=".owner_AddStore" />
-        <activity android:name=".owner_AddStore_webView" />
-        <activity android:name=".owner_Event_Form" />
-        <activity android:name=".user_map" />
-        <activity android:name=".user_payment" />
-        <activity android:name=".user_iteminfo" />
-        <activity android:name=".user_Info" />
-        <activity android:name=".user_Event_Detail" />
+        <activity android:name=".Activity_User_Join" />
+        <activity android:name=".Activity_User_Event_Main" />
+        <activity android:name=".Activity_User_Event_Details_Info" />
+        <activity android:name=".Activity_User_Info" />
+        <activity android:name=".Activity_User_Map" />
+        <activity android:name=".Activity_Owner_Event_Main" />
+        <activity android:name=".Activity_Owner_Event_Details_Info" />
+        <activity android:name=".Activity_Owner_Add_Store" />
+        <activity android:name=".Activity_Owner_Add_Store_WebView" />
+        <activity android:name=".Activity_Owner_Add_Event" />
+        <activity android:name=".Activity_Owner_Store_Event_List" />
+        <activity android:name=".Activity_Owner_Entry_List" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -54,7 +55,7 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".owner_Info"></activity>
+        <activity android:name=".Activity_Owner_Info"></activity>
     </application>
 
 </manifest>

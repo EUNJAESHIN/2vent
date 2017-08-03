@@ -12,30 +12,28 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.win.a2vent.databinding.UserInfoBinding;
-
-import static com.example.win.a2vent.activity_User_Login.actList;
+import com.example.win.a2vent.databinding.ActivityOwnerInfoBinding;
 
 /**
  * Created by EUNJAESHIN on 2017-07-26.
- * 사용자 상세정보 부분
+ * 사업자(판매자) 상세정보 부분
  */
 
-public class user_Info extends AppCompatActivity {
-    UserInfoBinding binding_UserInfo;
+public class Activity_Owner_Info extends AppCompatActivity {
+    ActivityOwnerInfoBinding binding_OwnerInfo;
     AlertDialog.Builder builder_WithdrawalAlert;
     LeavingTask leavingTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        actList.add(this);
-        binding_UserInfo = DataBindingUtil.setContentView(this, R.layout.user_info);
+        binding_OwnerInfo = DataBindingUtil.setContentView(this, R.layout.activity_owner_info);
 
-        builder_WithdrawalAlert = new AlertDialog.Builder(user_Info.this);
+        builder_WithdrawalAlert = new AlertDialog.Builder(Activity_Owner_Info.this);
         builder_WithdrawalAlert
                 .setTitle("회원 탈퇴")
-                .setMessage("\n 탈퇴 시, 참여한 모든 이벤트가 삭제됩니다. \n 탈퇴하시겠습니까?")
+                .setMessage(" 탈퇴 시, 등록된 매장 모두가 삭제되고 " +
+                        "\n 추가했던 모든 이벤트가 삭제됩니다. \n 탈퇴하시겠습니까?")
                 .setCancelable(true)
                 .setPositiveButton("탈퇴", new DialogInterface.OnClickListener() {
                     @Override
@@ -51,24 +49,24 @@ public class user_Info extends AppCompatActivity {
                     }
                 });
 
-        binding_UserInfo.tvInfo1.append("아이디  : " + GlobalData.getUserID());
-        binding_UserInfo.tvInfo2.append("비밀번호 : " + GlobalData.getUserPW());
-        binding_UserInfo.tvInfo3.append("성명 : " + GlobalData.getUserName());
-        binding_UserInfo.tvInfo4.append("주소 : " + GlobalData.getUserAddr());
-        binding_UserInfo.tvInfo5.append("생년월일 : " + GlobalData.getUserBirth());
+        binding_OwnerInfo.tvOwnerinfo1.append("아이디  : " + GlobalData.getUserID());
+        binding_OwnerInfo.tvOwnerinfo2.append("비밀번호 : " + GlobalData.getUserPW());
+        binding_OwnerInfo.tvOwnerinfo3.append("성명 : " + GlobalData.getUserName());
+        binding_OwnerInfo.tvOwnerinfo4.append("주소 : " + GlobalData.getUserAddr());
+        binding_OwnerInfo.tvOwnerinfo5.append("생년월일 : " + GlobalData.getUserBirth());
         if (GlobalData.getUserSex().equals("0")) {
-            binding_UserInfo.tvInfo6.append("성별 : 여성");
+            binding_OwnerInfo.tvOwnerinfo6.append("성별 : 여성");
         } else if (GlobalData.getUserSex().equals("1")) {
-            binding_UserInfo.tvInfo6.append("성별 : 남성");
+            binding_OwnerInfo.tvOwnerinfo6.append("성별 : 남성");
         } else {
-            binding_UserInfo.tvInfo6.append("성별 : ");
+            binding_OwnerInfo.tvOwnerinfo6.append("성별 : ");
         }
-        binding_UserInfo.tvInfo7.append("전화번호 : " + GlobalData.getUserPhone());
-        binding_UserInfo.tvInfo8.append("계좌번호 : " + GlobalData.getUserAccountNum());
+        binding_OwnerInfo.tvOwnerinfo7.append("전화번호 : " + GlobalData.getUserPhone());
+        binding_OwnerInfo.tvOwnerinfo8.append("계좌번호 : " + GlobalData.getUserAccountNum());
 
     }
 
-    public void onClick_Withdrawal(View v) {
+    public void onClick_owner_Withdrawal(View v) {
         AlertDialog dialog_WithdrawalAlert = builder_WithdrawalAlert.create();
         dialog_WithdrawalAlert.show();
     } // 탈퇴 버튼
@@ -80,13 +78,13 @@ public class user_Info extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = ProgressDialog.show(user_Info.this,
+            progressDialog = ProgressDialog.show(Activity_Owner_Info.this,
                     "Bye Bye..", null, true, true);
         }
 
         @Override
         protected String doInBackground(String... params) {
-            String serverURL = "2ventWithdrawal_user.php";
+            String serverURL = "2ventWithdrawal_owner.php";
 
             try {
                 ServerConnector serverConnector = new ServerConnector(serverURL);
@@ -113,14 +111,12 @@ public class user_Info extends AppCompatActivity {
             progressDialog.dismiss();
 
             if (result.equals("탈퇴 처리 완료")) {
-                Intent intent_Leavingdone = new Intent(user_Info.this, activity_User_Login.class);
-                for(int i=0; i<actList.size(); i++)
-                    actList.get(i).finish();
-                startActivity(intent_Leavingdone);
                 finish();
-                Toast.makeText(user_Info.this, "탈퇴 되었습니다", Toast.LENGTH_SHORT).show();
+                Intent intent_Leavingdone = new Intent(Activity_Owner_Info.this, Activity_User_Login.class);
+                startActivity(intent_Leavingdone);
+                Toast.makeText(Activity_Owner_Info.this, "탈퇴 되었습니다.", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(user_Info.this, "Withdrawal Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Owner_Info.this, "Withdrawal Error", Toast.LENGTH_SHORT).show();
             }
             Log.d("DB", "POST response  - " + result);
         }
@@ -142,5 +138,4 @@ public class user_Info extends AppCompatActivity {
         }
         super.onPause();
     }
-
 }

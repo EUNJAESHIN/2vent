@@ -29,7 +29,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    //    compile 'com.naver.maps.open:naver-map-api:2.1.2@aar'
+    //    compile 'com.naver.maps.open:naver-activity_user_map-api:2.1.2@aar'
 
     compile files('libs/picasso-2.5.2.jar')
     compile files('libs/libDaumMapAndroid.jar')

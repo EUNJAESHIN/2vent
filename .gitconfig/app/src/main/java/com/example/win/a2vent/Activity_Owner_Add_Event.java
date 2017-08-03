@@ -41,6 +41,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -61,7 +63,7 @@ import java.util.StringTokenizer;
  * Created by win on 2017-07-10.
  */
 
-public class owner_Event_Form extends AppCompatActivity {
+public class Activity_Owner_Add_Event extends AppCompatActivity {
 
     private final static String TAG = "테스트";
 
@@ -101,13 +103,13 @@ public class owner_Event_Form extends AppCompatActivity {
 
     private Button btnAddSubmit, btnAddTemp, btnAddCancel;
 
-    private int mEvent_number;
+    private int mEvent_number = -1;
     private boolean flagUpdate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.owner_event_form);
+        setContentView(R.layout.activity_owner_add_event);
 
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                 .detectDiskReads()
@@ -115,7 +117,7 @@ public class owner_Event_Form extends AppCompatActivity {
                 .detectNetwork()
                 .penaltyLog().build());
 
-        verifyStoragePermissions(owner_Event_Form.this);
+        verifyStoragePermissions(Activity_Owner_Add_Event.this);
 
         rlEventForm = (RelativeLayout) findViewById(R.id.rlEventForm);
         rlEventForm.setOnClickListener(new View.OnClickListener() {
@@ -170,11 +172,11 @@ public class owner_Event_Form extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 switch (checkedId) {
                     case R.id.rbCashPayment:
-                        //Toast.makeText(owner_event_form.this, rbCashPayment.getText().toString(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(activity_owner_add_event.this, rbCashPayment.getText().toString(), Toast.LENGTH_SHORT).show();
                         payment = 0;
                         break;
                     case R.id.rbCardPayment:
-                        //Toast.makeText(owner_event_form.this, rbCardPayment.getText().toString(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(activity_owner_add_event.this, rbCardPayment.getText().toString(), Toast.LENGTH_SHORT).show();
                         payment = 1;
                         break;
                 }
@@ -232,7 +234,7 @@ public class owner_Event_Form extends AppCompatActivity {
             }
         });
 
-        ArrayAdapter<CharSequence> arrAdtLocations = ArrayAdapter.createFromResource(owner_Event_Form.this, R.array.locations, R.layout.support_simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> arrAdtLocations = ArrayAdapter.createFromResource(Activity_Owner_Add_Event.this, R.array.locations, R.layout.support_simple_spinner_dropdown_item);
         spinLocation = (Spinner) findViewById(R.id.spinLocation);
         spinLocation.setAdapter(arrAdtLocations);
         spinLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -266,7 +268,7 @@ public class owner_Event_Form extends AppCompatActivity {
         btnAddCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                owner_Event_Form.super.onBackPressed();
+                Activity_Owner_Add_Event.super.onBackPressed();
             }
         });
 
@@ -284,8 +286,6 @@ public class owner_Event_Form extends AppCompatActivity {
                 getTempEvent.execute(String.valueOf(mEvent_number));
 
                 flagUpdate = true;
-
-                Log.d(TAG, "flagUpdate: " + flagUpdate);
             } catch (NumberFormatException e) {
 
             }
@@ -428,7 +428,7 @@ public class owner_Event_Form extends AppCompatActivity {
 
     private void input(String msg) {
         if (msg != null) {
-            Toast.makeText(owner_Event_Form.this, msg, Toast.LENGTH_SHORT).show();
+            Toast.makeText(Activity_Owner_Add_Event.this, msg, Toast.LENGTH_SHORT).show();
         } else {
             String _name = etEventName.getText().toString();
             String _type = String.valueOf(type);
@@ -470,6 +470,7 @@ public class owner_Event_Form extends AppCompatActivity {
 
             InsertData inputTask = new InsertData();
             if (flagUpdate) {
+                Log.d(TAG, "flagUpdate: " + flagUpdate);
                 inputTask.execute(_name, _type, _stats, _URI, _price, _dis_price, _people, _startday,
                         _endday, _starttime, _endtime, _payment, _target, _minage, _maxage, _sex, _area,
                         _com_number, _id, String.valueOf(mEvent_number));
@@ -703,7 +704,7 @@ public class owner_Event_Form extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = ProgressDialog.show(owner_Event_Form.this, "Please Wait", null, true, true);
+            progressDialog = ProgressDialog.show(Activity_Owner_Add_Event.this, "Please Wait", null, true, true);
         }
 
         @Override
@@ -792,13 +793,13 @@ public class owner_Event_Form extends AppCompatActivity {
             if (result.equals("SQL문 처리 성공")) {
                 switch (status) {
                     case 0:
-                        Toast.makeText(owner_Event_Form.this, "등록이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Activity_Owner_Add_Event.this, "등록이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                         break;
                     case 1:
-                        Toast.makeText(owner_Event_Form.this, "임시저장 되었습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Activity_Owner_Add_Event.this, "임시저장 되었습니다.", Toast.LENGTH_SHORT).show();
                         break;
                 }
-                owner_Event_Form.this.onBackPressed();
+                Activity_Owner_Add_Event.this.onBackPressed();
             }
         }
     }
@@ -888,14 +889,14 @@ public class owner_Event_Form extends AppCompatActivity {
                 String com_name;
 
                 if (jsonArray.length() == 0) {
-                    Toast.makeText(owner_Event_Form.this,
+                    Toast.makeText(Activity_Owner_Add_Event.this,
                             "등록된 매장이 없습니다. 매장을 등록해주세요.", Toast.LENGTH_SHORT).show();
 
                     new Handler().postDelayed(new Runnable() {
 
                         @Override
                         public void run() {
-                            owner_Event_Form.this.onBackPressed();
+                            Activity_Owner_Add_Event.this.onBackPressed();
                         }
                     }, 2000);
                 }
@@ -921,7 +922,7 @@ public class owner_Event_Form extends AppCompatActivity {
         }
 
         public void setAdapter(final ArrayList<CharSequence> arrList) {
-            ArrayAdapter<CharSequence> arrAdtSpinner = new ArrayAdapter<>(owner_Event_Form.this, R.layout.support_simple_spinner_dropdown_item, arrList);
+            ArrayAdapter<CharSequence> arrAdtSpinner = new ArrayAdapter<>(Activity_Owner_Add_Event.this, R.layout.support_simple_spinner_dropdown_item, arrList);
             spinStore = (Spinner) findViewById(R.id.spinStore);
             spinStore.setAdapter(arrAdtSpinner);
             spinStore.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1109,7 +1110,9 @@ public class owner_Event_Form extends AppCompatActivity {
                 Log.d(TAG, "event_URI: " + event_URI);
                 if (!event_URI.equals("")) {
                     Picasso.with(getApplicationContext()).load(GlobalData.getURL() + event_URI)
-                            .placeholder(R.drawable.event_default).into(imgContents);
+                            .placeholder(R.drawable.event_default)
+                            .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                            .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE).into(imgContents);
                     uploadImgPath = event_URI;
                 } else {
                     uploadImgPath = "";

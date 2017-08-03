@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.TabHost;
 import android.widget.Toast;
 
-import com.example.win.a2vent.databinding.UserEventMainBinding;
+import com.example.win.a2vent.databinding.ActivityUserEventMainBinding;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,7 +26,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-import static com.example.win.a2vent.activity_User_Login.actList;
+import static com.example.win.a2vent.Activity_User_Login.actList;
 
 /**
  * Created by EUNJAESHIN on 2017-07-10.
@@ -38,7 +38,7 @@ import static com.example.win.a2vent.activity_User_Login.actList;
  * https://developer.android.com/topic/libraries/data-binding/index.html?hl=ko
  */
 
-public class user_Event_Main extends AppCompatActivity {
+public class Activity_User_Event_Main extends AppCompatActivity {
     private String TAG = "getEventDB";
     private final String TAG_JSON = "Event";
     private final String TAG_NUM = "event_number";
@@ -51,7 +51,7 @@ public class user_Event_Main extends AppCompatActivity {
     private final String TAG_ENDDAY = "event_endday";
 
     private long backKeyPressedTime = 0;
-    UserEventMainBinding binding_UserMain;
+    ActivityUserEventMainBinding binding_UserMain;
     Context mContext;
     RecyclerView.Adapter rAdapter1, rAdapter2, rAdapter3, rAdapter4, rAdapter5;
     ArrayList category_All, category_Culture, category_Meal, category_Beauty, category_Fashion;
@@ -62,7 +62,7 @@ public class user_Event_Main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         actList.add(this);
-        binding_UserMain = DataBindingUtil.setContentView(this, R.layout.user_event_main);
+        binding_UserMain = DataBindingUtil.setContentView(this, R.layout.activity_user_event_main);
         set_TabHost(this);
 
         mContext = getApplicationContext();
@@ -72,24 +72,24 @@ public class user_Event_Main extends AppCompatActivity {
     }
 
     public void onClick_Accountinfo(View v) {
-        Intent GoUserinfo = new Intent(this, user_Info.class);
+        Intent GoUserinfo = new Intent(this, Activity_User_Info.class);
         startActivity(GoUserinfo);
     }
 
     public void onClick_goMap(View v) {
-        Intent intent = new Intent(this, user_map.class);
+        Intent intent = new Intent(this, Activity_User_Map.class);
         startActivity(intent);
     }
 
     public void onBackPressed() {
         if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
             backKeyPressedTime = System.currentTimeMillis();
-            Toast.makeText(user_Event_Main.this,
+            Toast.makeText(Activity_User_Event_Main.this,
                     "'뒤로' 버튼을 한번 더 누르면 로그아웃", Toast.LENGTH_SHORT).show();
             return;
         }
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-            Intent intent_Logout = new Intent(user_Event_Main.this, activity_User_Login.class);
+            Intent intent_Logout = new Intent(Activity_User_Event_Main.this, Activity_User_Login.class);
             for(int i=0; i<actList.size(); i++)
                 actList.get(i).finish();
             startActivity(intent_Logout);
@@ -246,30 +246,30 @@ public class user_Event_Main extends AppCompatActivity {
                 String event_endday = item.getString(TAG_ENDDAY);
 
                 // 전체 항목에는 모두 저장
-                category_All.add(new user_Event_Item(event_number, event_name, event_URI,
+                category_All.add(new User_Event_Item(event_number, event_name, event_URI,
                         event_price, event_dis_price, event_startday, event_endday));
 
                 // 카테고리 분류해서 각각 저장
                 if (event_type == 0) {
-                    category_Culture.add(new user_Event_Item(event_number, event_name, event_URI,
+                    category_Culture.add(new User_Event_Item(event_number, event_name, event_URI,
                             event_price, event_dis_price, event_startday, event_endday));
                 } else if (event_type == 1) {
-                    category_Meal.add(new user_Event_Item(event_number, event_name, event_URI,
+                    category_Meal.add(new User_Event_Item(event_number, event_name, event_URI,
                             event_price, event_dis_price, event_startday, event_endday));
                 } else if (event_type == 2) {
-                    category_Beauty.add(new user_Event_Item(event_number, event_name, event_URI,
+                    category_Beauty.add(new User_Event_Item(event_number, event_name, event_URI,
                             event_price, event_dis_price, event_startday, event_endday));
                 } else if (event_type == 3) {
-                    category_Fashion.add(new user_Event_Item(event_number, event_name, event_URI,
+                    category_Fashion.add(new User_Event_Item(event_number, event_name, event_URI,
                             event_price, event_dis_price, event_startday, event_endday));
                 }
             }
 
-            rAdapter1 = new user_Event_Adapter(category_All, mContext);
-            rAdapter2 = new user_Event_Adapter(category_Culture, mContext);
-            rAdapter3 = new user_Event_Adapter(category_Meal, mContext);
-            rAdapter4 = new user_Event_Adapter(category_Beauty, mContext);
-            rAdapter5 = new user_Event_Adapter(category_Fashion, mContext);
+            rAdapter1 = new User_Event_Adapter(category_All, mContext);
+            rAdapter2 = new User_Event_Adapter(category_Culture, mContext);
+            rAdapter3 = new User_Event_Adapter(category_Meal, mContext);
+            rAdapter4 = new User_Event_Adapter(category_Beauty, mContext);
+            rAdapter5 = new User_Event_Adapter(category_Fashion, mContext);
 
             binding_UserMain.rviewContent1.setAdapter(rAdapter1);
             binding_UserMain.rviewContent2.setAdapter(rAdapter2);

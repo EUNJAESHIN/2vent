@@ -53,7 +53,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class owner_AddStore extends AppCompatActivity implements View.OnClickListener {
+public class Activity_Owner_Add_Store extends AppCompatActivity implements View.OnClickListener {
 
     TextView v_com_name;
     TextView v_com_addr;
@@ -104,7 +104,7 @@ public class owner_AddStore extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.owner_addstore);
+        setContentView(R.layout.activity_owner_add_store);
 
         v_com_name = (TextView) findViewById(R.id.com_form_name);
         v_com_addr = (TextView) findViewById(R.id.com_form_addr);
@@ -167,7 +167,7 @@ public class owner_AddStore extends AppCompatActivity implements View.OnClickLis
         btn_search_addr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(owner_AddStore.this, owner_AddStore_webView.class);
+                Intent i = new Intent(Activity_Owner_Add_Store.this, Activity_Owner_Add_Store_WebView.class);
                 startActivityForResult(i, SEARCH_ADDR);
 //                // WebView 초기화
 //                init_webView();
@@ -219,8 +219,8 @@ public class owner_AddStore extends AppCompatActivity implements View.OnClickLis
         Log.e("새로 만든거", String.valueOf(city.length));
 
 
-        ArrayAdapter spin_adapter = new ArrayAdapter(getApplicationContext(), R.layout.owner_addstore_spin, city);
-        spin_adapter.setDropDownViewResource(R.layout.owner_addstore_spin_drop);
+        ArrayAdapter spin_adapter = new ArrayAdapter(getApplicationContext(), R.layout.owner_add_store_spin, city);
+        spin_adapter.setDropDownViewResource(R.layout.owner_add_store_spin_drop);
 
         v_com_manager.setAdapter(spin_adapter);
         v_com_manager.setSelection(0);
@@ -290,7 +290,7 @@ public class owner_AddStore extends AppCompatActivity implements View.OnClickLis
             super.onPreExecute();
 
             Log.i("asyntask", "됨");
-            progressDialog = ProgressDialog.show(owner_AddStore.this,
+            progressDialog = ProgressDialog.show(Activity_Owner_Add_Store.this,
                     "Please Wait", null, true, true);
         }
 
@@ -452,11 +452,11 @@ public class owner_AddStore extends AppCompatActivity implements View.OnClickLis
         try {
             photoFile = createImageFile();
         } catch (IOException e) {
-            Toast.makeText(owner_AddStore.this, "이미지 처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Activity_Owner_Add_Store.this, "이미지 처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
             finish();
         }
         if (photoFile != null) {
-            photoUri = FileProvider.getUriForFile(owner_AddStore.this,
+            photoUri = FileProvider.getUriForFile(Activity_Owner_Add_Store.this,
                     "com.example.win.a2vent.provider", photoFile); //FileProvider의 경우 이전 포스트를 참고하세요.
             Toast.makeText(this, photoUri.toString(), Toast.LENGTH_SHORT).show();
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri); //사진을 찍어 해당 Content uri를 photoUri에 적용시키기 위함
@@ -495,7 +495,7 @@ public class owner_AddStore extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK) {
-            Toast.makeText(owner_AddStore.this, "이미지 처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Activity_Owner_Add_Store.this, "이미지 처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
         }
         if (requestCode == PICK_FROM_ALBUM) {
             if (data == null) {
@@ -508,7 +508,7 @@ public class owner_AddStore extends AppCompatActivity implements View.OnClickLis
 
         } else if (requestCode == PICK_FROM_CAMERA) {
             cropImage();
-            MediaScannerConnection.scanFile(owner_AddStore.this, //앨범에 사진을 보여주기 위해 Scan을 합니다.
+            MediaScannerConnection.scanFile(Activity_Owner_Add_Store.this, //앨범에 사진을 보여주기 위해 Scan을 합니다.
                     new String[]{photoUri.getPath()}, null,
                     new MediaScannerConnection.OnScanCompletedListener() {
                         public void onScanCompleted(String path, Uri uri) {
@@ -577,7 +577,7 @@ public class owner_AddStore extends AppCompatActivity implements View.OnClickLis
             File folder = new File(Environment.getExternalStorageDirectory() + "/test/");
             File tempFile = new File(folder.toString(), croppedFileName.getName());
 
-            photoUri = FileProvider.getUriForFile(owner_AddStore.this,
+            photoUri = FileProvider.getUriForFile(Activity_Owner_Add_Store.this,
                     "com.example.win.a2vent.provider", tempFile);
 
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

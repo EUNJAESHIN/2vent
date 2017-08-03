@@ -10,23 +10,23 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.win.a2vent.databinding.UserEventDetailBinding;
+import com.example.win.a2vent.databinding.ActivityUserEventDetailsInfoBinding;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.example.win.a2vent.activity_User_Login.actList;
+import static com.example.win.a2vent.Activity_User_Login.actList;
 
 /**
  * Created by EUNJAESHIN on 2017-07-27.
  * 이벤트 상세정보 부분
  */
 
-public class user_Event_Detail extends AppCompatActivity {
+public class Activity_User_Event_Details_Info extends AppCompatActivity {
     private String TAG = "getEventDetail";
-    UserEventDetailBinding binding_UserDetail;
+    ActivityUserEventDetailsInfoBinding binding_UserDetail;
     GetEventInfo getEventInfo;
     PutEntry putEntry;
     int event_number, event_type;
@@ -36,7 +36,7 @@ public class user_Event_Detail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         actList.add(this);
-        binding_UserDetail = DataBindingUtil.setContentView(this, R.layout.user_event_detail);
+        binding_UserDetail = DataBindingUtil.setContentView(this, R.layout.activity_user_event_details_info);
 
         Intent intent_getEventinfo = getIntent();
         event_number = intent_getEventinfo.getExtras().getInt("event_number");
@@ -60,7 +60,7 @@ public class user_Event_Detail extends AppCompatActivity {
                     Integer.toString(event_type),
                     com_number);
         } else if (event_type == 1) {
-            Toast.makeText(user_Event_Detail.this, "결제 미구현", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Activity_User_Event_Details_Info.this, "결제 미구현", Toast.LENGTH_SHORT).show();
             //TODO 결제 부분 미구현
         }
     }
@@ -213,14 +213,14 @@ public class user_Event_Detail extends AppCompatActivity {
             super.onPostExecute(result);
             Log.d("echo", result);
             if (result.equals("성공")) {
-                Toast.makeText(user_Event_Detail.this, "참여 완료", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_User_Event_Details_Info.this, "참여 완료", Toast.LENGTH_SHORT).show();
                 finish();
             } else if (result.equals("남은 자리 없음")) {
-                Toast.makeText(user_Event_Detail.this, "이미 모집이 완료된 이벤트입니다", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_User_Event_Details_Info.this, "이미 모집이 완료된 이벤트입니다", Toast.LENGTH_SHORT).show();
             } else if (result.equals("중복 에러")) {
-                Toast.makeText(user_Event_Detail.this, "이미 참여한 이벤트입니다", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_User_Event_Details_Info.this, "이미 참여한 이벤트입니다", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(user_Event_Detail.this, "응모/결제 오류", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_User_Event_Details_Info.this, "응모/결제 오류", Toast.LENGTH_SHORT).show();
             }
         }
 

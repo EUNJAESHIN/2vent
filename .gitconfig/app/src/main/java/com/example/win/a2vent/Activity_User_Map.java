@@ -9,7 +9,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -55,7 +54,7 @@ import java.util.List;
  * Created by Administrator on 2017-07-03.
  */
 
-public class user_map extends AppCompatActivity implements MapView.MapViewEventListener, MapView.POIItemEventListener, MapView.CurrentLocationEventListener {
+public class Activity_User_Map extends AppCompatActivity implements MapView.MapViewEventListener, MapView.POIItemEventListener, MapView.CurrentLocationEventListener {
 
     private int selectedNumberinMarker = 0;
 
@@ -80,7 +79,7 @@ public class user_map extends AppCompatActivity implements MapView.MapViewEventL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.map);
+        setContentView(R.layout.activity_user_map);
 
         //권한 부여
         PermissionListener permissionListener = new PermissionListener() {
@@ -91,7 +90,7 @@ public class user_map extends AppCompatActivity implements MapView.MapViewEventL
 
             @Override
             public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Toast.makeText(user_map.this, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_User_Map.this, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
             }
         };
 
@@ -268,14 +267,14 @@ public class user_map extends AppCompatActivity implements MapView.MapViewEventL
                 case R.id.llTestView:
                     // 하단뷰가 보일때만
                     if (simple_info.getVisibility() == View.VISIBLE) {
-                        intent = new Intent(getBaseContext(), user_iteminfo.class);
+                        intent = new Intent(getBaseContext(), Activity_User_Event_Details_Info.class);
                         intent.putExtra("event_number", selectedNumberinMarker);
                         startActivity(intent);
                     }
 
                     break;
                 case R.id.map_FAB:
-                    intent = new Intent(user_map.this, user_Event_Main.class);
+                    intent = new Intent(Activity_User_Map.this, Activity_User_Event_Main.class);
                     startActivity(intent);
             }
 

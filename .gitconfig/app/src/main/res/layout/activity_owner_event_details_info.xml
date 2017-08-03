@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="85">
+
+        <RelativeLayout
+            android:id="@+id/rlEventForm"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <ImageView
+                android:id="@+id/imgContents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:scaleType="fitXY"
+                app:srcCompat="@mipmap/ic_launcher" />
+
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imgContents"
+                android:layout_marginLeft="40dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="40dp"
+                android:text="구분" />
+
+            <TextView
+                android:id="@+id/tvType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tv1"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="60dp"
+                android:layout_toRightOf="@id/tv1"
+                android:textAlignment="center"
+                tools:background="?android:attr/editTextBackground" />
+
+            <TextView
+                android:id="@+id/tv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv1"
+                android:layout_below="@id/tv1"
+                android:layout_marginTop="20dp"
+                android:text="매장" />
+
+            <TextView
+                android:id="@+id/tvStore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tv2"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="60dp"
+                android:layout_toRightOf="@id/tv2"
+                android:textAlignment="center"
+                tools:background="?android:attr/editTextBackground" />
+
+            <TextView
+                android:id="@+id/tv3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv2"
+                android:layout_below="@id/tv2"
+                android:layout_marginTop="20dp"
+                android:text="정상가" />
+
+            <TextView
+                android:id="@+id/tvFixedPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tv3"
+                android:layout_alignLeft="@id/tvStore"
+                android:layout_alignRight="@id/tvType"
+                android:textAlignment="center"
+                tools:background="?android:attr/editTextBackground" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tvFixedPrice"
+                android:layout_toRightOf="@id/tvFixedPrice"
+                android:text="원" />
+
+            <TextView
+                android:id="@+id/tv4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv3"
+                android:layout_below="@id/tv3"
+                android:layout_marginTop="20dp"
+                android:text="할인가" />
+
+            <TextView
+                android:id="@+id/tvDiscount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tv4"
+                android:layout_alignLeft="@id/tvFixedPrice"
+                android:layout_alignRight="@id/tvType"
+                android:textAlignment="center"
+                tools:background="?android:attr/editTextBackground" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tvDiscount"
+                android:layout_toRightOf="@id/tvDiscount"
+                android:text="원" />
+            <!--
+                        <TextView
+                            android:id="@+id/tvCategory"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@id/tvDiscount"
+                            android:layout_below="@id/tvDiscount"
+                            android:layout_marginTop="45dp"
+                            android:text="카테고리" />
+
+                        <RadioGroup
+                            android:id="@+id/rgCategory"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@id/etDiscount"
+                            android:layout_alignTop="@id/tvCategory">
+
+                            <RadioButton
+                                android:id="@+id/rbCultureCategory"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="문화" />
+
+                            <RadioButton
+                                android:id="@+id/rbFoodCategory"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="음식" />
+
+                            <RadioButton
+                                android:id="@+id/rbBeautyCategory"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="뷰티" />
+
+                            <RadioButton
+                                android:id="@+id/rbFashionCategory"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="패션" />
+
+                            <RadioButton
+                                android:id="@+id/rbTravelCategory"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="여행" />
+
+                        </RadioGroup>
+            -->
+            <TextView
+                android:id="@+id/tv5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv4"
+                android:layout_below="@id/tv4"
+                android:layout_marginTop="20dp"
+                android:text="인원제한" />
+
+            <TextView
+                android:id="@+id/tvLimitPersons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tv5"
+                android:layout_alignLeft="@id/tvDiscount"
+                android:layout_alignRight="@id/tvType"
+                android:textAlignment="center"
+                tools:background="?android:attr/editTextBackground" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tvLimitPersons"
+                android:layout_toRightOf="@id/tvLimitPersons"
+                android:text="명" />
+
+            <TextView
+                android:id="@+id/tv6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv5"
+                android:layout_below="@id/tv5"
+                android:layout_marginTop="20dp"
+                android:text="시작 날짜" />
+
+            <TextView
+                android:id="@+id/tvStartDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tv6"
+                android:layout_alignLeft="@id/tvLimitPersons"
+                android:layout_alignRight="@id/tvType"
+                android:textAlignment="center"
+                tools:background="?android:attr/editTextBackground" />
+
+            <TextView
+                android:id="@+id/tv9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv6"
+                android:layout_below="@id/tv6"
+                android:layout_marginTop="20dp"
+                android:text="시작 시간" />
+
+            <TextView
+                android:id="@+id/tvStartTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tv9"
+                android:layout_alignLeft="@id/tvStartDate"
+                android:layout_alignRight="@id/tvType"
+                android:textAlignment="center"
+                tools:background="?android:attr/editTextBackground" />
+
+            <TextView
+                android:id="@+id/tv11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv9"
+                android:layout_below="@id/tv9"
+                android:layout_marginTop="20dp"
+                android:text="종료 날짜" />
+
+            <TextView
+                android:id="@+id/tvEndDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tv11"
+                android:layout_alignLeft="@id/tvStartTime"
+                android:layout_alignRight="@id/tvType"
+                android:textAlignment="center"
+                tools:background="?android:attr/editTextBackground" />
+
+            <TextView
+                android:id="@+id/tv14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv11"
+                android:layout_below="@id/tv11"
+                android:layout_marginTop="20dp"
+                android:text="종료 시간" />
+
+            <TextView
+                android:id="@+id/tvEndTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tv14"
+                android:layout_alignLeft="@id/tvEndDate"
+                android:layout_alignRight="@id/tvType"
+                android:textAlignment="center"
+                tools:background="?android:attr/editTextBackground" />
+
+            <TextView
+                android:id="@+id/tv16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv14"
+                android:layout_below="@id/tv14"
+                android:layout_marginTop="20dp"
+                android:maxLines="1"
+                android:text="이벤트 명" />
+
+            <TextView
+                android:id="@+id/tvEventName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tv16"
+                android:layout_alignLeft="@id/tvEndTime"
+                android:layout_alignRight="@id/tvType"
+                android:textAlignment="center"
+                tools:background="?android:attr/editTextBackground" />
+
+            <TextView
+                android:id="@+id/tvConditions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv16"
+                android:layout_below="@id/tvEventName"
+                android:layout_marginTop="20dp"
+                android:text="참가 조건" />
+
+            <Switch
+                android:id="@+id/swConditions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/tvConditions"
+                android:layout_alignLeft="@+id/tvEventName"
+                android:layout_alignStart="@+id/tvEventName"
+                android:clickable="false" />
+
+            <TextView
+                android:id="@+id/tvAge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv16"
+                android:layout_below="@id/tvConditions"
+                android:layout_marginTop="20dp"
+                android:text="나이" />
+
+            <RelativeLayout
+                android:id="@+id/ll1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tvAge"
+                android:layout_alignLeft="@id/tvEventName"
+                android:layout_alignRight="@id/tvEventName"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvMinimumAge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="4"
+                    android:enabled="false"
+                    android:maxLength="2"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/tvAge1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/tvMinimumAge"
+                    android:layout_toRightOf="@id/tvMinimumAge"
+                    android:text="~" />
+
+                <TextView
+                    android:id="@+id/tvMaximumAge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/tvAge1"
+                    android:layout_toRightOf="@id/tvAge1"
+                    android:ems="4"
+                    android:enabled="false"
+                    android:maxLength="2"
+                    android:textAlignment="center" />
+            </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/tv17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tvAge"
+                android:layout_below="@id/tvAge"
+                android:layout_marginTop="20dp"
+                android:text="성별" />
+
+            <TextView
+                android:id="@+id/tvSex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tv17"
+                android:layout_alignLeft="@id/ll1"
+                android:layout_alignRight="@id/tvType"
+                android:enabled="false"
+                android:textAlignment="center"
+                tools:background="?android:attr/editTextBackground" />
+
+            <TextView
+                android:id="@+id/tv18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv17"
+                android:layout_below="@id/tv17"
+                android:layout_marginTop="20dp"
+                android:text="지역" />
+
+            <TextView
+                android:id="@+id/tvLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tv18"
+                android:layout_alignLeft="@id/tvSex"
+                android:layout_alignRight="@id/tvType"
+                android:enabled="false"
+                android:textAlignment="center"
+                tools:background="?android:attr/editTextBackground" />
+
+            <TextView
+                android:id="@+id/tv19"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv18"
+                android:layout_below="@id/tv18"
+                android:layout_marginTop="20dp"
+                android:text="결제방식" />
+
+            <TextView
+                android:id="@+id/tvPayment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tv19"
+                android:layout_alignLeft="@id/tvLocation"
+                android:layout_alignRight="@id/tvType"
+                tools:background="?android:attr/editTextBackground" />
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/btnEntryList"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_gravity="bottom"
+            android:background="@color/colorAccent"
+            android:text="참가자 현황 확인"/>
+
+    </LinearLayout>
+</LinearLayout>

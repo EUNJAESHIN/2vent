@@ -8,7 +8,7 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
-public class owner_AddStore_webView extends AppCompatActivity {
+public class Activity_Owner_Add_Store_WebView extends AppCompatActivity {
     private static final int SERCH_ADDR = 4; //가져온 사진을 자르기 위한 변수
     //주소 검색
     WebView webview;
@@ -20,7 +20,7 @@ public class owner_AddStore_webView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.owner_addstore_webview);
+        setContentView(R.layout.activity_owner_add_store_webview);
 
         // WebView 초기화
         init_webView();

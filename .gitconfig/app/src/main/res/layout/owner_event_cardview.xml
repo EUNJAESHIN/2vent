@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="6dp"
         android:layout_gravity="center"
         android:layout_margin="8dp"
-        >
+        app:cardCornerRadius="6dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -19,7 +18,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/event_main"
+                android:id="@+id/event_imageView"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_alignParentEnd="true"
@@ -27,6 +26,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
+                android:scaleType="centerCrop"
                 app:srcCompat="@mipmap/ic_launcher" />
 
             <LinearLayout
@@ -35,20 +35,18 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/event_name"
-                    android:layout_width="177dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/event_main"
+                    android:layout_margin="5dp"
                     android:text="이벤트 명 :" />
 
                 <TextView
-                    android:id="@+id/event_day"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/event_name"
+                    android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.40"
-                    android:text="기간 : " />
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:text="이벤트명이 들어감" />
 
             </LinearLayout>
 
@@ -58,24 +56,103 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/event_dis_price"
-                    android:layout_width="92dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                android:text="매   장 :" />
+
+                <TextView
+                    android:id="@+id/com_name"
+                    android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:text="할인가 : " />
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:text="매장명이 들어감" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="   응모방식 :" />
+
+                <TextView
+                    android:id="@+id/event_type"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:text="참여형/결제형" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="정상가 :" />
 
                 <TextView
                     android:id="@+id/event_price"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.20"
-                    android:text="정상가:" />
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:text="정상가가 들어감" />
 
                 <TextView
-                    android:id="@+id/event_addr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.47"
-                    android:text="위치 : " />
+                    android:layout_margin="5dp"
+                    android:text="할인가 :" />
+
+                <TextView
+                    android:id="@+id/event_dis_price"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:text="할인가가 들어감" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="시작일 :" />
+
+                <TextView
+                    android:id="@+id/event_startday"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:text="0000년 00월 00일\n00시 00분" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="종료일 :" />
+
+                <TextView
+                    android:id="@+id/event_endday"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:text="0000년 00월 00일\n00시 00분" />
+
             </LinearLayout>
 
         </LinearLayout>
