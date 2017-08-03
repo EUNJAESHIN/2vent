@@ -55,7 +55,8 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".Activity_Owner_Info"></activity>
+        <activity android:name=".Activity_Owner_Info" />
+        <activity android:name=".Activity_User_Entry_List"></activity>
     </application>
 
 </manifest>

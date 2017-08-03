@@ -142,5 +142,4 @@ public class Activity_User_Info extends AppCompatActivity {
         }
         super.onPause();
     }
-
 }

@@ -39,11 +39,11 @@ import static com.example.win.a2vent.Activity_User_Login.actList;
  */
 
 public class Activity_User_Event_Main extends AppCompatActivity {
-    private String TAG = "getEventDB";
+    private String TAG = "GetEventDB";
     private final String TAG_JSON = "Event";
     private final String TAG_NUM = "event_number";
     private final String TAG_NAME = "event_name";
-    private final String TAG_TYPE = "event_type";
+    private final String TAG_CATEGORY = "com_category";
     private final String TAG_URI = "event_URI";
     private final String TAG_PRICE = "event_price";
     private final String TAG_DISPRICE = "event_dis_price";
@@ -55,8 +55,8 @@ public class Activity_User_Event_Main extends AppCompatActivity {
     Context mContext;
     RecyclerView.Adapter rAdapter1, rAdapter2, rAdapter3, rAdapter4, rAdapter5;
     ArrayList category_All, category_Culture, category_Meal, category_Beauty, category_Fashion;
-    getEventDB getEventDB;
-    int event_type;
+    GetEventDB getEventDB;
+    int com_category;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,13 +67,18 @@ public class Activity_User_Event_Main extends AppCompatActivity {
 
         mContext = getApplicationContext();
 
-        getEventDB = new getEventDB();
+        getEventDB = new GetEventDB();
         getEventDB.execute(GlobalData.getURL() + "2ventGetEventAll.php"); // AsyncTask 실행
     }
 
     public void onClick_Accountinfo(View v) {
         Intent GoUserinfo = new Intent(this, Activity_User_Info.class);
         startActivity(GoUserinfo);
+    }
+
+    public void onClick_Detailinfo(View v) {
+        Intent GoUserentry = new Intent(this, Activity_User_Entry_List.class);
+        startActivity(GoUserentry);
     }
 
     public void onClick_goMap(View v) {
@@ -145,7 +150,7 @@ public class Activity_User_Event_Main extends AppCompatActivity {
         });
     } // TabWidget 설정
 
-    private class getEventDB extends AsyncTask<String, Void, String> {
+    private class GetEventDB extends AsyncTask<String, Void, String> {
         String errorString = null;
 
         @Override
@@ -238,7 +243,7 @@ public class Activity_User_Event_Main extends AppCompatActivity {
 
                 int event_number = item.getInt(TAG_NUM);
                 String event_name = item.getString(TAG_NAME);
-                event_type = item.getInt(TAG_TYPE);
+                com_category = item.getInt(TAG_CATEGORY);
                 String event_URI = item.getString(TAG_URI);
                 String event_price = item.getString(TAG_PRICE);
                 String event_dis_price = item.getString(TAG_DISPRICE);
@@ -250,16 +255,17 @@ public class Activity_User_Event_Main extends AppCompatActivity {
                         event_price, event_dis_price, event_startday, event_endday));
 
                 // 카테고리 분류해서 각각 저장
-                if (event_type == 0) {
+                //TODO 이거 참여/결제형 분류임 다시 수정해야함
+                if (com_category == 0) {
                     category_Culture.add(new User_Event_Item(event_number, event_name, event_URI,
                             event_price, event_dis_price, event_startday, event_endday));
-                } else if (event_type == 1) {
+                } else if (com_category == 1) {
                     category_Meal.add(new User_Event_Item(event_number, event_name, event_URI,
                             event_price, event_dis_price, event_startday, event_endday));
-                } else if (event_type == 2) {
+                } else if (com_category == 2) {
                     category_Beauty.add(new User_Event_Item(event_number, event_name, event_URI,
                             event_price, event_dis_price, event_startday, event_endday));
-                } else if (event_type == 3) {
+                } else if (com_category == 3) {
                     category_Fashion.add(new User_Event_Item(event_number, event_name, event_URI,
                             event_price, event_dis_price, event_startday, event_endday));
                 }
@@ -299,5 +305,4 @@ public class Activity_User_Event_Main extends AppCompatActivity {
         }
         super.onPause();
     }
-
 }

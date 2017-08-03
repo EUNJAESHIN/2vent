@@ -5,9 +5,9 @@
     android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/user_event_cardview"
+        android:id="@+id/user_entry_cardview"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="150dp"
         android:layout_gravity="center"
         android:layout_margin="10dp"
         card:cardCornerRadius="6dp">
@@ -16,20 +16,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:weightSum="15">
-
-            <ImageView
-                android:id="@+id/user_event_cardview_image"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="9"
-                android:scaleType="fitXY" />
+            android:weightSum="12">
 
             <TextView
-                android:id="@+id/user_event_cardview_text1"
+                android:id="@+id/user_entry_cardview_text1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="2"
+                android:layout_weight="3"
+                android:gravity="center|left"
+                android:paddingLeft="10dp"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/user_entry_cardview_text2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
                 android:gravity="center|left"
                 android:paddingLeft="10dp"
                 android:textSize="16sp" />
@@ -37,11 +39,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="2"
+                android:layout_weight="3"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/user_event_cardview_text2"
+                    android:id="@+id/user_entry_cardview_text3"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -50,7 +52,7 @@
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/user_event_cardview_text3"
+                    android:id="@+id/user_entry_cardview_text4"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -63,11 +65,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="2"
+                android:layout_weight="3"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/user_event_cardview_text4"
+                    android:id="@+id/user_entry_cardview_text5"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -76,7 +78,7 @@
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/user_event_cardview_text5"
+                    android:id="@+id/user_entry_cardview_text6"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"

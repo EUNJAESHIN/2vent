@@ -105,6 +105,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="horizontal"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:padding="10dp">
 
             <TextView
@@ -120,7 +122,8 @@
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_weight="3"
-                android:background="#ffea00"
+                android:background="@drawable/button_shape"
+                android:backgroundTint="#ffea00"
                 android:onClick="onClick_participation"
                 android:text=""
                 android:textSize="20sp" />

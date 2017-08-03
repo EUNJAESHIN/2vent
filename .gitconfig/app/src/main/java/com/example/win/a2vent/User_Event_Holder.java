@@ -19,15 +19,14 @@ public class User_Event_Holder extends RecyclerView.ViewHolder {
 
     public User_Event_Holder(View itemView) {
         super(itemView);
-        view = itemView.findViewById(R.id.cardview);
-        imageView = (ImageView) itemView.findViewById(R.id.cardview_image);
-        textView1 = (TextView) itemView.findViewById(R.id.cardview_text1);
-        textView2 = (TextView) itemView.findViewById(R.id.cardview_text2);
+        view = itemView.findViewById(R.id.user_event_cardview);
+        imageView = (ImageView) itemView.findViewById(R.id.user_event_cardview_image);
+        textView1 = (TextView) itemView.findViewById(R.id.user_event_cardview_text1);
+        textView2 = (TextView) itemView.findViewById(R.id.user_event_cardview_text2);
         textView2.setPaintFlags(textView2.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG); // 삭선
-        textView3 = (TextView) itemView.findViewById(R.id.cardview_text3);
-        textView4 = (TextView) itemView.findViewById(R.id.cardview_text4);
-        textView5 = (TextView) itemView.findViewById(R.id.cardview_text5);
-
+        textView3 = (TextView) itemView.findViewById(R.id.user_event_cardview_text3);
+        textView4 = (TextView) itemView.findViewById(R.id.user_event_cardview_text4);
+        textView5 = (TextView) itemView.findViewById(R.id.user_event_cardview_text5);
 
     }
 }
