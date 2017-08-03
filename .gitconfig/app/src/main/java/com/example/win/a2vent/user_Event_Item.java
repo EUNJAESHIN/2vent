@@ -5,7 +5,7 @@ package com.example.win.a2vent;
  * 뷰의 아이템
  */
 
-public class user_Event_Item {
+public class User_Event_Item {
 
     int event_number;
     String event_name, event_URI;
@@ -26,7 +26,7 @@ public class user_Event_Item {
 
     public String getEventEndday() { return event_endday; }
 
-    public user_Event_Item(int num, String name, String uri, String price, String dis_price,
+    public User_Event_Item(int num, String name, String uri, String price, String dis_price,
                            String startday, String endday) {
         this.event_number = num;
         this.event_name = name;

@@ -11,13 +11,13 @@ import android.widget.TextView;
  * 뷰홀더만
  */
 
-public class user_Event_Holder extends RecyclerView.ViewHolder {
+public class User_Event_Holder extends RecyclerView.ViewHolder {
 
     public View view;
     public ImageView imageView;
     public TextView textView1,textView2,textView3,textView4,textView5;
 
-    public user_Event_Holder(View itemView) {
+    public User_Event_Holder(View itemView) {
         super(itemView);
         view = itemView.findViewById(R.id.cardview);
         imageView = (ImageView) itemView.findViewById(R.id.cardview_image);

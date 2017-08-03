@@ -27,7 +27,7 @@ import java.util.ArrayList;
  * 참고 http://neoroid.tistory.com/201
  */
 
-public class activity_User_Login extends AppCompatActivity {
+public class Activity_User_Login extends AppCompatActivity {
 
     public static ArrayList<Activity> actList = new ArrayList<Activity>();
 
@@ -59,14 +59,14 @@ public class activity_User_Login extends AppCompatActivity {
     }
 
     public void onClick_join(View view) {
-        Intent intent_join = new Intent(activity_User_Login.this, activity_User_Join.class);
+        Intent intent_join = new Intent(Activity_User_Login.this, Activity_User_Join.class);
         startActivity(intent_join);
     }
 
     public void onBackPressed() {
         if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
             backKeyPressedTime = System.currentTimeMillis();
-            Toast.makeText(activity_User_Login.this,
+            Toast.makeText(Activity_User_Login.this,
                     "'뒤로' 버튼을 한번 더 누르시면 종료됩니다", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -85,7 +85,7 @@ public class activity_User_Login extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = ProgressDialog.show(activity_User_Login.this,
+            progressDialog = ProgressDialog.show(Activity_User_Login.this,
                     "Signing in", null, true, true);
         }
 
@@ -119,23 +119,23 @@ public class activity_User_Login extends AppCompatActivity {
 
 //            2ventLogin.php의 결과값과 비교하여 로그인 성공 및 실패
             if (result.equals("0")) {
-                Toast.makeText(activity_User_Login.this, "Account Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_User_Login.this, "Account Error", Toast.LENGTH_SHORT).show();
             } else if (result.equals("1")) {
                 getUserInfo.execute(binding_userLogin.eTextLoginId.getText().toString());
-                Intent intent_userLogin = new Intent(activity_User_Login.this, user_Event_Main.class);
+                Intent intent_userLogin = new Intent(Activity_User_Login.this, Activity_User_Event_Main.class);
                 for(int i=0; i<actList.size(); i++)
                     actList.get(i).finish();
                 startActivity(intent_userLogin);
                 finish();
             } else if (result.equals("2")) {
                 getUserInfo.execute(binding_userLogin.eTextLoginId.getText().toString());
-                Intent intent_managerLogin = new Intent(activity_User_Login.this, owner_Event_Main.class);
+                Intent intent_managerLogin = new Intent(Activity_User_Login.this, Activity_Owner_Event_Main.class);
                 for(int i=0; i<actList.size(); i++)
                     actList.get(i).finish();
                 startActivity(intent_managerLogin);
                 finish();
             } else {
-                Toast.makeText(activity_User_Login.this, "Account Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_User_Login.this, "Account Error", Toast.LENGTH_SHORT).show();
             }
 
             Log.d("DB", "POST response - " + result);
@@ -150,7 +150,7 @@ public class activity_User_Login extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = ProgressDialog.show(activity_User_Login.this,
+            progressDialog = ProgressDialog.show(Activity_User_Login.this,
                     "Processing data", null, true, true);
         }
 

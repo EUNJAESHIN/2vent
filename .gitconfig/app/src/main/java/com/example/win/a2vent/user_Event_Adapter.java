@@ -26,28 +26,28 @@ import java.util.ArrayList;
  * http://egloos.zum.com/mightyfine/v/307168
  */
 
-public class user_Event_Adapter extends RecyclerView.Adapter<user_Event_Holder> {
+public class User_Event_Adapter extends RecyclerView.Adapter<User_Event_Holder> {
 
     private Context context;
-    private ArrayList<user_Event_Item> mItems = new ArrayList<user_Event_Item>();
+    private ArrayList<User_Event_Item> mItems = new ArrayList<User_Event_Item>();
     private int lastPosition = -1;
 
-    public user_Event_Adapter(ArrayList items, Context mContext) {
+    public User_Event_Adapter(ArrayList items, Context mContext) {
         mItems = items;
         context = mContext;
     }
 
     @Override
-    public user_Event_Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public User_Event_Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).
                 inflate(R.layout.user_event_cardview, parent, false);
-        user_Event_Holder holder = new user_Event_Holder(v);
+        User_Event_Holder holder = new User_Event_Holder(v);
 
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(user_Event_Holder holder, final int position) {
+    public void onBindViewHolder(User_Event_Holder holder, final int position) {
 //        피카소 라이브러리 적용
         Picasso.with(context).load(GlobalData.getURL() + mItems.get(position).event_URI).
                 placeholder(R.drawable.event_default).into(holder.imageView);
@@ -62,7 +62,7 @@ public class user_Event_Adapter extends RecyclerView.Adapter<user_Event_Holder> 
         holder.view.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent_goDetail = new Intent(context, user_Event_Detail.class);
+                Intent intent_goDetail = new Intent(context, Activity_User_Event_Details_Info.class);
                 intent_goDetail.putExtra("event_number", mItems.get(position).event_number);
                 // Intent에 event_number값을 담기
                 context.startActivity(intent_goDetail);
