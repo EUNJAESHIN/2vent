@@ -16,6 +16,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import static com.example.win.a2vent.Activity_User_Login.toast;
+
 /**
  * Created by EUNJAESHIN on 2017-07-10.
  * 사용자 이벤트 받아오는 어댑터
@@ -63,7 +65,7 @@ public class User_Event_Adapter extends RecyclerView.Adapter<User_Event_Holder> 
             @Override
             public void onClick(View v) {
                 Intent intent_goDetail = new Intent(context, Activity_User_Event_Details_Info.class);
-                intent_goDetail.putExtra("event_number", mItems.get(position).event_number);
+                intent_goDetail.putExtra("event_number", mItems.get(position).getEventNum());
                 // Intent에 event_number값을 담기
                 context.startActivity(intent_goDetail);
             }
@@ -72,7 +74,8 @@ public class User_Event_Adapter extends RecyclerView.Adapter<User_Event_Holder> 
         holder.view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(context, "롱 클릭", Toast.LENGTH_SHORT).show();
+                toast = Toast.makeText(context, "롱 클릭", Toast.LENGTH_SHORT);
+                toast.show();
                 return true;
             }
         });
@@ -88,8 +91,7 @@ public class User_Event_Adapter extends RecyclerView.Adapter<User_Event_Holder> 
     //    이미지 애니메이션 기본
     private void setAnimation(View viewToAnimate, int position) {
         if (position > lastPosition) {
-            Animation animation = AnimationUtils.loadAnimation(context,
-                    android.R.anim.slide_in_left);
+            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
             viewToAnimate.startAnimation(animation);
             lastPosition = position;
         }

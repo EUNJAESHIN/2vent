@@ -1,11 +1,14 @@
 package com.example.win.a2vent;
 
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.win.a2vent.databinding.ActivityUserEntryListBinding;
 
@@ -16,6 +19,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import static com.example.win.a2vent.Activity_User_Login.actList;
+import static com.example.win.a2vent.Activity_User_Login.toast;
 
 /**
  * Created by EUNJAESHIN on 2017-08-03.
@@ -24,23 +28,30 @@ import static com.example.win.a2vent.Activity_User_Login.actList;
 
 public class Activity_User_Entry_List extends AppCompatActivity {
 
+    Context context;
     ActivityUserEntryListBinding binding_UserEntryList;
-    RecyclerView.Adapter rAdapter;
-    ArrayList mCategory;
+    static RecyclerView.Adapter rAdapter_UserEntryList;
+    static ArrayList mCategory;
     GetMyEntry getMyEntry;
-    int com_category;
+    int event_number,com_category;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         actList.add(this);
         binding_UserEntryList = DataBindingUtil.setContentView(this, R.layout.activity_user_entry_list);
+        context = this;
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         getMyEntry = new GetMyEntry();
         getMyEntry.execute(GlobalData.getUserID());
     }
 
     private class GetMyEntry extends AsyncTask<String, Void, String> {
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -114,9 +125,9 @@ public class Activity_User_Entry_List extends AppCompatActivity {
                 }
             }
 
-            rAdapter = new User_Entry_Adapter(mCategory, getApplicationContext());
-            binding_UserEntryList.entryRviewContent.setAdapter(rAdapter);
-            rAdapter.notifyDataSetChanged();
+            rAdapter_UserEntryList = new User_Entry_Adapter(mCategory, getApplicationContext());
+            binding_UserEntryList.entryRviewContent.setAdapter(rAdapter_UserEntryList);
+            rAdapter_UserEntryList.notifyDataSetChanged();
 
         } catch (JSONException e) {
             Log.d("GetMyEntry", "addItemInEntry Error : ", e);

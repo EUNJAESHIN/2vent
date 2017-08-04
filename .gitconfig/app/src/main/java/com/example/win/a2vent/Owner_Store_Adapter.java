@@ -20,7 +20,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-
 /**
  * Created by win on 2017-07-03.
  */

@@ -3,10 +3,14 @@ package com.example.win.a2vent;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -17,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
 import java.util.ArrayList;
 
 /**
@@ -30,6 +35,7 @@ import java.util.ArrayList;
 public class Activity_User_Login extends AppCompatActivity {
 
     public static ArrayList<Activity> actList = new ArrayList<Activity>();
+    public static Toast toast;
 
     private long backKeyPressedTime = 0;
     String sId, sPw;
@@ -41,6 +47,7 @@ public class Activity_User_Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding_userLogin = DataBindingUtil.setContentView(this, R.layout.activity_user_login);
+        getAppKeyHash();
 
         GlobalData.setUserData(null,null,null,null,null,null,null,null);
     }
@@ -66,11 +73,15 @@ public class Activity_User_Login extends AppCompatActivity {
     public void onBackPressed() {
         if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
             backKeyPressedTime = System.currentTimeMillis();
-            Toast.makeText(Activity_User_Login.this,
-                    "'뒤로' 버튼을 한번 더 누르시면 종료됩니다", Toast.LENGTH_SHORT).show();
+            if(toast != null)
+                toast.cancel();
+            toast = Toast.makeText(Activity_User_Login.this,
+                    "'뒤로' 버튼을 한번 더 누르시면 종료됩니다", Toast.LENGTH_SHORT);
+            toast.show();
             return;
         }
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+            toast.cancel();
             for(int i=0; i<actList.size(); i++)
                 actList.get(i).finish();
             finish();
@@ -119,7 +130,9 @@ public class Activity_User_Login extends AppCompatActivity {
 
 //            2ventLogin.php의 결과값과 비교하여 로그인 성공 및 실패
             if (result.equals("0")) {
-                Toast.makeText(Activity_User_Login.this, "Account Error", Toast.LENGTH_SHORT).show();
+                toast.cancel();
+                toast = Toast.makeText(Activity_User_Login.this, "Account Error", Toast.LENGTH_SHORT);
+                toast.show();
             } else if (result.equals("1")) {
                 getUserInfo.execute(binding_userLogin.eTextLoginId.getText().toString());
                 Intent intent_userLogin = new Intent(Activity_User_Login.this, Activity_User_Event_Main.class);
@@ -135,7 +148,9 @@ public class Activity_User_Login extends AppCompatActivity {
                 startActivity(intent_managerLogin);
                 finish();
             } else {
-                Toast.makeText(Activity_User_Login.this, "Account Error", Toast.LENGTH_SHORT).show();
+                toast.cancel();
+                toast = Toast.makeText(Activity_User_Login.this, "Account Error", Toast.LENGTH_SHORT);
+                toast.show();
             }
 
             Log.d("DB", "POST response - " + result);
@@ -217,6 +232,22 @@ public class Activity_User_Login extends AppCompatActivity {
             Log.d("GetUserInfo", "setUserInfo Error : ", e);
         }
     } // 유저정보 JSON 데이터를 GlobalData에 저장
+
+    private void getAppKeyHash() {
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md;
+                md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String something = new String(Base64.encode(md.digest(), 0));
+                Log.d("Hash key", something);
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            Log.e("name not found", e.toString());
+        }
+    }
 
     @Override
     protected void onDestroy() {

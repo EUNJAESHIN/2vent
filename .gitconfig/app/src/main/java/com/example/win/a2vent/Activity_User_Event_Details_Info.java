@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import static com.example.win.a2vent.Activity_User_Login.actList;
+import static com.example.win.a2vent.Activity_User_Login.toast;
 
 /**
  * Created by EUNJAESHIN on 2017-07-27.
@@ -42,6 +43,11 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
         event_number = intent_getEventinfo.getExtras().getInt("event_number");
         // Intent에 담긴 event_number값 받기
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         getEventInfo = new GetEventInfo();
         getEventInfo.execute(Integer.toString(event_number));
     }
@@ -60,7 +66,8 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
                     Integer.toString(event_type),
                     com_number);
         } else if (event_type == 1) {
-            Toast.makeText(Activity_User_Event_Details_Info.this, "결제 미구현", Toast.LENGTH_SHORT).show();
+            toast = Toast.makeText(Activity_User_Event_Details_Info.this, "결제 미구현", Toast.LENGTH_SHORT);
+            toast.show();
             //TODO 결제 부분 미구현
         }
     }
@@ -213,14 +220,22 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
             super.onPostExecute(result);
             Log.d("echo", result);
             if (result.equals("성공")) {
-                Toast.makeText(Activity_User_Event_Details_Info.this, "참여 완료", Toast.LENGTH_SHORT).show();
+                toast = Toast.makeText(Activity_User_Event_Details_Info.this,
+                        "참여 완료", Toast.LENGTH_SHORT);
+                toast.show();
                 finish();
             } else if (result.equals("남은 자리 없음")) {
-                Toast.makeText(Activity_User_Event_Details_Info.this, "이미 모집이 완료된 이벤트입니다", Toast.LENGTH_SHORT).show();
+                toast = Toast.makeText(Activity_User_Event_Details_Info.this,
+                        "이미 모집이 완료된 이벤트입니다", Toast.LENGTH_SHORT);
+                toast.show();
             } else if (result.equals("중복 에러")) {
-                Toast.makeText(Activity_User_Event_Details_Info.this, "이미 참여한 이벤트입니다", Toast.LENGTH_SHORT).show();
+                toast = Toast.makeText(Activity_User_Event_Details_Info.this,
+                        "이미 참여한 이벤트입니다", Toast.LENGTH_SHORT);
+                toast.show();
             } else {
-                Toast.makeText(Activity_User_Event_Details_Info.this, "응모/결제 오류", Toast.LENGTH_SHORT).show();
+                toast = Toast.makeText(Activity_User_Event_Details_Info.this,
+                        "응모/결제 오류", Toast.LENGTH_SHORT);
+                toast.show();
             }
         }
 

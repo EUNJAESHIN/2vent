@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.example.win.a2vent.databinding.ActivityUserJoinBinding;
 
+import static com.example.win.a2vent.Activity_User_Login.toast;
+
 /**
  * Created by EUNJAESHIN on 2017-07-10.
  * 회원가입 부분
@@ -135,11 +137,14 @@ public class Activity_User_Join extends AppCompatActivity {
                 Intent intent_Joindone = new Intent(Activity_User_Join.this, Activity_User_Login.class);
                 finish();
                 startActivity(intent_Joindone);
-                Toast.makeText(Activity_User_Join.this, "가입 성공!", Toast.LENGTH_SHORT).show();
+                toast = Toast.makeText(Activity_User_Join.this, "가입 성공!", Toast.LENGTH_SHORT);
+                toast.show();
             } else if (result.equals("아이디가 존재합니다")) {
-                Toast.makeText(Activity_User_Join.this, "아이디가 존재합니다", Toast.LENGTH_SHORT).show();
+                toast = Toast.makeText(Activity_User_Join.this, "아이디가 존재합니다", Toast.LENGTH_SHORT);
+                toast.show();
             } else {
-                Toast.makeText(Activity_User_Join.this, "Register Error", Toast.LENGTH_SHORT).show();
+                toast = Toast.makeText(Activity_User_Join.this, "Register Error", Toast.LENGTH_SHORT);
+                toast.show();
             }
             Log.d("DB", "POST response  - " + result);
         }

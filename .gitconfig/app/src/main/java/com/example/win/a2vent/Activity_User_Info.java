@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.win.a2vent.databinding.ActivityUserInfoBinding;
 
 import static com.example.win.a2vent.Activity_User_Login.actList;
+import static com.example.win.a2vent.Activity_User_Login.toast;
 
 /**
  * Created by EUNJAESHIN on 2017-07-26.
@@ -118,9 +119,11 @@ public class Activity_User_Info extends AppCompatActivity {
                     actList.get(i).finish();
                 startActivity(intent_Leavingdone);
                 finish();
-                Toast.makeText(Activity_User_Info.this, "탈퇴 되었습니다", Toast.LENGTH_SHORT).show();
+                toast = Toast.makeText(Activity_User_Info.this, "탈퇴 되었습니다", Toast.LENGTH_SHORT);
+                toast.show();
             } else {
-                Toast.makeText(Activity_User_Info.this, "Withdrawal Error", Toast.LENGTH_SHORT).show();
+                toast = Toast.makeText(Activity_User_Info.this, "Withdrawal Error", Toast.LENGTH_SHORT);
+                toast.show();
             }
             Log.d("DB", "POST response  - " + result);
         }

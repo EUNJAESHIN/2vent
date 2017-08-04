@@ -27,6 +27,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import static com.example.win.a2vent.Activity_User_Login.actList;
+import static com.example.win.a2vent.Activity_User_Login.toast;
 
 /**
  * Created by EUNJAESHIN on 2017-07-10.
@@ -66,7 +67,11 @@ public class Activity_User_Event_Main extends AppCompatActivity {
         set_TabHost(this);
 
         mContext = getApplicationContext();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         getEventDB = new GetEventDB();
         getEventDB.execute(GlobalData.getURL() + "2ventGetEventAll.php"); // AsyncTask 실행
     }
@@ -89,11 +94,13 @@ public class Activity_User_Event_Main extends AppCompatActivity {
     public void onBackPressed() {
         if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
             backKeyPressedTime = System.currentTimeMillis();
-            Toast.makeText(Activity_User_Event_Main.this,
-                    "'뒤로' 버튼을 한번 더 누르면 로그아웃", Toast.LENGTH_SHORT).show();
+            toast = Toast.makeText(Activity_User_Event_Main.this,
+                    "'뒤로' 버튼을 한번 더 누르면 로그아웃", Toast.LENGTH_SHORT);
+            toast.show();
             return;
         }
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+            toast.cancel();
             Intent intent_Logout = new Intent(Activity_User_Event_Main.this, Activity_User_Login.class);
             for(int i=0; i<actList.size(); i++)
                 actList.get(i).finish();
