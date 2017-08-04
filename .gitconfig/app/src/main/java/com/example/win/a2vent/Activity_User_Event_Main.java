@@ -142,17 +142,13 @@ public class Activity_User_Event_Main extends AppCompatActivity {
         tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
-                if (tabId == "전체") {
-                    rAdapter1.notifyDataSetChanged();
-                } else if (tabId == "문화") {
-                    rAdapter2.notifyDataSetChanged();
-                } else if (tabId == "외식") {
-                    rAdapter3.notifyDataSetChanged();
-                } else if (tabId == "뷰티") {
-                    rAdapter4.notifyDataSetChanged();
-                } else if (tabId == "패션") {
-                    rAdapter5.notifyDataSetChanged();
-                }
+                getEventDB = new GetEventDB();
+                getEventDB.execute(GlobalData.getURL() + "2ventGetEventAll.php");
+                if (tabId == "전체") { }
+                else if (tabId == "문화") { }
+                else if (tabId == "외식") { }
+                else if (tabId == "뷰티") { }
+                else if (tabId == "패션") { }
             }
         });
     } // TabWidget 설정
@@ -262,7 +258,6 @@ public class Activity_User_Event_Main extends AppCompatActivity {
                         event_price, event_dis_price, event_startday, event_endday));
 
                 // 카테고리 분류해서 각각 저장
-                //TODO 이거 참여/결제형 분류임 다시 수정해야함
                 if (com_category == 0) {
                     category_Culture.add(new User_Event_Item(event_number, event_name, event_URI,
                             event_price, event_dis_price, event_startday, event_endday));
@@ -291,6 +286,10 @@ public class Activity_User_Event_Main extends AppCompatActivity {
             binding_UserMain.rviewContent5.setAdapter(rAdapter5);
 
             rAdapter1.notifyDataSetChanged();
+            rAdapter2.notifyDataSetChanged();
+            rAdapter3.notifyDataSetChanged();
+            rAdapter4.notifyDataSetChanged();
+            rAdapter5.notifyDataSetChanged();
 
         } catch (JSONException e) {
             Log.d(TAG, "addItemInCategory Error : ", e);

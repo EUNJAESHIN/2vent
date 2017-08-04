@@ -1,6 +1,5 @@
 package com.example.win.a2vent;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -66,9 +65,9 @@ public class User_Entry_Adapter extends RecyclerView.Adapter<User_Entry_Holder> 
                 deleteUserEntry.
                         execute(Integer.toString(mItems.get(position).getEventNum()), GlobalData.getUserID());
 
-                toast = Toast.makeText(context , "취소 완료", Toast.LENGTH_SHORT);
+                toast = Toast.makeText(context, "취소 완료", Toast.LENGTH_SHORT);
                 toast.show();
-
+                // 새로고침
                 Intent intent_Refresh = new Intent(context, Activity_User_Entry_List.class);
                 intent_Refresh.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 context.startActivity(intent_Refresh);
@@ -83,5 +82,4 @@ public class User_Entry_Adapter extends RecyclerView.Adapter<User_Entry_Holder> 
     public int getItemCount() {
         return mItems.size();
     }
-
 }

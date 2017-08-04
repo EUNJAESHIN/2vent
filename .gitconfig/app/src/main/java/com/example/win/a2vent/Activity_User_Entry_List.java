@@ -28,7 +28,7 @@ import static com.example.win.a2vent.Activity_User_Login.toast;
 
 public class Activity_User_Entry_List extends AppCompatActivity {
 
-    Context context;
+    public static Context context;
     ActivityUserEntryListBinding binding_UserEntryList;
     static RecyclerView.Adapter rAdapter_UserEntryList;
     static ArrayList mCategory;
