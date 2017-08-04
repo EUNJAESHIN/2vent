@@ -55,6 +55,8 @@ public class DeleteUserEntry extends AsyncTask<String, Void, String> {
         if (result.equals("Delete Done")) {
             Activity_User_Entry_List.mCategory.remove(delete_event_number);
             Activity_User_Entry_List.rAdapter_UserEntryList.notifyDataSetChanged();
+
+            //TODO 새로고침 하는거
         }
     }
 

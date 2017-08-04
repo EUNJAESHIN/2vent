@@ -61,7 +61,6 @@ public class User_Entry_Adapter extends RecyclerView.Adapter<User_Entry_Holder> 
         holder.view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                //TODO 이벤트 참여 취소
                 delete_event_number = mItems.get(position).getEventNum();
                 deleteUserEntry = new DeleteUserEntry();
                 deleteUserEntry.
