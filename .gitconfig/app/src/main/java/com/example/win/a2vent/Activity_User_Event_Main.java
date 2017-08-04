@@ -86,6 +86,11 @@ public class Activity_User_Event_Main extends AppCompatActivity {
         startActivity(GoUserentry);
     }
 
+    public void onClick_Help(View v) {
+        toast = Toast.makeText(mContext, "도움말", Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
     public void onClick_goMap(View v) {
         Intent intent = new Intent(this, Activity_User_Map.class);
         startActivity(intent);

@@ -27,8 +27,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
+                android:layout_marginRight="232dp"
                 android:onClick="onClick_Detailinfo"
                 android:src="@drawable/ic_menu" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:onClick="onClick_Help"
+                android:src="@drawable/ic_help" />
 
         </android.support.v7.widget.Toolbar>
 
