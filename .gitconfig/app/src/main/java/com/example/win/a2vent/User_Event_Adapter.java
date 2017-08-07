@@ -51,7 +51,7 @@ public class User_Event_Adapter extends RecyclerView.Adapter<User_Event_Holder> 
     @Override
     public void onBindViewHolder(User_Event_Holder holder, final int position) {
 //        피카소 라이브러리 적용
-        Picasso.with(context).load(GlobalData.getURL() + mItems.get(position).event_URI).
+        Picasso.with(context).load(GlobalData.getURL() + mItems.get(position).getEventURI()).
                 placeholder(R.drawable.event_default).into(holder.imageView);
 
         holder.textView1.setText(mItems.get(position).event_name);

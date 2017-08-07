@@ -122,7 +122,7 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
 
                 String event_name = item.getString("event_name");
                 event_type = item.getInt("event_type");
-                String event_URI = item.getString("event_URI");
+                String event_content = item.getString("event_content");
                 String event_price = item.getString("event_price");
                 String event_dis_price = item.getString("event_dis_price");
                 String event_people = item.getString("event_people");
@@ -137,6 +137,7 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
                 int event_sex = item.getInt("event_sex");
                 String event_area = item.getString("event_area");
                 com_number = item.getString("com_number");
+                String event_URI = item.getString("event_URI");
 
                 Picasso.with(this).load(GlobalData.getURL() + event_URI)
                         .placeholder(R.drawable.event_default).into(binding_UserDetail.ivDetail);

@@ -1,8 +1,10 @@
 package com.example.win.a2vent;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -40,10 +42,11 @@ import static com.example.win.a2vent.Activity_User_Login.toast;
  */
 
 public class Activity_User_Event_Main extends AppCompatActivity {
-    private String TAG = "GetEventDB";
+    private String TAG = "테스트";
     private final String TAG_JSON = "Event";
     private final String TAG_NUM = "event_number";
     private final String TAG_NAME = "event_name";
+    private final String TAG_CONTENT = "event_content";
     private final String TAG_CATEGORY = "com_category";
     private final String TAG_URI = "event_URI";
     private final String TAG_PRICE = "event_price";
@@ -51,13 +54,16 @@ public class Activity_User_Event_Main extends AppCompatActivity {
     private final String TAG_STARTDAY = "event_startday";
     private final String TAG_ENDDAY = "event_endday";
 
+    private boolean flagRegisterReceiver = false;
+
     private long backKeyPressedTime = 0;
     ActivityUserEventMainBinding binding_UserMain;
     Context mContext;
     RecyclerView.Adapter rAdapter1, rAdapter2, rAdapter3, rAdapter4, rAdapter5;
-    ArrayList category_All, category_Culture, category_Meal, category_Beauty, category_Fashion;
+    ArrayList<User_Event_Item> category_All, category_Culture, category_Meal, category_Beauty, category_Fashion;
     GetEventDB getEventDB;
-    int com_category;
+    GetImageURI getImageURI;
+    String result; // GetEventDB의 result값 저장
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +78,14 @@ public class Activity_User_Event_Main extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (!flagRegisterReceiver) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction("com.example.win.a2vent.GetURI_Receiver");
+            mContext.registerReceiver(broadcastReceiver, filter);
+            flagRegisterReceiver = true;
+
+            Log.d("Receiver", "register");
+        }
         getEventDB = new GetEventDB();
         getEventDB.execute(GlobalData.getURL() + "2ventGetEventAll.php"); // AsyncTask 실행
     }
@@ -229,13 +243,24 @@ public class Activity_User_Event_Main extends AppCompatActivity {
             if (result == null) {
 
             } else {
-                addItemInCategory(result);
+                Activity_User_Event_Main.this.result = result;
+                getImageURI = new GetImageURI(mContext);
+                getImageURI.execute("0","0");
             }
         }
 
     } // EventDB 받는 AsyncTask
 
-    private void addItemInCategory(String result) {
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String value = intent.getExtras().getString("finish");
+
+            addItemInCategory(result, value);
+        }
+    };
+
+    private void addItemInCategory(String result, String value) {
         category_All = new ArrayList<>();
         category_Culture = new ArrayList<>();
         category_Meal = new ArrayList<>();
@@ -245,36 +270,40 @@ public class Activity_User_Event_Main extends AppCompatActivity {
         try {
             JSONObject jsonObject = new JSONObject(result);
             JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+            JSONObject jsonObject2 = new JSONObject(value);
+            JSONArray jsonArray2 = jsonObject2.getJSONArray("EventMainImage");
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject item = jsonArray.getJSONObject(i);
+                JSONObject item2 = jsonArray2.getJSONObject(i);
 
                 int event_number = item.getInt(TAG_NUM);
                 String event_name = item.getString(TAG_NAME);
-                com_category = item.getInt(TAG_CATEGORY);
-                String event_URI = item.getString(TAG_URI);
+                String event_content = item.getString(TAG_CONTENT);
+                int com_category = item.getInt(TAG_CATEGORY);
                 String event_price = item.getString(TAG_PRICE);
                 String event_dis_price = item.getString(TAG_DISPRICE);
                 String event_startday = item.getString(TAG_STARTDAY);
                 String event_endday = item.getString(TAG_ENDDAY);
+                String event_URI = item2.getString("event_URI");
 
                 // 전체 항목에는 모두 저장
-                category_All.add(new User_Event_Item(event_number, event_name, event_URI,
-                        event_price, event_dis_price, event_startday, event_endday));
+                category_All.add(new User_Event_Item(event_number, event_name, event_content,
+                        event_price, event_dis_price, event_startday, event_endday, event_URI));
 
                 // 카테고리 분류해서 각각 저장
                 if (com_category == 0) {
-                    category_Culture.add(new User_Event_Item(event_number, event_name, event_URI,
-                            event_price, event_dis_price, event_startday, event_endday));
+                    category_Culture.add(new User_Event_Item(event_number, event_name, event_content,
+                            event_price, event_dis_price, event_startday, event_endday, event_URI));
                 } else if (com_category == 1) {
-                    category_Meal.add(new User_Event_Item(event_number, event_name, event_URI,
-                            event_price, event_dis_price, event_startday, event_endday));
+                    category_Meal.add(new User_Event_Item(event_number, event_name, event_content,
+                            event_price, event_dis_price, event_startday, event_endday, event_URI));
                 } else if (com_category == 2) {
-                    category_Beauty.add(new User_Event_Item(event_number, event_name, event_URI,
-                            event_price, event_dis_price, event_startday, event_endday));
+                    category_Beauty.add(new User_Event_Item(event_number, event_name, event_content,
+                            event_price, event_dis_price, event_startday, event_endday, event_URI));
                 } else if (com_category == 3) {
-                    category_Fashion.add(new User_Event_Item(event_number, event_name, event_URI,
-                            event_price, event_dis_price, event_startday, event_endday));
+                    category_Fashion.add(new User_Event_Item(event_number, event_name, event_content,
+                            event_price, event_dis_price, event_startday, event_endday, event_URI));
                 }
             }
 
@@ -316,4 +345,5 @@ public class Activity_User_Event_Main extends AppCompatActivity {
         }
         super.onPause();
     }
+
 }
