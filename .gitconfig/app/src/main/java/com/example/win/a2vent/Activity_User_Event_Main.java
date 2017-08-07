@@ -55,8 +55,8 @@ public class Activity_User_Event_Main extends AppCompatActivity {
     private final String TAG_ENDDAY = "event_endday";
 
     private boolean flagRegisterReceiver = false;
-
     private long backKeyPressedTime = 0;
+
     ActivityUserEventMainBinding binding_UserMain;
     Context mContext;
     RecyclerView.Adapter rAdapter1, rAdapter2, rAdapter3, rAdapter4, rAdapter5;
@@ -83,8 +83,6 @@ public class Activity_User_Event_Main extends AppCompatActivity {
             filter.addAction("com.example.win.a2vent.GetURI_Receiver");
             mContext.registerReceiver(broadcastReceiver, filter);
             flagRegisterReceiver = true;
-
-            Log.d("Receiver", "register");
         }
         getEventDB = new GetEventDB();
         getEventDB.execute(GlobalData.getURL() + "2ventGetEventAll.php"); // AsyncTask 실행
@@ -121,7 +119,7 @@ public class Activity_User_Event_Main extends AppCompatActivity {
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
             toast.cancel();
             Intent intent_Logout = new Intent(Activity_User_Event_Main.this, Activity_User_Login.class);
-            for(int i=0; i<actList.size(); i++)
+            for (int i = 0; i < actList.size(); i++)
                 actList.get(i).finish();
             startActivity(intent_Logout);
             finish(); // 액티비티 종료 (정확하게는 onDestroy() 호출)
@@ -163,11 +161,12 @@ public class Activity_User_Event_Main extends AppCompatActivity {
             public void onTabChanged(String tabId) {
                 getEventDB = new GetEventDB();
                 getEventDB.execute(GlobalData.getURL() + "2ventGetEventAll.php");
-                if (tabId == "전체") { }
-                else if (tabId == "문화") { }
-                else if (tabId == "외식") { }
-                else if (tabId == "뷰티") { }
-                else if (tabId == "패션") { }
+                if (tabId == "전체") {
+                } else if (tabId == "문화") {
+                } else if (tabId == "외식") {
+                } else if (tabId == "뷰티") {
+                } else if (tabId == "패션") {
+                }
             }
         });
     } // TabWidget 설정
@@ -223,7 +222,8 @@ public class Activity_User_Event_Main extends AppCompatActivity {
 
                 while ((line = bufferedReader.readLine()) != null) {
                     sb.append(line);
-                };
+                }
+                ;
                 bufferedReader.close();
 
                 return sb.toString().trim();
@@ -239,13 +239,12 @@ public class Activity_User_Event_Main extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             Log.d(TAG, "response  - " + result);
-
             if (result == null) {
 
             } else {
                 Activity_User_Event_Main.this.result = result;
                 getImageURI = new GetImageURI(mContext);
-                getImageURI.execute("0","0");
+                getImageURI.execute("0", "0", "0");
             }
         }
 

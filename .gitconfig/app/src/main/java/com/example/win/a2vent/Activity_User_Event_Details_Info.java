@@ -1,6 +1,9 @@
 package com.example.win.a2vent;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.graphics.Paint;
 import android.os.AsyncTask;
@@ -27,11 +30,15 @@ import static com.example.win.a2vent.Activity_User_Login.toast;
 
 public class Activity_User_Event_Details_Info extends AppCompatActivity {
     private String TAG = "getEventDetail";
+
+    private boolean flagRegisterReceiver = false;
+
     ActivityUserEventDetailsInfoBinding binding_UserDetail;
     GetEventInfo getEventInfo;
+    GetImageURI getImageURI;
     PutEntry putEntry;
     int event_number, event_type;
-    String com_number;
+    String com_number, result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +55,12 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (!flagRegisterReceiver) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction("com.example.win.a2vent.GetURI_Receiver");
+            getApplicationContext().registerReceiver(broadcastReceiver, filter);
+            flagRegisterReceiver = true;
+        }
         getEventInfo = new GetEventInfo();
         getEventInfo.execute(Integer.toString(event_number));
     }
@@ -105,20 +118,34 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
             if (result == null) {
 
             } else {
-                setEventDetail(result);
+                Activity_User_Event_Details_Info.this.result = result;
+                getImageURI = new GetImageURI(getApplicationContext());
+                getImageURI.execute(Integer.toString(event_number),"0", "1");
             }
         }
 
     } // EventDB 받는 AsyncTask
 
-    public void setEventDetail(String result) {
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String value = intent.getExtras().getString("finish");
+
+            setEventDetail(result, value);
+        }
+    };
+
+    public void setEventDetail(String result, String value) {
 
         try {
             JSONObject jsonObject = new JSONObject(result);
             JSONArray jsonArray = jsonObject.getJSONArray("EventInfo");
+            JSONObject jsonObject2 = new JSONObject(value);
+            JSONArray jsonArray2 = jsonObject2.getJSONArray("EventImage");
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject item = jsonArray.getJSONObject(i);
+                JSONObject item2 = jsonArray2.getJSONObject(i);
 
                 String event_name = item.getString("event_name");
                 event_type = item.getInt("event_type");
@@ -137,7 +164,7 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
                 int event_sex = item.getInt("event_sex");
                 String event_area = item.getString("event_area");
                 com_number = item.getString("com_number");
-                String event_URI = item.getString("event_URI");
+                String event_URI = item2.getString("event_URI");
 
                 Picasso.with(this).load(GlobalData.getURL() + event_URI)
                         .placeholder(R.drawable.event_default).into(binding_UserDetail.ivDetail);

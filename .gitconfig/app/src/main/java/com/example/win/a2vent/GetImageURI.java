@@ -30,7 +30,8 @@ public class GetImageURI extends AsyncTask<String, Void, String> {
             ServerConnector serverConnector = new ServerConnector(serverURL);
 
             serverConnector.addPostData("event_number", params[0]);
-            serverConnector.addPostData("separator", params[1]);
+            serverConnector.addPostData("event_stats", params[1]);
+            serverConnector.addPostData("separator", params[2]);
 
             serverConnector.addDelimiter();
             serverConnector.writePostData();
