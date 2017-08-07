@@ -15,28 +15,41 @@
             android:background="@color/colorPrimary"
             android:minHeight="?attr/actionBarSize">
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:layout_marginRight="24dp"
-                android:onClick="onClick_Accountinfo"
-                android:src="@drawable/ic_account" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="10"
+                android:orientation="horizontal">
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:layout_marginRight="232dp"
-                android:onClick="onClick_Detailinfo"
-                android:src="@drawable/ic_menu" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:onClick="onClick_Accountinfo"
+                    android:src="@drawable/ic_account" />
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:onClick="onClick_Help"
-                android:src="@drawable/ic_help" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:background="@android:color/transparent"
+                    android:onClick="onClick_Detailinfo"
+                    android:src="@drawable/ic_menu" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:orientation="horizontal" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:background="@android:color/transparent"
+                    android:onClick="onClick_Help"
+                    android:src="@drawable/ic_help" />
+            </LinearLayout>
 
         </android.support.v7.widget.Toolbar>
 
