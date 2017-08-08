@@ -41,5 +41,4 @@ public class User_Event_Item {
         this.event_URI = uri;
     }
 
-
 }

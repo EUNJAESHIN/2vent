@@ -39,12 +39,12 @@ public class User_Entry_Adapter extends RecyclerView.Adapter<User_Entry_Holder> 
 
     @Override
     public void onBindViewHolder(User_Entry_Holder holder, final int position) {
-        holder.textView1.setText(mItems.get(position).event_category);
-        holder.textView2.setText(mItems.get(position).event_name);
-        holder.textView3.setText(mItems.get(position).event_price);
-        holder.textView4.setText(mItems.get(position).event_dis_price);
-        holder.textView5.setText(mItems.get(position).event_startday);
-        holder.textView6.setText(mItems.get(position).event_endday);
+        holder.textView1.setText(mItems.get(position).getEventName() +
+                "  (" + mItems.get(position).getEventCategory() + ")");
+        holder.textView2.setText(mItems.get(position).getEventPrice());
+        holder.textView3.setText(mItems.get(position).getEventDisprice());
+        holder.textView4.setText(mItems.get(position).getEventStartday() +
+                " ~ " + mItems.get(position).getEventEndday());
 
 //        아이템 클릭리스너 (RecyclerItemClickListener)
         holder.view.setOnClickListener(new View.OnClickListener() {

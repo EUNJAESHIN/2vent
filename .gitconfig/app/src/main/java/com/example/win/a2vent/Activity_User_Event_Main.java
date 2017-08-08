@@ -48,7 +48,6 @@ public class Activity_User_Event_Main extends AppCompatActivity {
     private final String TAG_NAME = "event_name";
     private final String TAG_CONTENT = "event_content";
     private final String TAG_CATEGORY = "com_category";
-    private final String TAG_URI = "event_URI";
     private final String TAG_PRICE = "event_price";
     private final String TAG_DISPRICE = "event_dis_price";
     private final String TAG_STARTDAY = "event_startday";
@@ -159,13 +158,16 @@ public class Activity_User_Event_Main extends AppCompatActivity {
         tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
-                getEventDB = new GetEventDB();
-                getEventDB.execute(GlobalData.getURL() + "2ventGetEventAll.php");
                 if (tabId == "전체") {
+                    rAdapter1.notifyDataSetChanged();
                 } else if (tabId == "문화") {
+                    rAdapter2.notifyDataSetChanged();
                 } else if (tabId == "외식") {
+                    rAdapter3.notifyDataSetChanged();
                 } else if (tabId == "뷰티") {
+                    rAdapter4.notifyDataSetChanged();
                 } else if (tabId == "패션") {
+                    rAdapter5.notifyDataSetChanged();
                 }
             }
         });
@@ -254,7 +256,6 @@ public class Activity_User_Event_Main extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String value = intent.getExtras().getString("finish");
-
             addItemInCategory(result, value);
         }
     };
@@ -318,12 +319,6 @@ public class Activity_User_Event_Main extends AppCompatActivity {
             binding_UserMain.rviewContent4.setAdapter(rAdapter4);
             binding_UserMain.rviewContent5.setAdapter(rAdapter5);
 
-            rAdapter1.notifyDataSetChanged();
-            rAdapter2.notifyDataSetChanged();
-            rAdapter3.notifyDataSetChanged();
-            rAdapter4.notifyDataSetChanged();
-            rAdapter5.notifyDataSetChanged();
-
         } catch (JSONException e) {
             Log.d(TAG, "addItemInCategory Error : ", e);
         }
@@ -334,6 +329,7 @@ public class Activity_User_Event_Main extends AppCompatActivity {
         if (getEventDB != null) {
             getEventDB.cancel(true);
         }
+
         super.onDestroy();
     }
 
@@ -342,6 +338,7 @@ public class Activity_User_Event_Main extends AppCompatActivity {
         if (getEventDB != null) {
             getEventDB.cancel(true);
         }
+
         super.onPause();
     }
 

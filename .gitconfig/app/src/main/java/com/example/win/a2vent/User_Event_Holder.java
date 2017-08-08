@@ -27,6 +27,6 @@ public class User_Event_Holder extends RecyclerView.ViewHolder {
         textView3 = (TextView) itemView.findViewById(R.id.user_event_cardview_text3);
         textView4 = (TextView) itemView.findViewById(R.id.user_event_cardview_text4);
         textView5 = (TextView) itemView.findViewById(R.id.user_event_cardview_text5);
-
     }
+
 }

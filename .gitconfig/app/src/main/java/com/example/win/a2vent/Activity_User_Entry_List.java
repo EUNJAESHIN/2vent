@@ -111,16 +111,16 @@ public class Activity_User_Entry_List extends AppCompatActivity {
                 String event_endday = item.getString("event_endday");
 
                 if (com_category == 0) {
-                    mCategory.add(new User_Entry_Item(event_number, "문화", event_name, event_price,
+                    mCategory.add(new User_Entry_Item(event_number, event_name, "문화", event_price,
                             event_dis_price, event_startday, event_endday));
                 } else if (com_category == 1) {
-                    mCategory.add(new User_Entry_Item(event_number, "외식", event_name, event_price,
+                    mCategory.add(new User_Entry_Item(event_number, event_name, "외식", event_price,
                             event_dis_price, event_startday, event_endday));
                 } else if (com_category == 2) {
-                    mCategory.add(new User_Entry_Item(event_number, "뷰티", event_name, event_price,
+                    mCategory.add(new User_Entry_Item(event_number, event_name, "뷰티", event_price,
                             event_dis_price, event_startday, event_endday));
                 } else if (com_category == 3) {
-                    mCategory.add(new User_Entry_Item(event_number, "패션", event_name, event_price,
+                    mCategory.add(new User_Entry_Item(event_number, event_name, "패션", event_price,
                             event_dis_price, event_startday, event_endday));
                 }
             }

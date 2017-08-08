@@ -12,7 +12,7 @@ import android.widget.TextView;
 public class User_Entry_Holder extends RecyclerView.ViewHolder {
 
     public View view;
-    public TextView textView1,textView2,textView3,textView4,textView5,textView6;
+    public TextView textView1,textView2,textView3,textView4,textView5;
 
     public User_Entry_Holder(View itemView) {
         super(itemView);
@@ -20,11 +20,9 @@ public class User_Entry_Holder extends RecyclerView.ViewHolder {
         textView1 = (TextView) itemView.findViewById(R.id.user_entry_cardview_text1);
         textView1.setPaintFlags(textView1.getPaintFlags()| Paint.FAKE_BOLD_TEXT_FLAG); // 볼드
         textView2 = (TextView) itemView.findViewById(R.id.user_entry_cardview_text2);
+        textView2.setPaintFlags(textView2.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG); // 삭선
         textView3 = (TextView) itemView.findViewById(R.id.user_entry_cardview_text3);
-        textView3.setPaintFlags(textView3.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG); // 삭선
         textView4 = (TextView) itemView.findViewById(R.id.user_entry_cardview_text4);
-        textView5 = (TextView) itemView.findViewById(R.id.user_entry_cardview_text5);
-        textView6 = (TextView) itemView.findViewById(R.id.user_entry_cardview_text6);
 
     }
 }

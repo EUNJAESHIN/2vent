@@ -9,16 +9,20 @@ import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.win.a2vent.databinding.ActivityUserEventDetailsInfoBinding;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import static com.example.win.a2vent.Activity_User_Login.actList;
 import static com.example.win.a2vent.Activity_User_Login.toast;
@@ -34,6 +38,9 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
     private boolean flagRegisterReceiver = false;
 
     ActivityUserEventDetailsInfoBinding binding_UserDetail;
+    Context mContext;
+    RecyclerView.Adapter rAdapter_image;
+    ArrayList<User_Details_Item> image_All;
     GetEventInfo getEventInfo;
     GetImageURI getImageURI;
     PutEntry putEntry;
@@ -46,6 +53,7 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
         actList.add(this);
         binding_UserDetail = DataBindingUtil.setContentView(this, R.layout.activity_user_event_details_info);
 
+        mContext = getApplicationContext();
         Intent intent_getEventinfo = getIntent();
         event_number = intent_getEventinfo.getExtras().getInt("event_number");
         // Intent에 담긴 event_number값 받기
@@ -58,7 +66,7 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
         if (!flagRegisterReceiver) {
             IntentFilter filter = new IntentFilter();
             filter.addAction("com.example.win.a2vent.GetURI_Receiver");
-            getApplicationContext().registerReceiver(broadcastReceiver, filter);
+            mContext.registerReceiver(broadcastReceiver, filter);
             flagRegisterReceiver = true;
         }
         getEventInfo = new GetEventInfo();
@@ -130,12 +138,12 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String value = intent.getExtras().getString("finish");
-
             setEventDetail(result, value);
         }
     };
 
     public void setEventDetail(String result, String value) {
+        image_All = new ArrayList<>();
 
         try {
             JSONObject jsonObject = new JSONObject(result);
@@ -166,8 +174,8 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
                 com_number = item.getString("com_number");
                 String event_URI = item2.getString("event_URI");
 
-                Picasso.with(this).load(GlobalData.getURL() + event_URI)
-                        .placeholder(R.drawable.event_default).into(binding_UserDetail.ivDetail);
+                image_All.add(new User_Details_Item(event_URI));
+
                 binding_UserDetail.tvDetail1.append(event_name);
                 binding_UserDetail.tvDetail2.append(event_price);
                 binding_UserDetail.tvDetail2.setPaintFlags
@@ -203,6 +211,10 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
                     binding_UserDetail.btDetail.setText("결제");
                 }
             }
+
+            rAdapter_image = new User_Details_Adapter(image_All, mContext);
+            binding_UserDetail.rviewDetail.setAdapter(rAdapter_image);
+            rAdapter_image.notifyDataSetChanged();
 
         } catch (JSONException e) {
             Log.d(TAG, "setEventDetail Error : ", e);
@@ -276,6 +288,7 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
         } else if (putEntry != null) {
             putEntry.cancel(true);
         }
+
         super.onDestroy();
     }
 
@@ -286,6 +299,7 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
         } else if (putEntry != null) {
             putEntry.cancel(true);
         }
+
         super.onPause();
     }
 }
