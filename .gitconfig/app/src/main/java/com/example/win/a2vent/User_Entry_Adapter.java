@@ -2,6 +2,8 @@ package com.example.win.a2vent;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -42,6 +44,7 @@ public class User_Entry_Adapter extends RecyclerView.Adapter<User_Entry_Holder> 
                 "  (" + mItems.get(position).getEventCategory() + ")");
         holder.textView2.setText(mItems.get(position).getEventPrice());
         holder.textView3.setText(mItems.get(position).getEventDisprice());
+        holder.textView3.setTextColor(ContextCompat.getColor(context, R.color.colorRed));
         holder.textView4.setText(mItems.get(position).getEventStartday() +
                 " ~ " + mItems.get(position).getEventEndday());
 
