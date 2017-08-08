@@ -186,25 +186,26 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
                 binding_UserDetail.tvDetail3.append(event_dis_price);
                 binding_UserDetail.tvDetail4.append(event_startday + " " + event_starttime +
                         " ~\n                  " + event_endday + " " + event_endtime);
+                binding_UserDetail.tvDetail5.append(event_content);
 
                 //target 설정 했을시
                 if (event_target == 0) {
 
                 } else if (event_target == 1) {
-                    binding_UserDetail.tvDetail5.setVisibility(View.VISIBLE);
                     binding_UserDetail.tvDetail6.setVisibility(View.VISIBLE);
                     binding_UserDetail.tvDetail7.setVisibility(View.VISIBLE);
-                    binding_UserDetail.tvDetail5.append
+                    binding_UserDetail.tvDetail8.setVisibility(View.VISIBLE);
+                    binding_UserDetail.tvDetail6.append
                             ("(" + event_minage + "세 ~ " + event_maxage + "세) ");
                     if (event_sex == 0) {
-                        binding_UserDetail.tvDetail6.append("여성");
+                        binding_UserDetail.tvDetail7.append("여성");
                     } else if (event_sex == 1) {
-                        binding_UserDetail.tvDetail6.append("남성");
+                        binding_UserDetail.tvDetail7.append("남성");
                     }
-                    binding_UserDetail.tvDetail7.append(event_area);
+                    binding_UserDetail.tvDetail8.append(event_area);
                 }
 
-                binding_UserDetail.tvDetail10.append(event_people);
+                binding_UserDetail.tvDetail9.append(event_people);
 
                 //type이 응모형인지 결제형 이벤트인지 구분해서 버튼 텍스트 변경
                 if (event_type == 0) {
