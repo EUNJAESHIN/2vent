@@ -2,15 +2,13 @@ package com.example.win.a2vent;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-
-import static com.example.win.a2vent.Activity_User_Login.toast;
 
 /**
  * Created by EUNJAESHIN on 2017-08-03.
@@ -22,6 +20,7 @@ public class User_Entry_Adapter extends RecyclerView.Adapter<User_Entry_Holder> 
     private Context context;
     private ArrayList<User_Entry_Item> mItems = new ArrayList<User_Entry_Item>();
     static int delete_event_number;
+    AlertDialog.Builder builder_EntryDeleteAlert;
 
     public User_Entry_Adapter(ArrayList items, Context mContext) {
         mItems = items;
@@ -64,9 +63,6 @@ public class User_Entry_Adapter extends RecyclerView.Adapter<User_Entry_Holder> 
                 deleteUserEntry = new DeleteUserEntry();
                 deleteUserEntry.
                         execute(Integer.toString(mItems.get(position).getEventNum()), GlobalData.getUserID());
-
-                toast = Toast.makeText(context, "취소 완료", Toast.LENGTH_SHORT);
-                toast.show();
                 // 새로고침
                 Intent intent_Refresh = new Intent(context, Activity_User_Entry_List.class);
                 intent_Refresh.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -75,7 +71,6 @@ public class User_Entry_Adapter extends RecyclerView.Adapter<User_Entry_Holder> 
                 return true;
             }
         });
-
     }
 
     @Override

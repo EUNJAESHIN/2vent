@@ -49,7 +49,7 @@ public class GetImageURI extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        Log.d("테스트", result);
+        Log.d("GetImageURI", result);
         Intent intent = new Intent("com.example.win.a2vent.GetURI_Receiver");
         intent.putExtra("finish", result);
         mContext.sendBroadcast(intent);

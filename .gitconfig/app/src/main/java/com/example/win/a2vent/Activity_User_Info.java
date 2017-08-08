@@ -52,21 +52,24 @@ public class Activity_User_Info extends AppCompatActivity {
                     }
                 });
 
-        binding_UserInfo.tvInfo1.append("아이디  : " + GlobalData.getUserID());
-        binding_UserInfo.tvInfo2.append("비밀번호 : " + GlobalData.getUserPW());
-        binding_UserInfo.tvInfo3.append("성명 : " + GlobalData.getUserName());
-        binding_UserInfo.tvInfo4.append("주소 : " + GlobalData.getUserAddr());
-        binding_UserInfo.tvInfo5.append("생년월일 : " + GlobalData.getUserBirth());
-        if (GlobalData.getUserSex().equals("0")) {
-            binding_UserInfo.tvInfo6.append("성별 : 여성");
-        } else if (GlobalData.getUserSex().equals("1")) {
-            binding_UserInfo.tvInfo6.append("성별 : 남성");
-        } else {
-            binding_UserInfo.tvInfo6.append("성별 : ");
+        try {
+            binding_UserInfo.tvInfo1.append("아이디  : " + GlobalData.getUserID());
+            binding_UserInfo.tvInfo2.append("비밀번호 : " + GlobalData.getEncMD5(GlobalData.getUserPW()));
+            binding_UserInfo.tvInfo3.append("성명 : " + GlobalData.getUserName());
+            binding_UserInfo.tvInfo4.append("주소 : " + GlobalData.getUserAddr());
+            binding_UserInfo.tvInfo5.append("생년월일 : " + GlobalData.getUserBirth());
+            if (GlobalData.getUserSex().equals("0")) {
+                binding_UserInfo.tvInfo6.append("성별 : 여성");
+            } else if (GlobalData.getUserSex().equals("1")) {
+                binding_UserInfo.tvInfo6.append("성별 : 남성");
+            } else {
+                binding_UserInfo.tvInfo6.append("성별 : ");
+            }
+            binding_UserInfo.tvInfo7.append("전화번호 : " + GlobalData.getUserPhone());
+            binding_UserInfo.tvInfo8.append("계좌번호 : " + GlobalData.getUserAccountNum());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        binding_UserInfo.tvInfo7.append("전화번호 : " + GlobalData.getUserPhone());
-        binding_UserInfo.tvInfo8.append("계좌번호 : " + GlobalData.getUserAccountNum());
-
     }
 
     public void onClick_Withdrawal(View v) {
@@ -115,7 +118,7 @@ public class Activity_User_Info extends AppCompatActivity {
 
             if (result.equals("탈퇴 처리 완료")) {
                 Intent intent_Leavingdone = new Intent(Activity_User_Info.this, Activity_User_Login.class);
-                for(int i=0; i<actList.size(); i++)
+                for (int i = 0; i < actList.size(); i++)
                     actList.get(i).finish();
                 startActivity(intent_Leavingdone);
                 finish();

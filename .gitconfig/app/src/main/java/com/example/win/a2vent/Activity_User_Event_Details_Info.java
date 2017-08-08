@@ -153,7 +153,13 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject item = jsonArray.getJSONObject(i);
-                JSONObject item2 = jsonArray2.getJSONObject(i);
+
+                for (int j = 0; j < jsonArray2.length(); j++) {
+                    JSONObject item2 = jsonArray2.getJSONObject(j);
+
+                    String event_URI = item2.getString("event_URI");
+                    image_All.add(new User_Details_Item(event_URI));
+                }
 
                 String event_name = item.getString("event_name");
                 event_type = item.getInt("event_type");
@@ -172,9 +178,6 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
                 int event_sex = item.getInt("event_sex");
                 String event_area = item.getString("event_area");
                 com_number = item.getString("com_number");
-                String event_URI = item2.getString("event_URI");
-
-                image_All.add(new User_Details_Item(event_URI));
 
                 binding_UserDetail.tvDetail1.append(event_name);
                 binding_UserDetail.tvDetail2.append(event_price);
@@ -202,7 +205,6 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
                 }
 
                 binding_UserDetail.tvDetail10.append(event_people);
-                //TODO 참여 시 people 감소, 취소 or 탈퇴했을때 people 다시 증가
 
                 //type이 응모형인지 결제형 이벤트인지 구분해서 버튼 텍스트 변경
                 if (event_type == 0) {

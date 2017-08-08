@@ -414,7 +414,6 @@
                 android:layout_alignRight="@id/tvType"
                 tools:background="?android:attr/editTextBackground" />
 
-
         </RelativeLayout>
     </ScrollView>
 
