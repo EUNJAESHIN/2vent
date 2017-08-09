@@ -130,7 +130,6 @@ public class Activity_User_Login extends AppCompatActivity {
 
 //            2ventLogin.php의 결과값과 비교하여 로그인 성공 및 실패
             if (result.equals("0")) {
-                toast.cancel();
                 toast = Toast.makeText(Activity_User_Login.this, "Account Error", Toast.LENGTH_SHORT);
                 toast.show();
             } else if (result.equals("1")) {
@@ -148,7 +147,6 @@ public class Activity_User_Login extends AppCompatActivity {
                 startActivity(intent_managerLogin);
                 finish();
             } else {
-                toast.cancel();
                 toast = Toast.makeText(Activity_User_Login.this, "Account Error", Toast.LENGTH_SHORT);
                 toast.show();
             }
