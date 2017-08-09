@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.win.a2vent.databinding.ActivityUserJoinBinding;
 
+import static com.example.win.a2vent.Activity_User_Login.actList;
 import static com.example.win.a2vent.Activity_User_Login.toast;
 
 /**
@@ -31,6 +32,7 @@ public class Activity_User_Join extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        actList.add(this);
         binding_userJoin = DataBindingUtil.setContentView(this, R.layout.activity_user_join);
 
 //        라디오버튼 체크리스너
@@ -135,7 +137,7 @@ public class Activity_User_Join extends AppCompatActivity {
 //            2ventRegister.php의 echo(result)와 비교하여 회원가입 성공 및 실패
             if (result.equals("회원가입 성공!")) {
                 Intent intent_Joindone = new Intent(Activity_User_Join.this, Activity_User_Login.class);
-                finish();
+                intent_Joindone.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent_Joindone);
                 toast = Toast.makeText(Activity_User_Join.this, "가입 성공!", Toast.LENGTH_SHORT);
                 toast.show();
