@@ -43,6 +43,7 @@ public class DeleteUserEntry extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
         Log.d("DeleteUserEntry", "response - " + result);
+        // event_people을 증가시킨 후 entry에서 제거
         if (result.equals("Delete Done")) {
             Activity_User_Entry_List.mCategory.remove(delete_event_number);
             Activity_User_Entry_List.rAdapter_UserEntryList.notifyDataSetChanged();
