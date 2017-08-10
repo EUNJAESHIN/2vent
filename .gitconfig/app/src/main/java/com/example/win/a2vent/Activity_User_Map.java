@@ -49,7 +49,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * Created by Administrator on 2017-07-03.
  */
@@ -218,8 +217,8 @@ public class Activity_User_Map extends AppCompatActivity implements MapView.MapV
 
     @Override
     public void onPOIItemSelected(MapView mapView, MapPOIItem mapPOIItem) {
-        slideViewUpdate((int) mapPOIItem.getUserObject());
-        selectedNumberinMarker = (int) mapPOIItem.getUserObject();
+        slideViewUpdate(Integer.parseInt((String) mapPOIItem.getUserObject()));
+        selectedNumberinMarker = Integer.parseInt((String) mapPOIItem.getUserObject());
 
         setFadeInUpAnimation();
     }
@@ -245,7 +244,6 @@ public class Activity_User_Map extends AppCompatActivity implements MapView.MapV
                 (getApplicationContext(), R.anim.anim_fade_in_up);
         simple_info.setAnimation(animFadeInUp);
         simple_info.bringToFront();
-
     }
 
     private void setFadeOutDownAnimation() {
@@ -255,7 +253,6 @@ public class Activity_User_Map extends AppCompatActivity implements MapView.MapV
         simple_info.setVisibility(View.GONE);
         mapView.bringToFront();
         map_FAB.bringToFront();
-
     }
 
     // 하단뷰 플로팅버튼 리스너
@@ -281,15 +278,13 @@ public class Activity_User_Map extends AppCompatActivity implements MapView.MapV
         }
     }
 
-    //마커에 표시할 데이터를 다운받음
     private class getMapData extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-
         }
 
+        @Override
         protected String doInBackground(String... args) {
             InputStream inputStream = null;
             StringBuilder sb = null;
@@ -330,6 +325,7 @@ public class Activity_User_Map extends AppCompatActivity implements MapView.MapV
             return sb.toString();
         }
 
+        @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             try {
@@ -338,19 +334,37 @@ public class Activity_User_Map extends AppCompatActivity implements MapView.MapV
                 e.printStackTrace();
             }
             jsonParser(s);
-
-
         }
 
-    }
+    } // 마커에 표시할 데이터를 다운받음
 
-    //마커찍기
-    public void makeMarker(String addr, String com_name, MapView mapView, int event_no) {
+    public void jsonParser(String s) {
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(s);
+            JSONArray jsonArray = jsonObject.getJSONArray("eventInfo");
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject item = jsonArray.getJSONObject(i);
+
+                String com_addr = item.getString("com_addr");
+                String com_name = item.getString("com_name");
+                String event_no = item.getString("event_number");
+                Log.i("map info", com_addr+"  "+com_name+"  "+event_no);
+                makeMarker(com_addr, com_name, mapView, event_no);
+            }
+            mapView.fitMapViewAreaToShowAllPOIItems();   //추가된 마커가 모두보이게 조절
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    } // json 객체 값 추출
+
+    public void makeMarker(String addr, String com_name, MapView mapView, String event_no) {
         double latitude;
         double longitude;
         geocoder = new Geocoder(this);
         try {
-            list = geocoder.getFromLocationName(addr, 1);
+            list = geocoder.getFromLocationName(addr, 5);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -360,8 +374,10 @@ public class Activity_User_Map extends AppCompatActivity implements MapView.MapV
         MapPoint DEFAULT_MARKER_POINT = MapPoint.mapPointWithGeoCoord(latitude, longitude);
 
         MapPOIItem mDefaultMarker = new MapPOIItem();
+
         mDefaultMarker.setItemName(com_name);
         mDefaultMarker.setTag(1);
+
         mDefaultMarker.setMapPoint(DEFAULT_MARKER_POINT);
 
         mDefaultMarker.setMarkerType(MapPOIItem.MarkerType.CustomImage);
@@ -375,34 +391,10 @@ public class Activity_User_Map extends AppCompatActivity implements MapView.MapV
             mapView.addPOIItem(mDefaultMarker);
         }
 
-
 //        mapView.selectPOIItem(mDefaultMarker, true);
 //        mapView.setMapCenterPoint(DEFAULT_MARKER_POINT, false);
-    }
+    } // 마커찍기
 
-    // json 객체 값 추출
-    public void jsonParser(String s) {
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(s);
-            JSONArray jsonArray = jsonObject.getJSONArray("eventInfo");
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject item = jsonArray.getJSONObject(i);
-
-                String com_addr = item.getString("com_addr");
-                String com_name = item.getString("com_name");
-                int event_no = item.getInt("event_number");
-                Log.i("가게이름", com_name);
-                makeMarker(com_addr, com_name, mapView, event_no);
-            }
-            mapView.fitMapViewAreaToShowAllPOIItems();   //추가된 마커가 모두보이게 조절
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // 하단 view 업데이트
     public void slideViewUpdate(int event_number) {
         JSONObject jsonObject = null;
         try {
@@ -415,20 +407,19 @@ public class Activity_User_Map extends AppCompatActivity implements MapView.MapV
                 if (event_number == item.getInt("event_number")) {
                     String price = item.getString("event_price");
                     String discount = item.getString("event_dis_price");
-                    String imageURI = item.getString("event_URI");
+//                    String imageURI = item.getString("event_URI");
 
                     tv_price.setText(price);
                     tv_discount.setText(discount);
-                    LoadImage loadImage = new LoadImage();
-                    loadImage.execute(imageURI);
+//                    LoadImage loadImage = new LoadImage();
+//                    loadImage.execute(imageURI);
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
+    } // 하단 view 업데이트
 
-    //사진 다운로드
     private class LoadImage extends AsyncTask<String, String, Bitmap> {
         Bitmap mBitmap;
 
@@ -475,9 +466,8 @@ public class Activity_User_Map extends AppCompatActivity implements MapView.MapV
             }
         }
 
-    }
+    } // 사진 다운로드
 
-    //로케이션 리스너 생성
     public void createLocationListener() {
         locationListener = new LocationListener() {
             //로케이션 변동시 이벤트 발생
@@ -502,15 +492,14 @@ public class Activity_User_Map extends AppCompatActivity implements MapView.MapV
             public void onProviderDisabled(String provider) {
             }
         };
-    }
+    } // 로케이션 리스너 생성
 
-    //현재 위치값 받아오기
     @Override
     public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
         Log.i("좌표", mapPoint.getMapPointGeoCoord().latitude + " " + mapPoint.getMapPointGeoCoord().longitude);
         myLatitude = mapPoint.getMapPointGeoCoord().latitude;
         myLongitude = mapPoint.getMapPointGeoCoord().longitude;
-    }
+    } // 현재 위치값 받아오기
 
     @Override
     public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
@@ -524,7 +513,6 @@ public class Activity_User_Map extends AppCompatActivity implements MapView.MapV
     public void onCurrentLocationUpdateCancelled(MapView mapView) {
     }
 
-    //현재 자기 위치와 매장과의 거리 계산
     public double distanceCheck(double latitude, double longitude) {
         LatLng to = new LatLng(latitude, longitude);
 
@@ -535,7 +523,7 @@ public class Activity_User_Map extends AppCompatActivity implements MapView.MapV
         LatLng from = new LatLng(latitude, longitude);
 
         return SphericalUtil.computeDistanceBetween(to, from);
-    }
+    } // 현재 자기 위치와 매장과의 거리 계산
 
     @Override
     protected void onDestroy() {

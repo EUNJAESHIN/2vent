@@ -56,7 +56,7 @@
         </provider>
 
         <activity android:name=".Activity_Owner_Info" />
-        <activity android:name=".Activity_User_Entry_List"></activity>
+        <activity android:name=".Activity_User_Entry_List" />
     </application>
 
 </manifest>

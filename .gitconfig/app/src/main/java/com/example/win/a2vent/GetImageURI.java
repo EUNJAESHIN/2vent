@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 /**
- * Created by Administrator on 2017-08-07.
+ * Created by EUNJAESHIN on 2017-08-07.
  */
 
 public class GetImageURI extends AsyncTask<String, Void, String> {
