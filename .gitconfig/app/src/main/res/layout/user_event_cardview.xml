@@ -48,7 +48,6 @@
                     android:layout_weight="1"
                     android:gravity="center|start"
                     android:paddingLeft="10dp"
-                    android:text="정상가 : "
                     android:textColor="#9c9a9a"
                     android:textSize="18sp" />
 
@@ -59,7 +58,6 @@
                     android:layout_weight="1"
                     android:gravity="center|start"
                     android:paddingLeft="10dp"
-                    android:text="할인가 : "
                     android:textColor="@color/colorRed"
                     android:textSize="18sp" />
 
