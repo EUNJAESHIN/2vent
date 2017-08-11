@@ -302,7 +302,10 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
         } else if (putEntry != null) {
             putEntry.cancel(true);
         }
-
+        if (flagRegisterReceiver) {
+            mContext.unregisterReceiver(broadcastReceiver);
+            flagRegisterReceiver = false;
+        }
         super.onPause();
     }
 }
