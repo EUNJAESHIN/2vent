@@ -53,20 +53,20 @@ public class Activity_User_Info extends AppCompatActivity {
                 });
 
         try {
-            binding_UserInfo.tvInfo1.append("아이디  : " + GlobalData.getUserID());
+            binding_UserInfo.tvInfo1.append(GlobalData.getUserID());
 //            binding_UserInfo.tvInfo2.append("비밀번호 : " + GlobalData.getUserPW());
-            binding_UserInfo.tvInfo3.append("성명 : " + GlobalData.getUserName());
-            binding_UserInfo.tvInfo4.append("주소 : " + GlobalData.getUserAddr());
-            binding_UserInfo.tvInfo5.append("생년월일 : " + GlobalData.getUserBirth());
+            binding_UserInfo.tvInfo3.append(GlobalData.getUserName());
+            binding_UserInfo.tvInfo4.append(GlobalData.getUserAddr());
+            binding_UserInfo.tvInfo5.append(GlobalData.getUserBirth());
             if (GlobalData.getUserSex().equals("0")) {
-                binding_UserInfo.tvInfo6.append("성별 : 여성");
+                binding_UserInfo.tvInfo6.append("여성");
             } else if (GlobalData.getUserSex().equals("1")) {
-                binding_UserInfo.tvInfo6.append("성별 : 남성");
+                binding_UserInfo.tvInfo6.append("남성");
             } else {
-                binding_UserInfo.tvInfo6.append("성별 : ");
+                binding_UserInfo.tvInfo6.append("");
             }
-            binding_UserInfo.tvInfo7.append("전화번호 : " + GlobalData.getUserPhone());
-            binding_UserInfo.tvInfo8.append("계좌번호 : " + GlobalData.getUserAccountNum());
+            binding_UserInfo.tvInfo7.append(GlobalData.getUserPhone());
+            binding_UserInfo.tvInfo8.append(GlobalData.getUserAccountNum());
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -34,48 +34,56 @@
                 android:id="@+id/tv_info1"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
+                android:text="아이디 : "
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_info2"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_info3"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
+                android:text="성명 : "
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_info4"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
+                android:text="주소 : "
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_info5"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
+                android:text="생년월일 : "
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_info6"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
+                android:text="성별 : "
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_info7"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
+                android:text="전화번호 : "
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_info8"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:text="계좌번호 : "
                 android:textSize="18sp" />
 
         </LinearLayout>
@@ -102,7 +110,7 @@
             <android.support.v4.widget.Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="3"/>
+                android:layout_weight="3" />
 
             <Button
                 android:layout_width="0dp"
