@@ -39,7 +39,7 @@
             <TextView
                 android:id="@+id/tv_info2"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="70dp"
                 android:textSize="18sp" />
 
             <TextView
