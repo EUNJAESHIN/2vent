@@ -54,7 +54,7 @@ public class Activity_User_Info extends AppCompatActivity {
 
         try {
             binding_UserInfo.tvInfo1.append("아이디  : " + GlobalData.getUserID());
-            binding_UserInfo.tvInfo2.append("비밀번호 : " + GlobalData.getUserPW());
+//            binding_UserInfo.tvInfo2.append("비밀번호 : " + GlobalData.getUserPW());
             binding_UserInfo.tvInfo3.append("성명 : " + GlobalData.getUserName());
             binding_UserInfo.tvInfo4.append("주소 : " + GlobalData.getUserAddr());
             binding_UserInfo.tvInfo5.append("생년월일 : " + GlobalData.getUserBirth());
@@ -70,6 +70,11 @@ public class Activity_User_Info extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void onClick_ModifyInfo(View v) {
+        Intent intent_ModifyInfo = new Intent(Activity_User_Info.this, Activity_User_Info_Modify.class);
+        startActivity(intent_ModifyInfo);
     }
 
     public void onClick_Withdrawal(View v) {

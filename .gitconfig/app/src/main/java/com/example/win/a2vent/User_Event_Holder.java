@@ -15,7 +15,7 @@ public class User_Event_Holder extends RecyclerView.ViewHolder {
 
     public View view;
     public ImageView imageView;
-    public TextView textView1,textView2,textView3,textView4,textView5;
+    public TextView textView1,textView2,textView3,textView4;
 
     public User_Event_Holder(View itemView) {
         super(itemView);
@@ -26,7 +26,6 @@ public class User_Event_Holder extends RecyclerView.ViewHolder {
         textView2.setPaintFlags(textView2.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG); // 삭선
         textView3 = (TextView) itemView.findViewById(R.id.user_event_cardview_text3);
         textView4 = (TextView) itemView.findViewById(R.id.user_event_cardview_text4);
-        textView5 = (TextView) itemView.findViewById(R.id.user_event_cardview_text5);
     }
 
 }

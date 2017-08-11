@@ -25,7 +25,8 @@
                 android:layout_weight="2"
                 android:gravity="center|left"
                 android:paddingLeft="10dp"
-                android:textSize="16sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -37,9 +38,11 @@
                     android:id="@+id/user_entry_cardview_text2"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:gravity="center|start"
                     android:paddingLeft="10dp"
+                    android:text="정상가 : "
+                    android:textColor="#9c9a9a"
                     android:textSize="16sp" />
 
                 <TextView
@@ -49,6 +52,8 @@
                     android:layout_weight="3"
                     android:gravity="center|start"
                     android:paddingLeft="10dp"
+                    android:text="할인가 : "
+                    android:textColor="@color/colorRed"
                     android:textSize="16sp" />
 
             </LinearLayout>
@@ -64,9 +69,9 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="center|start"
-                    android:paddingLeft="10dp"
-                    android:textSize="16sp" />
+                    android:gravity="center|end"
+                    android:paddingRight="10dp"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 

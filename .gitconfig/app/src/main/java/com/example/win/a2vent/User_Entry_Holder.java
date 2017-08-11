@@ -18,7 +18,6 @@ public class User_Entry_Holder extends RecyclerView.ViewHolder {
         super(itemView);
         view = itemView.findViewById(R.id.user_entry_cardview);
         textView1 = (TextView) itemView.findViewById(R.id.user_entry_cardview_text1);
-        textView1.setPaintFlags(textView1.getPaintFlags()| Paint.FAKE_BOLD_TEXT_FLAG); // 볼드
         textView2 = (TextView) itemView.findViewById(R.id.user_entry_cardview_text2);
         textView2.setPaintFlags(textView2.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG); // 삭선
         textView3 = (TextView) itemView.findViewById(R.id.user_entry_cardview_text3);

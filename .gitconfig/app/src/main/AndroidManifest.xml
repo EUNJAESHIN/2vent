@@ -57,6 +57,9 @@
 
         <activity android:name=".Activity_Owner_Info" />
         <activity android:name=".Activity_User_Entry_List" />
+        <activity
+            android:name=".Activity_User_Info_Modify"
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog"></activity>
     </application>
 
 </manifest>

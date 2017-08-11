@@ -54,11 +54,11 @@ public class User_Event_Adapter extends RecyclerView.Adapter<User_Event_Holder> 
         Picasso.with(context).load(GlobalData.getURL() + mItems.get(position).getEventURI()).
                 placeholder(R.drawable.event_default).into(holder.imageView);
 
-        holder.textView1.setText(mItems.get(position).getEventName());
-        holder.textView2.setText(mItems.get(position).getEventPrice());
-        holder.textView3.setText(mItems.get(position).getEventDisprice());
-        holder.textView4.setText(mItems.get(position).getEventStartday());
-        holder.textView5.setText(mItems.get(position).getEventEndday());
+        holder.textView1.append(mItems.get(position).getEventName());
+        holder.textView2.append(mItems.get(position).getEventPrice());
+        holder.textView3.append(mItems.get(position).getEventDisprice());
+        holder.textView4.append(mItems.get(position).getEventStartday() +
+                "  ~  " + mItems.get(position).getEventEndday());
 
 //        아이템 클릭리스너 (RecyclerItemClickListener)
         holder.view.setOnClickListener(new OnClickListener() {

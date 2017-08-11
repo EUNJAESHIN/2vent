@@ -34,7 +34,8 @@
             android:hint="아이디"
             android:lines="1"
             android:singleLine="true"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:text="2"/>
 
         <EditText
             android:id="@+id/eText_login_pw"
@@ -43,7 +44,8 @@
             android:hint="비밀번호"
             android:lines="1"
             android:singleLine="true"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:text="2"/>
     </LinearLayout>
 
     <LinearLayout
