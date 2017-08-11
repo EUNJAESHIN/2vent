@@ -79,7 +79,7 @@ public class Activity_User_Event_Main extends AppCompatActivity {
         super.onResume();
         if (!flagRegisterReceiver) {
             IntentFilter filter = new IntentFilter();
-            filter.addAction("com.example.win.a2vent.GetURI_Receiver");
+            filter.addAction(GlobalData.GET_URI_RECEIVER);
             mContext.registerReceiver(broadcastReceiver, filter);
             flagRegisterReceiver = true;
         }
@@ -329,7 +329,6 @@ public class Activity_User_Event_Main extends AppCompatActivity {
         if (getEventDB != null) {
             getEventDB.cancel(true);
         }
-
         super.onDestroy();
     }
 
@@ -338,7 +337,10 @@ public class Activity_User_Event_Main extends AppCompatActivity {
         if (getEventDB != null) {
             getEventDB.cancel(true);
         }
-
+        if (flagRegisterReceiver) {
+            mContext.unregisterReceiver(broadcastReceiver);
+            flagRegisterReceiver = false;
+        }
         super.onPause();
     }
 

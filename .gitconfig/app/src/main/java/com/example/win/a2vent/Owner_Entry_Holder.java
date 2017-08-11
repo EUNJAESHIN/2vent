@@ -1,5 +1,6 @@
 package com.example.win.a2vent;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -16,6 +17,8 @@ public class Owner_Entry_Holder extends RecyclerView.ViewHolder {
     private TextView tvSex;
     private TextView tvPhoneNo;
     private TextView tvAddress;
+    private CardView cvEntry;
+
 
     public Owner_Entry_Holder(View itemView) {
         super(itemView);
@@ -25,6 +28,7 @@ public class Owner_Entry_Holder extends RecyclerView.ViewHolder {
         tvSex = (TextView) itemView.findViewById(R.id.tvSex);
         tvPhoneNo = (TextView) itemView.findViewById(R.id.tvPhoneNo);
         tvAddress = (TextView) itemView.findViewById(R.id.tvAddress);
+        cvEntry = (CardView) itemView.findViewById(R.id.cvEntry);
     }
 
     public TextView getTvNo() {
@@ -49,5 +53,9 @@ public class Owner_Entry_Holder extends RecyclerView.ViewHolder {
 
     public TextView getTvAddress() {
         return tvAddress;
+    }
+
+    public CardView getCvEntry() {
+        return cvEntry;
     }
 }

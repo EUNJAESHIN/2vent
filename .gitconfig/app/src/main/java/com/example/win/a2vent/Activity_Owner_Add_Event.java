@@ -1,15 +1,17 @@
 package com.example.win.a2vent;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
+import android.content.IntentFilter;
+import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.MediaScannerConnection;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,13 +20,15 @@ import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.IdRes;
-import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -32,7 +36,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -41,23 +44,25 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
+
+import com.example.win.a2vent.databinding.ActivityOwnerAddEventBinding;
 
 /**
  * Created by win on 2017-07-10.
@@ -66,6 +71,8 @@ import java.util.StringTokenizer;
 public class Activity_Owner_Add_Event extends AppCompatActivity {
 
     private final static String TAG = "테스트";
+
+    private Context mContext;
 
     private RelativeLayout rlEventForm;
 
@@ -84,13 +91,14 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
     private RadioButton rbCashPayment, rbCardPayment;
     private int payment = 0;
 
-    private EditText etEventName, etMinimumAge, etMaximumAge;
+    private EditText etEventName, etMinimumAge, etMaximumAge, etContents;
 
-    private static final int REQ_CODE_SELECT_IMAGE = 100;
-    private String absolutePath;
-    private String uploadImgPath = "";
-    private File filePath;
-    private ImageView imgContents;
+    private RecyclerView rvContents;
+    private RecyclerView.Adapter<Owner_Add_Event_Holder> rvAdtContents;
+    private ArrayList<Owner_Add_Event_Item> arrayListContents;
+    private int arrayPosition = 0;
+    private final int MAX_IMAGE_LIST = 3;
+    private ImageURI imageURI;
 
     private Switch swConditions;
     private int conditions = 0;
@@ -103,13 +111,22 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
 
     private Button btnAddSubmit, btnAddTemp, btnAddCancel;
 
-    private int mEvent_number = -1;
+    private ActivityOwnerAddEventBinding binding;
+
+    private String mEvent_number = "-1";
     private boolean flagUpdate = false;
+    private boolean flagRegisterReceiver = false;
+    private String mResultTempData;
+    private boolean flagRegisterURIReceiver = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_owner_add_event);
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_owner_add_event);
+
+        mContext = getApplicationContext();
 
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                 .detectDiskReads()
@@ -117,9 +134,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                 .detectNetwork()
                 .penaltyLog().build());
 
-        verifyStoragePermissions(Activity_Owner_Add_Event.this);
-
-        rlEventForm = (RelativeLayout) findViewById(R.id.rlEventForm);
+        rlEventForm = binding.rlEventForm;
         rlEventForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,7 +142,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             }
         });
 
-        rgType = (RadioGroup) findViewById(R.id.rgType);
+        rgType = binding.rgType;
         rgType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
@@ -144,29 +159,29 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             }
         });
 
-        etFixedPrice = (EditText) findViewById(R.id.etFixedPrice);
-        etDiscount = (EditText) findViewById(R.id.etDiscount);
+        etFixedPrice = binding.etFixedPrice;
+        etDiscount = binding.etDiscount;
         etFixedPrice.addTextChangedListener(new TextWatcher_MoneyToComma(etFixedPrice));
         etDiscount.addTextChangedListener(new TextWatcher_MoneyToComma(etDiscount));
 
-        etLimitPersons = (EditText) findViewById(R.id.etLimitPersons);
+        etLimitPersons = binding.etLimitPersons;
         etLimitPersons.addTextChangedListener(new TextWatcher_MoneyToComma(etLimitPersons));
 
-        etStartDateYear = (EditText) findViewById(R.id.etStartDateYear);
-        etStartDateMonth = (EditText) findViewById(R.id.etStartDateMonth);
-        etStartDateDay = (EditText) findViewById(R.id.etStartDateDay);
-        etStartHour = (EditText) findViewById(R.id.etStartHour);
-        etStartMin = (EditText) findViewById(R.id.etStartMin);
+        etStartDateYear = binding.etStartDateYear;
+        etStartDateMonth = binding.etStartDateMonth;
+        etStartDateDay = binding.etStartDateDay;
+        etStartHour = binding.etStartHour;
+        etStartMin = binding.etStartMin;
 
-        etEndDateYear = (EditText) findViewById(R.id.etEndDateYear);
-        etEndDateMonth = (EditText) findViewById(R.id.etEndDateMonth);
-        etEndDateDay = (EditText) findViewById(R.id.etEndDateDay);
-        etEndHour = (EditText) findViewById(R.id.etEndHour);
-        etEndMin = (EditText) findViewById(R.id.etEndMin);
+        etEndDateYear = binding.etEndDateYear;
+        etEndDateMonth = binding.etEndDateMonth;
+        etEndDateDay = binding.etEndDateDay;
+        etEndHour = binding.etEndHour;
+        etEndMin = binding.etEndMin;
 
-        rbCashPayment = (RadioButton) findViewById(R.id.rbCashPayment);
-        rbCardPayment = (RadioButton) findViewById(R.id.rbCardPayment);
-        rgPayment = (RadioGroup) findViewById(R.id.rgPayment);
+        rbCashPayment = binding.rbCashPayment;
+        rbCardPayment = binding.rbCardPayment;
+        rgPayment = binding.rgPayment;
         rgPayment.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
@@ -183,21 +198,28 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             }
         });
 
-        etEventName = (EditText) findViewById(R.id.etEventName);
+        etEventName = binding.etEventName;
 
-        imgContents = (ImageView) findViewById(R.id.imgContents);
-        imgContents.setOnClickListener(new View.OnClickListener() {
+        etContents = binding.etContents;
+        etContents.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                Intent _intent = new Intent(Intent.ACTION_PICK);
-                _intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                _intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(_intent, REQ_CODE_SELECT_IMAGE);
-                Log.d(TAG, "터치");
+            public boolean onTouch(View v, MotionEvent event) {
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_UP:
+                        v.getParent().requestDisallowInterceptTouchEvent(false);
+                        break;
+                }
+                return false;
             }
         });
 
-        swConditions = (Switch) findViewById(R.id.swConditions);
+        imageURI = new ImageURI(Activity_Owner_Add_Event.this);
+        rvContents = binding.rvContents;
+        arrayListContents = new ArrayList<>();
+        addImageList(null, null, null);
+
+        swConditions = binding.swConditions;
         swConditions.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -210,13 +232,13 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             }
         });
 
-        etMinimumAge = (EditText) findViewById(R.id.etMinimumAge);
-        etMaximumAge = (EditText) findViewById(R.id.etMaximumAge);
+        etMinimumAge = binding.etMinimumAge;
+        etMaximumAge = binding.etMaximumAge;
 
-        rbMale = (RadioButton) findViewById(R.id.rbMale);
-        rbFemale = (RadioButton) findViewById(R.id.rbFemale);
-        rbAllSex = (RadioButton) findViewById(R.id.rbAllSex);
-        rgSex = (RadioGroup) findViewById(R.id.rgSex);
+        rbMale = binding.rbMale;
+        rbFemale = binding.rbFemale;
+        rbAllSex = binding.rbAllSex;
+        rgSex = binding.rgSex;
         rgSex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
@@ -235,7 +257,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
         });
 
         ArrayAdapter<CharSequence> arrAdtLocations = ArrayAdapter.createFromResource(Activity_Owner_Add_Event.this, R.array.locations, R.layout.support_simple_spinner_dropdown_item);
-        spinLocation = (Spinner) findViewById(R.id.spinLocation);
+        spinLocation = binding.spinLocation;
         spinLocation.setAdapter(arrAdtLocations);
         spinLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -250,96 +272,143 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
         });
         spinLocation.setEnabled(false);
 
-        btnAddSubmit = (Button) findViewById(R.id.btnAddSubmit);
+        btnAddSubmit = binding.btnAddSubmit;
         btnAddSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClick_AddSubmit();
             }
         });
-        btnAddTemp = (Button) findViewById(R.id.btnAddTemp);
+        btnAddTemp = binding.btnAddTemp;
         btnAddTemp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClick_AddTemp();
             }
         });
-        btnAddCancel = (Button) findViewById(R.id.btnAddCancel);
+        btnAddCancel = binding.btnAddCancel;
         btnAddCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Activity_Owner_Add_Event.super.onBackPressed();
+                Activity_Owner_Add_Event.this.onBackPressed();
             }
         });
 
         invisiblePayment();
 
-        GetData getData = new GetData();
-        getData.execute(GlobalData.getUserID());
+        GetStoreData getStoreData = new GetStoreData();
+        getStoreData.execute(GlobalData.getUserID());
 
         if ((getIntent()) != null) {
+            Log.d(TAG, "exist intent data");
             try {
                 Intent intent = getIntent();
-                mEvent_number = Integer.parseInt(intent.getStringExtra("event_number"));
+                mEvent_number = intent.getExtras().getString("event_number");
 
                 GetTempEvent getTempEvent = new GetTempEvent();
-                getTempEvent.execute(String.valueOf(mEvent_number));
+                getTempEvent.execute(mEvent_number);
 
                 flagUpdate = true;
-            } catch (NumberFormatException e) {
+            } catch (NullPointerException e) {
 
             }
         }
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    protected void onResume() {
+        super.onResume();
 
-        this.finish();
+        if (!flagRegisterReceiver) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(GlobalData.ADD_EVENT_RECEIVER);
+            registerReceiver(broadcastReceiver, filter);
+            flagRegisterReceiver = true;
+        }
+
+        if (!flagRegisterURIReceiver) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(GlobalData.GET_URI_RECEIVER);
+            registerReceiver(broadcastURIReceiver, filter);
+            flagRegisterURIReceiver = true;
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (flagRegisterURIReceiver) {
+            unregisterReceiver(broadcastURIReceiver);
+            flagRegisterURIReceiver = false;
+        }
+
+        if (flagRegisterReceiver) {
+            unregisterReceiver(broadcastReceiver);
+            flagRegisterReceiver = false;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(Activity_Owner_Add_Event.this)
+                .setTitle("취소하시겠습니까?").setCancelable(false)
+                .setMessage("작성한 내용이 저장되지 않습니다.")
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Activity_Owner_Add_Event.this.finish();
+                    }
+                }).setNegativeButton("닫기", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                return;
+            }
+        }).show();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         Log.d(TAG, "ActivityResult");
-        if (requestCode == REQ_CODE_SELECT_IMAGE) {
-            Log.d(TAG, "REQ_CODE_SELECT_IMAGE");
-            if (resultCode == Activity.RESULT_OK) {
-                try {
-                    Log.d(TAG, "RESULT_OK");
-                    // Uri에서 이미지 이름을 얻어온다.
-                    String strName = getImageNameToUri(data.getData());
-                    Uri selPhotoUri = data.getData();
-                    Log.d(TAG, "strName: " + strName);
-                    // 절대경로 획득
-                    Cursor cursor = getContentResolver().query(Uri.parse(selPhotoUri.toString()), null, null, null, null);
-                    cursor.moveToNext();
-                    absolutePath = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
 
-                    // 이미지 데이터를 비트맵으로 받아옴
-                    Bitmap image_bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+        Log.d(TAG, "ActivityResult - resultCode = " + requestCode);
+        if (resultCode != RESULT_OK) {
+            Toast.makeText(Activity_Owner_Add_Event.this, "취소 되었습니다.", Toast.LENGTH_SHORT).show();
+        }
 
-                    // 이미지 리사이징
-                    int height = image_bitmap.getHeight();
-                    int width = image_bitmap.getWidth();
+        if (requestCode == ImageURI.PICK_FROM_ALBUM) {
+            Log.d(TAG, "ActivityResult - PICK_FROM_ALBUM");
 
-                    Bitmap src = BitmapFactory.decodeFile(absolutePath);
-                    Bitmap resized = Bitmap.createScaledBitmap(src, width / 2, height / 2, true);
+            if (data == null) {
+                return;
+            }
 
-                    saveBitmapToJPEG(resized, "2ventApp", strName);
+            imageURI.setPhotoUri(data.getData());
+            imageURI.cropImage();
+        } else if (requestCode == ImageURI.PICK_FROM_CAMERA) {
+            Log.d(TAG, "ActivityResult - PICK_FROM_CAMERA");
+            imageURI.cropImage();
+            MediaScannerConnection.scanFile(Activity_Owner_Add_Event.this, //앨범에 사진을 보여주기 위해 Scan을 합니다.
+                    new String[]{imageURI.getPhotoUri().getPath()}, null,
+                    new MediaScannerConnection.OnScanCompletedListener() {
+                        public void onScanCompleted(String path, Uri uri) {
+                        }
+                    });
+        } else if (requestCode == ImageURI.CROP_FROM_CAMERA) {
+            Log.d("테스트", "ActivityResult - CROP_FROM_CAMERA");
+            try { //저는 bitmap 형태의 이미지로 가져오기 위해 아래와 같이 작업하였으며 Thumbnail을 추출하였습니다.
+//                this.grantUriPermission("com", photoUri,
+//                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageURI.getPhotoUri());
+                Bitmap thumbImage = ThumbnailUtils.extractThumbnail(bitmap, 128, 128);
+                ByteArrayOutputStream bs = new ByteArrayOutputStream();
+                thumbImage.compress(Bitmap.CompressFormat.JPEG, 100, bs); //이미지가 클 경우 OutOfMemoryException 발생이 예상되어 압축
 
-                    Log.d(TAG, "불러오기");
-
-                    imgContents.setImageBitmap(resized);
-                    imgContents.setTag("exist");
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                setImageList(arrayPosition, imageURI.getFileName(), imageURI.getFileDir().concat(imageURI.getFileName()), bitmap);
+            } catch (Exception e) {
+                Log.d(TAG, e.getMessage().toString());
             }
         }
     }
@@ -433,7 +502,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             String _name = etEventName.getText().toString();
             String _type = String.valueOf(type);
             String _stats = String.valueOf(status);
-            String _URI;
+            String _content = etContents.getText().toString();
             String _price = etFixedPrice.getText().toString().trim().replaceAll(",", "");
             String _dis_price = etDiscount.getText().toString().trim().replaceAll(",", "");
             String _people = etLimitPersons.getText().toString().trim().replaceAll(",", "");
@@ -450,12 +519,6 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             String _com_number = strComNo;
             String _id = GlobalData.getUserID();
 
-            if (!uploadImgPath.equals("")) {
-                _URI = "event_img/" + _id + "/" + _name + ".jpg";
-            } else {
-                _URI = "";
-            }
-
             if (conditions == 1) {
                 _minage = etMinimumAge.getText().toString().trim();
                 _maxage = etMaximumAge.getText().toString().trim();
@@ -471,17 +534,14 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             InsertData inputTask = new InsertData();
             if (flagUpdate) {
                 Log.d(TAG, "flagUpdate: " + flagUpdate);
-                inputTask.execute(_name, _type, _stats, _URI, _price, _dis_price, _people, _startday,
+                inputTask.execute(_name, _type, _stats, _content, _price, _dis_price, _people, _startday,
                         _endday, _starttime, _endtime, _payment, _target, _minage, _maxage, _sex, _area,
-                        _com_number, _id, String.valueOf(mEvent_number));
+                        _com_number, _id, mEvent_number);
             } else {
-                inputTask.execute(_name, _type, _stats, _URI, _price, _dis_price, _people, _startday,
+                inputTask.execute(_name, _type, _stats, _content, _price, _dis_price, _people, _startday,
                         _endday, _starttime, _endtime, _payment, _target, _minage, _maxage, _sex, _area,
                         _com_number, _id, "");
             }
-
-
-
         }
     }
 
@@ -513,8 +573,6 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                     return "참가 나이를 확인하세요";
                 }
             }
-        } else if (uploadImgPath.equals("")) {
-            return "이미지를 등록하세요";
         }
 
         return null;
@@ -645,58 +703,6 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
         imm.hideSoftInputFromWindow(etMaximumAge.getWindowToken(), 0);
     }
 
-    private static void verifyStoragePermissions(Activity activity) {
-        final int REQUEST_EXTERNAL_STORAGE = 1;
-        String[] PERMISSIONS_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-
-        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
-        }
-    }
-
-    private void saveBitmapToJPEG(Bitmap bitmap, String folder, String name) {
-        String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath();
-        String folder_name = "/" + folder + "/";
-        String file_name = name;
-        String str_path = ex_storage + folder_name;
-        uploadImgPath = str_path + file_name;
-
-        Log.d(TAG, "saveBitmapToJPEG");
-
-        try {
-            filePath = new File(str_path);
-            Log.d(TAG, "isDirectory");
-            if (!filePath.isDirectory()) {
-                filePath.mkdirs();
-                Log.d(TAG, "mkdirs");
-            }
-            FileOutputStream out = new FileOutputStream(uploadImgPath);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            out.close();
-        } catch (FileNotFoundException e) {
-            Log.e("FileNotFountException", e.getMessage());
-            Log.d(TAG, "FileNotFoundException");
-        } catch (IOException e) {
-            Log.e("IOException", e.getMessage());
-            Log.d(TAG, "IOException");
-        }
-    }
-
-    private String getImageNameToUri(Uri data) {
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(data, proj, null, null, null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-
-        cursor.moveToFirst();
-
-        String imgPath = cursor.getString(column_index);
-        String imgName = imgPath.substring(imgPath.lastIndexOf("/") + 1);
-
-        return imgName;
-    }
-
     private class InsertData extends AsyncTask<String, Void, String> {
         ProgressDialog progressDialog;
 
@@ -712,7 +718,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             String event_name = params[0];
             String event_type = params[1];
             String event_stats = params[2];
-            String event_URI = params[3];
+            String event_content = params[3];
             String event_price = params[4];
             String event_dis_price = params[5];
             String event_people = params[6];
@@ -739,7 +745,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                 serverConnector.addPostData("event_name", event_name);
                 serverConnector.addPostData("event_type", event_type);
                 serverConnector.addPostData("event_stats", event_stats);
-                serverConnector.addPostData("event_URI", event_URI);
+                serverConnector.addPostData("event_content", event_content);
                 serverConnector.addPostData("event_price", event_price);
                 serverConnector.addPostData("event_dis_price", event_dis_price);
                 serverConnector.addPostData("event_people", event_people);
@@ -757,25 +763,35 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                 serverConnector.addPostData("id", id);
                 serverConnector.addPostData("event_number", event_number);
 
-                if (!uploadImgPath.equals("")) {
-                    // 파일 첨부
-                    Log.d(TAG, "uploadedPath: " + uploadImgPath);
-                    serverConnector.addFileData("uploaded_file", uploadImgPath);
+                if (arrayListContents.get(0).getFileName() != null) {
+                    for (int i = 0; i < arrayListContents.size(); i++) {
+                        if (arrayListContents.get(i).getFileName() != null) {
+                            serverConnector.addPostData("event_URI"+i, arrayListContents.get(i).getFileName());
+                        }
+                    }
+                }
 
-                    // 전송 작업 시작
-                    serverConnector.writeFileData(uploadImgPath);
+                serverConnector.addDelimiter();
+                serverConnector.writePostData();
+
+                if (arrayListContents.get(0).getURI() != null) {
+                    for (int i = 0; i < arrayListContents.size(); i++) {
+                        if (arrayListContents.get(i).getURI() != null) {
+                            Log.d(TAG, "uploadedPath: " + arrayListContents.get(i).getURI());
+
+                            serverConnector.addFileData("uploaded_file"+i, arrayListContents.get(i).getURI());
+
+                            serverConnector.writeFileData(arrayListContents.get(i).getURI());
+                        }
+                    }
                     serverConnector.finish();
                 } else {
-                    serverConnector.addDelimiter();
-                    serverConnector.writePostData();
                     serverConnector.finish();
                 }
 
                 return serverConnector.response();
 
-            } catch (NullPointerException e) {
-                return new String("NullPoint: " + e.getMessage());
-            } catch (Exception e) {
+            }  catch (Exception e) {
                 Log.d(TAG, "InsertData: Error", e);
 
                 return new String("Error: " + e.getMessage());
@@ -799,7 +815,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                         Toast.makeText(Activity_Owner_Add_Event.this, "임시저장 되었습니다.", Toast.LENGTH_SHORT).show();
                         break;
                 }
-                Activity_Owner_Add_Event.this.onBackPressed();
+                Activity_Owner_Add_Event.this.finish();
             }
         }
     }
@@ -842,7 +858,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
         }
     }
 
-    private class GetData extends AsyncTask<String, Void, String> {
+    private class GetStoreData extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -947,6 +963,8 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
 
     private class GetTempEvent extends AsyncTask<String, Void, String> {
 
+        String event_number = null;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -955,11 +973,12 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             String phpPage = "2ventGetTempEvent.php";
+            event_number = params[0];
 
             try {
                 ServerConnector serverConnector = new ServerConnector(phpPage);
 
-                serverConnector.addPostData("event_number", params[0]);
+                serverConnector.addPostData("event_number", event_number);
                 serverConnector.addDelimiter();
 
                 serverConnector.writePostData();
@@ -978,173 +997,311 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
+            Log.d(TAG, "response - " + result);
+
             if (result == null) {
 
             } else {
-                setTempData(result);
-            }
-        }
-
-        private void setTempData(String result) {
-            try {
-                JSONObject jsonObject = new JSONObject(result);
-                JSONArray jsonArray = jsonObject.getJSONArray("TempEvent");
-
-                JSONObject item;
-                String event_name = null, event_type = null, event_stats = null, event_URI = null, event_price = null, event_dis_price = null,
-                        event_people = null, event_startday = null, event_endday = null, event_starttime = null, event_endtime = null,
-                        event_payment = null, event_target = null, event_minage = null, event_maxage = null, event_sex = null,
-                        event_area = null, com_name = null;
-
-                String tmp_year, tmp_month, tmp_day, tmp_hour, tmp_min;
-                DecimalFormat format = new DecimalFormat("###,###");
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    item = jsonArray.getJSONObject(i);
-
-                    event_name = item.getString("event_name");
-                    event_type = item.getString("event_type");
-                    event_stats = item.getString("event_stats");
-                    event_URI = item.getString("event_URI");
-                    event_price = item.getString("event_price");
-                    event_dis_price = item.getString("event_dis_price");
-                    event_people = item.getString("event_people");
-                    event_startday = item.getString("event_startday");
-                    event_endday = item.getString("event_endday");
-                    event_starttime = item.getString("event_starttime");
-                    event_endtime = item.getString("event_endtime");
-                    event_payment = item.getString("event_payment");
-                    event_target = item.getString("event_target");
-                    event_minage = item.getString("event_minage");
-                    event_maxage = item.getString("event_maxage");
-                    event_sex = item.getString("event_sex");
-                    event_area = item.getString("event_area");
-                    com_name = item.getString("com_name");
-                }
-
-                if (event_type.equals("0")) {
-                    rgType.check(R.id.rbTypeEnter);
-                    invisiblePayment();
-                    type = 0;
-                } else if (event_type.equals("1")) {
-                    rgType.check(R.id.rbTypePay);
-                    visiblePayment();
-                    type = 1;
-                }
-
-                for (int j = 0; j < arrListStore.size(); j++) {
-                    if (arrListStore.get(j) == com_name) {
-                        spinStore.setSelection(j);
-                    }
-                }
-
-                etFixedPrice.setText(format.format(Long.parseLong(event_price)));
-                etDiscount.setText(format.format(Long.parseLong(event_dis_price)));
-                etLimitPersons.setText(format.format(Long.parseLong(event_people)));
-
-                StringTokenizer tokenDay;
-                StringTokenizer tokenTime;
-
-                if (!event_startday.equals("0000-00-00")) {
-                    tokenDay = new StringTokenizer(event_startday, "-");
-
-                    try {
-                        tmp_year = tokenDay.nextToken();
-                        tmp_month = tokenDay.nextToken();
-                        tmp_day = tokenDay.nextToken();
-
-                        etStartDateYear.setText(tmp_year);
-                        etStartDateMonth.setText(tmp_month);
-                        etStartDateDay.setText(tmp_day);
-                    } catch (NoSuchElementException e) {
-
-                    }
-                }
-
-                if (!event_starttime.equals("00:00:00")) {
-                    tokenTime = new StringTokenizer(event_starttime, ":");
-
-                    try {
-                        tmp_hour = tokenTime.nextToken();
-                        tmp_min = tokenTime.nextToken();
-
-                        etStartHour.setText(tmp_hour);
-                        etStartMin.setText(tmp_min);
-                    } catch (NoSuchElementException e) {
-
-                    }
-                }
-
-                if (!event_endday.equals("0000-00-00")) {
-                    tokenDay = new StringTokenizer(event_endday, "-");
-
-                    try {
-                        tmp_year = tokenDay.nextToken();
-                        tmp_month = tokenDay.nextToken();
-                        tmp_day = tokenDay.nextToken();
-
-                        etEndDateYear.setText(tmp_year);
-                        etEndDateMonth.setText(tmp_month);
-                        etEndDateDay.setText(tmp_day);
-                    } catch (NoSuchElementException e) {
-
-                    }
-                }
-
-                if (!event_endtime.equals("00:00:00")) {
-                    tokenTime = new StringTokenizer(event_endtime, ":");
-
-                    try {
-                        tmp_hour = tokenTime.nextToken();
-                        tmp_min = tokenTime.nextToken();
-
-                        etEndHour.setText(tmp_hour);
-                        etEndMin.setText(tmp_min);
-                    } catch (NoSuchElementException e) {
-
-                    }
-                }
-
-                etEventName.setText(event_name);
-
-                Log.d(TAG, "event_URI: " + event_URI);
-                if (!event_URI.equals("")) {
-                    Picasso.with(getApplicationContext()).load(GlobalData.getURL() + event_URI)
-                            .placeholder(R.drawable.event_default)
-                            .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
-                            .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE).into(imgContents);
-                    uploadImgPath = event_URI;
-                } else {
-                    uploadImgPath = "";
-                }
-
-                if (event_target.equals("0")) {
-                    swConditions.setChecked(false);
-                    inActiveContents();
-                } else if (event_target.equals("1")) {
-                    swConditions.setChecked(true);
-                    activeContents();
-                    if (!event_minage.equals("0")) etMinimumAge.setText(event_minage);
-                    if (!event_maxage.equals("0")) etMaximumAge.setText(event_maxage);
-                    if (event_sex.equals("0")) {
-                        rgSex.check(R.id.rbFemale);
-                    } else if (event_sex.equals("1")) {
-                        rgSex.check(R.id.rbMale);
-                    } else if (event_sex.equals("2")) {
-                        rgSex.check(R.id.rbAllSex);
-                    }
-                    if (!event_area.equals("")) {
-                        for (int i = 0; i < spinLocation.getCount(); i++) {
-                            if (spinLocation.getItemAtPosition(i).equals(event_area)) {
-                                spinLocation.setSelection(i);
-                            }
-                        }
-                    }
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
+               mResultTempData = result;
+                new GetImageURI(mContext).execute(event_number, "1", "1");
             }
         }
     }
+
+    private void setTempData(String result1, String result2) {
+        try {
+            JSONObject jsonObject1 = new JSONObject(result1);
+            JSONArray jsonArray1 = jsonObject1.getJSONArray("TempEvent");
+            JSONObject jsonObject2 = new JSONObject(result2);
+            JSONArray jsonArray2 = jsonObject2.getJSONArray("EventImage");
+
+            JSONObject item1, item2;
+            String event_name = null, event_type = null, event_stats = null, event_content = null, event_price = null, event_dis_price = null,
+                    event_people = null, event_startday = null, event_endday = null, event_starttime = null, event_endtime = null,
+                    event_payment = null, event_target = null, event_minage = null, event_maxage = null, event_sex = null,
+                    event_area = null, com_name = null, event_URI = null;
+
+            String tmp_year, tmp_month, tmp_day, tmp_hour, tmp_min;
+            DecimalFormat format = new DecimalFormat("###,###");
+
+            for (int i = 0; i < jsonArray1.length(); i++) {
+                item1 = jsonArray1.getJSONObject(i);
+
+                event_name = item1.getString("event_name");
+                event_type = item1.getString("event_type");
+                event_stats = item1.getString("event_stats");
+                event_content = item1.getString("event_content");
+                event_price = item1.getString("event_price");
+                event_dis_price = item1.getString("event_dis_price");
+                event_people = item1.getString("event_people");
+                event_startday = item1.getString("event_startday");
+                event_endday = item1.getString("event_endday");
+                event_starttime = item1.getString("event_starttime");
+                event_endtime = item1.getString("event_endtime");
+                event_payment = item1.getString("event_payment");
+                event_target = item1.getString("event_target");
+                event_minage = item1.getString("event_minage");
+                event_maxage = item1.getString("event_maxage");
+                event_sex = item1.getString("event_sex");
+                event_area = item1.getString("event_area");
+                com_name = item1.getString("com_name");
+            }
+
+            if (event_type.equals("0")) {
+                rgType.check(R.id.rbTypeEnter);
+                invisiblePayment();
+                type = 0;
+            } else if (event_type.equals("1")) {
+                rgType.check(R.id.rbTypePay);
+                visiblePayment();
+                type = 1;
+            }
+
+            for (int j = 0; j < arrListStore.size(); j++) {
+                if (arrListStore.get(j) == com_name) {
+                    spinStore.setSelection(j);
+                }
+            }
+
+            etFixedPrice.setText(format.format(Long.parseLong(event_price)));
+            etDiscount.setText(format.format(Long.parseLong(event_dis_price)));
+            etLimitPersons.setText(format.format(Long.parseLong(event_people)));
+
+            StringTokenizer tokenDay;
+            StringTokenizer tokenTime;
+
+            if (!event_startday.equals("0000-00-00")) {
+                tokenDay = new StringTokenizer(event_startday, "-");
+
+                try {
+                    tmp_year = tokenDay.nextToken();
+                    tmp_month = tokenDay.nextToken();
+                    tmp_day = tokenDay.nextToken();
+
+                    etStartDateYear.setText(tmp_year);
+                    etStartDateMonth.setText(tmp_month);
+                    etStartDateDay.setText(tmp_day);
+                } catch (NoSuchElementException e) {
+
+                }
+            }
+
+            if (!event_starttime.equals("00:00:00")) {
+                tokenTime = new StringTokenizer(event_starttime, ":");
+
+                try {
+                    tmp_hour = tokenTime.nextToken();
+                    tmp_min = tokenTime.nextToken();
+
+                    etStartHour.setText(tmp_hour);
+                    etStartMin.setText(tmp_min);
+                } catch (NoSuchElementException e) {
+
+                }
+            }
+
+            if (!event_endday.equals("0000-00-00")) {
+                tokenDay = new StringTokenizer(event_endday, "-");
+
+                try {
+                    tmp_year = tokenDay.nextToken();
+                    tmp_month = tokenDay.nextToken();
+                    tmp_day = tokenDay.nextToken();
+
+                    etEndDateYear.setText(tmp_year);
+                    etEndDateMonth.setText(tmp_month);
+                    etEndDateDay.setText(tmp_day);
+                } catch (NoSuchElementException e) {
+
+                }
+            }
+
+            if (!event_endtime.equals("00:00:00")) {
+                tokenTime = new StringTokenizer(event_endtime, ":");
+
+                try {
+                    tmp_hour = tokenTime.nextToken();
+                    tmp_min = tokenTime.nextToken();
+
+                    etEndHour.setText(tmp_hour);
+                    etEndMin.setText(tmp_min);
+                } catch (NoSuchElementException e) {
+
+                }
+            }
+
+            etEventName.setText(event_name);
+
+            etContents.setText(event_content);
+
+            if (event_target.equals("0")) {
+                swConditions.setChecked(false);
+                inActiveContents();
+            } else if (event_target.equals("1")) {
+                swConditions.setChecked(true);
+                activeContents();
+                if (!event_minage.equals("0")) etMinimumAge.setText(event_minage);
+                if (!event_maxage.equals("0")) etMaximumAge.setText(event_maxage);
+                if (event_sex.equals("0")) {
+                    rgSex.check(R.id.rbFemale);
+                } else if (event_sex.equals("1")) {
+                    rgSex.check(R.id.rbMale);
+                } else if (event_sex.equals("2")) {
+                    rgSex.check(R.id.rbAllSex);
+                }
+                if (!event_area.equals("")) {
+                    for (int i = 0; i < spinLocation.getCount(); i++) {
+                        if (spinLocation.getItemAtPosition(i).equals(event_area)) {
+                            spinLocation.setSelection(i);
+                        }
+                    }
+                }
+            }
+
+            InputStream in;
+            Bitmap bitmap;
+            OutputStream out;
+            File file;
+
+            for (int i = 0; i < jsonArray2.length(); i++) {
+                item2 = jsonArray2.getJSONObject(i);
+
+                event_URI = item2.getString("event_URI");
+
+                StringTokenizer token = new StringTokenizer(event_URI, "/");
+
+                String fileName = null;
+
+                try {
+                    token.nextToken();
+                    token.nextToken();
+                    fileName = token.nextToken();
+                } catch (NoSuchElementException e) {
+
+                }
+
+                try {
+                    in = new URL(GlobalData.getURL() + event_URI).openStream();
+                    bitmap = BitmapFactory.decodeStream(in);
+                    in.close();
+
+                    file = new File(Environment.getExternalStorageDirectory().toString(), "/2vent/Images/" + fileName);
+                    out = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+
+                    out.flush();
+                    out.close();
+
+                    setImageList(i, fileName, Environment.getExternalStorageDirectory().toString() + "/2vent/Images/" + fileName, bitmap);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String value = intent.getExtras().getString("add_image");
+            final int position = intent.getExtras().getInt("position");
+
+            Log.d(TAG, "receiver position : " + position);
+
+            arrayPosition = position;
+
+            if (value.equals("add")) {
+                showImageDialog();
+            } else if (value.equals("modify")) {
+                Toast.makeText(Activity_Owner_Add_Event.this, "이미지 수정", Toast.LENGTH_SHORT).show();
+            } else if (value.equals("remove")) {
+                removeImageList(arrayPosition);
+            }
+        }
+    };
+
+    private void showImageDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Owner_Add_Event.this);
+        builder.setTitle("이미지 삽입").setCancelable(true)
+                .setPositiveButton("앨범", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        imageURI.goToAlbum();
+                    }
+                }).setNegativeButton("촬영", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                imageURI.takePhoto();
+            }
+        }).setNeutralButton("닫기", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void addImageList(String fileName, String uri, Bitmap bitmap) {
+        if (arrayListContents.size() < MAX_IMAGE_LIST) {
+            arrayListContents.add(new Owner_Add_Event_Item(fileName, uri, bitmap));
+
+        } else {
+            //Toast.makeText(Activity_Owner_Add_Event.this, "이미지는 3개까지만 등록 가능합니다.", Toast.LENGTH_SHORT).show();
+        }
+        rvAdtContents = new Owner_Add_Event_Adapter(arrayListContents, Activity_Owner_Add_Event.this);
+        rvContents.setAdapter(rvAdtContents);
+        rvAdtContents.notifyDataSetChanged();
+    }
+
+    private void setImageList(int index, String fileName, String uri, Bitmap bitmap) {
+        arrayListContents.set(index, new Owner_Add_Event_Item(fileName, uri, bitmap));
+
+        if (arrayListContents.get(arrayListContents.size()-1).getBitmap() != null) {
+
+            addImageList(null, null, null);
+
+        } else {
+            rvAdtContents = new Owner_Add_Event_Adapter(arrayListContents, Activity_Owner_Add_Event.this);
+            rvContents.setAdapter(rvAdtContents);
+            rvAdtContents.notifyDataSetChanged();
+        }
+
+        Log.d(TAG, "URI:" + arrayListContents.get(index).getURI());
+    }
+
+    private void removeImageList(int position) {
+        if (arrayListContents.size() > 1) {
+
+            if ((arrayListContents.size() == MAX_IMAGE_LIST)
+                    && (arrayListContents.get(arrayListContents.size()-1).getBitmap() != null)) {
+
+                arrayListContents.remove(position);
+                addImageList(null, null, null);
+
+            } else if (arrayListContents.get(position).getBitmap() != null) {
+                arrayListContents.remove(position);
+
+                rvAdtContents = new Owner_Add_Event_Adapter(arrayListContents, Activity_Owner_Add_Event.this);
+                rvContents.setAdapter(rvAdtContents);
+                rvAdtContents.notifyDataSetChanged();
+            }
+        }
+    }
+
+    private BroadcastReceiver broadcastURIReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String value = intent.getExtras().getString("finish");
+
+            if (value == null) {
+
+            } else {
+                setTempData(mResultTempData, value);
+            }
+        }
+    };
 }

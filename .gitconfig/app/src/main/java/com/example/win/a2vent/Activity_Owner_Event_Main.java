@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.example.win.a2vent.databinding.ActivityOwnerEventMainBinding;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,7 +50,6 @@ public class Activity_Owner_Event_Main extends AppCompatActivity implements Navi
     private static String TAG = "테스트";
     private int nType = 1;
 
-    private Context mContext;
     private FloatingActionButton fab;
 
     private GetCompanyTask GetCompanyTask;
@@ -58,12 +58,17 @@ public class Activity_Owner_Event_Main extends AppCompatActivity implements Navi
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mRecyclerViewAdapter;
-    private ArrayList arrListCompany, arrListEvent;
+    private ArrayList arrListCompany;
+    private ArrayList<Owner_Event_Simple_Item> arrListEvent;
 
     private int flagNvigation = -1;
     private boolean flagRegisterReceiver = false;
+    private boolean flagRegisterURIReceiver = false;
 
     private long backKeyPressedTime = 0;
+
+    private String mResult;
+    private int mEvent_stats;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +76,6 @@ public class Activity_Owner_Event_Main extends AppCompatActivity implements Navi
         actList.add(this);
         binding_OwnerMain = DataBindingUtil.setContentView(this, R.layout.activity_owner_event_main);
 
-        mContext = getApplicationContext();
         mRecyclerView = binding_OwnerMain.eventOwnerMain;
 
         PermissionListener permissionListener = new PermissionListener() {
@@ -151,7 +155,7 @@ public class Activity_Owner_Event_Main extends AppCompatActivity implements Navi
             return;
         } else if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
             Intent intent_Logout = new Intent(Activity_Owner_Event_Main.this, Activity_User_Login.class);
-            for(int i=0; i<actList.size(); i++)
+            for (int i = 0; i < actList.size(); i++)
                 actList.get(i).finish();
             startActivity(intent_Logout);
             finish(); // 액티비티 종료 (정확하게는 onDestroy() 호출)
@@ -174,27 +178,18 @@ public class Activity_Owner_Event_Main extends AppCompatActivity implements Navi
         } else if (id == R.id.on_event) {
             nType = 1;
             flagNvigation = 1;
-            if (getEventTask != null) {
-                getEventTask = null;
-            }
             getEventTask = new GetEventTask();
             getEventTask.execute("0", GlobalData.getUserID());
             Log.d(TAG, "진행중 이벤트");
         } else if (id == R.id.temp_event) {
             nType = 1;
             flagNvigation = 2;
-            if (getEventTask != null) {
-                getEventTask = null;
-            }
             getEventTask = new GetEventTask();
             getEventTask.execute("1", GlobalData.getUserID());
             Log.d(TAG, "임시저장 이벤트");
         } else if (id == R.id.end_event) {
             nType = 1;
             flagNvigation = 3;
-            if (getEventTask != null) {
-                getEventTask = null;
-            }
             getEventTask = new GetEventTask();
             getEventTask.execute("2", GlobalData.getUserID());
             Log.d(TAG, "종료된 이벤트");
@@ -208,14 +203,25 @@ public class Activity_Owner_Event_Main extends AppCompatActivity implements Navi
     @Override
     public void onResume() {
         super.onResume();
+
         if (!flagRegisterReceiver) {
             IntentFilter filter = new IntentFilter();
-            filter.addAction("com.example.win.a2vent.owner_Event_Main_Receiver");
-            mContext.registerReceiver(broadcastReceiver, filter);
+            filter.addAction("com.example.win.a2vent.Activity_Owner_Event_Main_Receiver");
+            registerReceiver(broadcastReceiver, filter);
             flagRegisterReceiver = true;
 
             Log.d(TAG, "register receiver");
         }
+
+        if (!flagRegisterURIReceiver) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(GlobalData.GET_URI_RECEIVER);
+            registerReceiver(broadcastURIReceiver, filter);
+            flagRegisterURIReceiver = true;
+
+            Log.d(TAG, "register URI receiver");
+        }
+
         resume();
     }
 
@@ -224,26 +230,57 @@ public class Activity_Owner_Event_Main extends AppCompatActivity implements Navi
             case 0:
                 break;
             case 1:
-                if (getEventTask != null) {
-                    getEventTask = null;
-                }
                 getEventTask = new GetEventTask();
                 getEventTask.execute("0", GlobalData.getUserID());
                 break;
             case 2:
-                if (getEventTask != null) {
-                    getEventTask = null;
-                }
                 getEventTask = new GetEventTask();
                 getEventTask.execute("1", GlobalData.getUserID());
                 break;
             case 3:
-                if (getEventTask != null) {
-                    getEventTask = null;
-                }
                 getEventTask = new GetEventTask();
                 getEventTask.execute("2", GlobalData.getUserID());
                 break;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (GetCompanyTask != null) {
+            GetCompanyTask.cancel(true);
+        }
+
+        if (getEventTask != null) {
+            getEventTask.cancel(true);
+        }
+
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (GetCompanyTask != null) {
+            GetCompanyTask.cancel(true);
+        }
+
+        if (getEventTask != null) {
+            getEventTask.cancel(true);
+        }
+
+        if (flagRegisterURIReceiver) {
+            unregisterReceiver(broadcastURIReceiver);
+            flagRegisterURIReceiver = false;
+
+            Log.d(TAG, "unregister URI receiver");
+        }
+
+        if (flagRegisterReceiver) {
+            unregisterReceiver(broadcastReceiver);
+            flagRegisterReceiver = false;
+
+            Log.d(TAG, "unregister receiver");
         }
     }
 
@@ -380,47 +417,54 @@ public class Activity_Owner_Event_Main extends AppCompatActivity implements Navi
             if (result == null) {
 
             } else {
-                addItem(result);
+                mResult = result;
+                mEvent_stats = Integer.parseInt(event_stats);
+                new GetImageURI(getApplicationContext()).execute("0", event_stats, "0");
             }
         }
+    }
 
-        private void addItem(String result) {
-            arrListEvent = new ArrayList<>();
+    private void addItem(String result1, String result2) {
+        arrListEvent = new ArrayList<>();
 
-            try {
-                JSONObject jsonObject = new JSONObject(result);
-                JSONArray jsonArray = jsonObject.getJSONArray("EventList");
+        try {
+            JSONObject jsonObject1 = new JSONObject(result1);
+            JSONArray jsonArray1 = jsonObject1.getJSONArray("EventList");
+            JSONObject jsonObject2 = new JSONObject(result2);
+            JSONArray jsonArray2 = jsonObject2.getJSONArray("EventMainImage");
 
-                JSONObject item;
-                String event_number;
-                String event_name;
-                String event_type;
-                String event_URI;
-                String event_price;
-                String event_dis_price;
-                String event_startday;
-                String event_endday;
-                String event_starttime;
-                String event_endtime;
-                String com_name;
+            JSONObject item1, item2;
+            String event_number;
+            String event_name;
+            String event_type;
+            String event_price;
+            String event_dis_price;
+            String event_startday;
+            String event_endday;
+            String event_starttime;
+            String event_endtime;
+            String com_name;
+            String event_URI;
 
-                String tmp_year, tmp_month, tmp_day, tmp_hour, tmp_min;
-                DecimalFormat format = new DecimalFormat("###,###");
+            String tmp_year, tmp_month, tmp_day, tmp_hour, tmp_min;
+            DecimalFormat format = new DecimalFormat("###,###");
 
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    item = jsonArray.getJSONObject(i);
+            if (jsonArray1.length() == jsonArray2.length()) {
+                for (int i = 0; i < jsonArray1.length(); i++) {
+                    item1 = jsonArray1.getJSONObject(i);
+                    item2 = jsonArray2.getJSONObject(i);
 
-                    event_number = item.getString("event_number");
-                    event_name = item.getString("event_name");
-                    event_type = item.getString("event_type");
-                    event_URI = item.getString("event_URI");
-                    event_price = item.getString("event_price");
-                    event_dis_price = item.getString("event_dis_price");
-                    event_startday = item.getString("event_startday");
-                    event_endday = item.getString("event_endday");
-                    event_starttime = item.getString("event_starttime");
-                    event_endtime = item.getString("event_endtime");
-                    com_name = item.getString("com_name");
+                    event_number = item1.getString("event_number");
+                    event_name = item1.getString("event_name");
+                    event_type = item1.getString("event_type");
+                    event_price = item1.getString("event_price");
+                    event_dis_price = item1.getString("event_dis_price");
+                    event_startday = item1.getString("event_startday");
+                    event_endday = item1.getString("event_endday");
+                    event_starttime = item1.getString("event_starttime");
+                    event_endtime = item1.getString("event_endtime");
+                    com_name = item1.getString("com_name");
+                    event_URI = item2.getString("event_URI");
 
                     if (event_type.equals("0")) {
                         event_type = "응모형";
@@ -466,60 +510,44 @@ public class Activity_Owner_Event_Main extends AppCompatActivity implements Navi
 
                     }
 
-                    arrListEvent.add(new Owner_Event_Simple_Item(event_number, event_name, event_type, event_URI, event_price, event_dis_price,
-                            event_startday, event_endday, com_name));
-                }
+                    arrListEvent.add(new Owner_Event_Simple_Item(event_number, event_name, event_type, event_price, event_dis_price,
+                            event_startday, event_endday, com_name, event_URI));
 
-                mRecyclerViewAdapter = new Owner_Event_Simple_Adapter(arrListEvent, Activity_Owner_Event_Main.this, Integer.parseInt(event_stats));
+                }
+                mRecyclerViewAdapter = new Owner_Event_Simple_Adapter(arrListEvent, Activity_Owner_Event_Main.this, mEvent_stats);
 
                 mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
                 mRecyclerViewAdapter.notifyDataSetChanged();
+            } else {
+                arrListEvent.clear();
 
-            } catch (JSONException e) {
-                e.printStackTrace();
+                mRecyclerViewAdapter = new Owner_Event_Simple_Adapter(arrListEvent, Activity_Owner_Event_Main.this, mEvent_stats);
+
+                mRecyclerView.setAdapter(mRecyclerViewAdapter);
+
+                mRecyclerViewAdapter.notifyDataSetChanged();
             }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        if (GetCompanyTask != null) {
-            GetCompanyTask.cancel(true);
-        }
 
-        if (getEventTask != null) {
-            getEventTask.cancel(true);
-        }
-
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onPause() {
-        if (GetCompanyTask != null) {
-            GetCompanyTask.cancel(true);
-        }
-
-        if (getEventTask != null) {
-            getEventTask.cancel(true);
-        }
-
-        super.onPause();
-    }
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            final String value = intent.getExtras().getString("delete_finish");
+            final String value = intent.getExtras().getString("finish");
 
-            if (value.equals("event_success")) {
+            if (value.equals("event_delete_success")) {
                 Toast.makeText(Activity_Owner_Event_Main.this, "삭제가 완료되었습니다", Toast.LENGTH_SHORT).show();
                 resume();
-            } else if (value.equals("store_success")) {
+            } else if (value.equals("store_delete_success")) {
                 Toast.makeText(Activity_Owner_Event_Main.this, "삭제가 완료되었습니다", Toast.LENGTH_SHORT).show();
                 resume();
-            }  else if (value.equals("store_failure")) {
+            } else if (value.equals("store_delete_failure")) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Owner_Event_Main.this);
                 builder.setMessage("삭제를 완료할 수 없습니다.\n해당 매장에서 등록 된 이벤트가 존재합니다.").setCancelable(false)
                         .setPositiveButton("닫기", new DialogInterface.OnClickListener() {
@@ -529,6 +557,19 @@ public class Activity_Owner_Event_Main extends AppCompatActivity implements Navi
                         });
                 AlertDialog dialog = builder.create();
                 dialog.show();
+            }
+        }
+    };
+
+    private BroadcastReceiver broadcastURIReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String value = intent.getExtras().getString("finish");
+
+            if (value == null) {
+
+            } else {
+                addItem(mResult, value);
             }
         }
     };

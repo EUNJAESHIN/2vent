@@ -54,7 +54,7 @@ public class Activity_User_Info extends AppCompatActivity {
 
         try {
             binding_UserInfo.tvInfo1.append("아이디  : " + GlobalData.getUserID());
-            binding_UserInfo.tvInfo2.append("비밀번호 : " + GlobalData.getEncMD5(GlobalData.getUserPW()));
+            binding_UserInfo.tvInfo2.append("비밀번호 : " + GlobalData.getUserPW());
             binding_UserInfo.tvInfo3.append("성명 : " + GlobalData.getUserName());
             binding_UserInfo.tvInfo4.append("주소 : " + GlobalData.getUserAddr());
             binding_UserInfo.tvInfo5.append("생년월일 : " + GlobalData.getUserBirth());

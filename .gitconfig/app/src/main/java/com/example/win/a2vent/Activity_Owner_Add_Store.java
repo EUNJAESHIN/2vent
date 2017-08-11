@@ -86,19 +86,14 @@ public class Activity_Owner_Add_Store extends AppCompatActivity implements View.
     //주소 검색
     WebView webview;
     private Handler handler;
+    private static final int SEARCH_ADDRESS = 4;
 
 
     //사진 관련
     Button btn_gall;
     Button btn_picture;
-    Uri photoUri;
-    String file_name;
-    String file_dir;
     String[] city = null;
-    private static final int PICK_FROM_CAMERA = 1; //카메라 촬영으로 사진 가져오기
-    private static final int PICK_FROM_ALBUM = 2; //앨범에서 사진 가져오기
-    private static final int CROP_FROM_CAMERA = 3; //가져온 사진을 자르기 위한 변수
-    private static final int SEARCH_ADDR = 4; //가져온 사진을 자르기 위한 변수
+    ImageURI imageURI;
 
 
     @Override
@@ -150,17 +145,19 @@ public class Activity_Owner_Add_Store extends AppCompatActivity implements View.
             }
         });
 
+        imageURI = new ImageURI(Activity_Owner_Add_Store.this);
+
         btn_gall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToAlbum();
+                imageURI.goToAlbum();
             }
         });
 
         btn_picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                takePhoto();
+                imageURI.takePhoto();
             }
         });
 
@@ -168,7 +165,7 @@ public class Activity_Owner_Add_Store extends AppCompatActivity implements View.
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Activity_Owner_Add_Store.this, Activity_Owner_Add_Store_WebView.class);
-                startActivityForResult(i, SEARCH_ADDR);
+                startActivityForResult(i, SEARCH_ADDRESS);
 //                // WebView 초기화
 //                init_webView();
 //
@@ -263,12 +260,13 @@ public class Activity_Owner_Add_Store extends AppCompatActivity implements View.
 
                     ID = GlobalData.getUserID();
                     com_manager = v_com_manager.getSelectedItem().toString();
-                    com_URI = file_name;
+                    com_URI = imageURI.getFileName();
 
                     Log.i("asyntask", "됨");
                     InsertData_com com_Task = new InsertData_com();
                     Log.i("asyntask", "됨");
-                    com_Task.execute(com_number, com_name, com_addr, com_category, com_manager, com_URI, ID, file_dir + "" + file_name, file_dir, file_name);
+                    com_Task.execute(com_number, com_name, com_addr, com_category, com_manager, com_URI, ID,
+                            imageURI.getFileDir() + "" + imageURI.getFileName(), imageURI.getFileDir(), imageURI.getFileName());
 
                     break;
 
@@ -305,13 +303,9 @@ public class Activity_Owner_Add_Store extends AppCompatActivity implements View.
             String com_URI = (String) params[5];
             String id = (String) params[6];
             String sourceFileUri = (String) params[7];
-            String file_dir = (String) params[8];
-            String file_name = (String) params[9];
 
 
             String fileName = sourceFileUri;
-            String uploadFilePath = file_dir;
-            String uploadFileName = file_name;
             File sourceFile = new File(sourceFileUri);
 
             String boundary = "^******^";
@@ -446,79 +440,37 @@ public class Activity_Owner_Add_Store extends AppCompatActivity implements View.
         }
     }
 
-    private void takePhoto() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //사진을 찍기 위하여 설정합니다.
-        File photoFile = null;
-        try {
-            photoFile = createImageFile();
-        } catch (IOException e) {
-            Toast.makeText(Activity_Owner_Add_Store.this, "이미지 처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
-            finish();
-        }
-        if (photoFile != null) {
-            photoUri = FileProvider.getUriForFile(Activity_Owner_Add_Store.this,
-                    "com.example.win.a2vent.provider", photoFile); //FileProvider의 경우 이전 포스트를 참고하세요.
-            Toast.makeText(this, photoUri.toString(), Toast.LENGTH_SHORT).show();
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri); //사진을 찍어 해당 Content uri를 photoUri에 적용시키기 위함
-            startActivityForResult(intent, PICK_FROM_CAMERA);
-        }
-    }
-
-    // Android M에서는 Uri.fromFile 함수를 사용하였으나 7.0부터는 이 함수를 사용할 시 FileUriExposedException이
-    // 발생하므로 아래와 같이 함수를 작성합니다. 이전 포스트에 참고한 영문 사이트를 들어가시면 자세한 설명을 볼 수 있습니다.
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
-        String imageFileName = "2vent" + timeStamp + "_";
-        File storageDir = new File(Environment.getExternalStorageDirectory() + "/test/"); //test라는 경로에 이미지를 저장하기 위함
-        if (!storageDir.exists()) {
-            storageDir.mkdirs();
-        }
-        File image = File.createTempFile(
-                imageFileName,
-                ".jpg",
-                storageDir
-        );
-        file_dir = storageDir.toString() + "/";
-        file_name = image.getName();
-
-        return image;
-    }
-
-    private void goToAlbum() {
-        Intent intent = new Intent(Intent.ACTION_PICK); //ACTION_PICK 즉 사진을 고르겠다!
-        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-        startActivityForResult(intent, PICK_FROM_ALBUM);
-    }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK) {
-            Toast.makeText(Activity_Owner_Add_Store.this, "이미지 처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Activity_Owner_Add_Store.this, "취소 되었습니다.", Toast.LENGTH_SHORT).show();
         }
-        if (requestCode == PICK_FROM_ALBUM) {
+        if (requestCode == ImageURI.PICK_FROM_ALBUM) {
+            Log.d("테스트", "ActivityResult - PICK_FROM_ALBUM");
+
             if (data == null) {
                 return;
             }
 
-            photoUri = data.getData();
-            cropImage();
+            imageURI.setPhotoUri(data.getData());
+            imageURI.cropImage();
 
 
-        } else if (requestCode == PICK_FROM_CAMERA) {
-            cropImage();
+        } else if (requestCode == ImageURI.PICK_FROM_CAMERA) {
+            Log.d("테스트", "ActivityResult - PICK_FROM_CAMERA");
+            imageURI.cropImage();
             MediaScannerConnection.scanFile(Activity_Owner_Add_Store.this, //앨범에 사진을 보여주기 위해 Scan을 합니다.
-                    new String[]{photoUri.getPath()}, null,
+                    new String[]{imageURI.getPhotoUri().getPath()}, null,
                     new MediaScannerConnection.OnScanCompletedListener() {
                         public void onScanCompleted(String path, Uri uri) {
                         }
                     });
-        } else if (requestCode == CROP_FROM_CAMERA) {
+        } else if (requestCode == ImageURI.CROP_FROM_CAMERA) {
+            Log.d("테스트", "ActivityResult - CROP_FROM_CAMERA");
             try { //저는 bitmap 형태의 이미지로 가져오기 위해 아래와 같이 작업하였으며 Thumbnail을 추출하였습니다.
 //                this.grantUriPermission("com", photoUri,
 //                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageURI.getPhotoUri());
                 Bitmap thumbImage = ThumbnailUtils.extractThumbnail(bitmap, 128, 128);
                 ByteArrayOutputStream bs = new ByteArrayOutputStream();
                 thumbImage.compress(Bitmap.CompressFormat.JPEG, 100, bs); //이미지가 클 경우 OutOfMemoryException 발생이 예상되어 압축
@@ -531,7 +483,7 @@ public class Activity_Owner_Add_Store extends AppCompatActivity implements View.
                 Log.e("ERROR", e.getMessage().toString());
 
             }
-        } else if (requestCode == SEARCH_ADDR) {
+        } else if (requestCode == SEARCH_ADDRESS) {
             try {
                 v_com_addr.setText(data.getStringExtra("addr"));
                 String test = data.getStringExtra("addr");
@@ -543,66 +495,6 @@ public class Activity_Owner_Add_Store extends AppCompatActivity implements View.
         }
 
     }
-
-    //Android N crop image (이 부분에서 몇일동안 정신 못차렸습니다 ㅜ)
-//모든 작업에 있어 사전에 FALG_GRANT_WRITE_URI_PERMISSION과 READ 퍼미션을 줘야 uri를 활용한 작업에 지장을 받지 않는다는 것이 핵심입니다.
-    public void cropImage() {
-        this.grantUriPermission("com.android.camera", photoUri,
-                Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(photoUri, "image/*");
-
-        List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, 0);
-        grantUriPermission(list.get(0).activityInfo.packageName, photoUri,
-                Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        int size = list.size();
-        if (size == 0) {
-            Toast.makeText(this, "취소 되었습니다.", Toast.LENGTH_SHORT).show();
-            return;
-        } else {
-            Toast.makeText(this, "용량이 큰 사진의 경우 시간이 오래 걸릴 수 있습니다.", Toast.LENGTH_SHORT).show();
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            intent.putExtra("crop", "true");
-            intent.putExtra("aspectX", 4);
-            intent.putExtra("aspectY", 3);
-            intent.putExtra("scale", true);
-            File croppedFileName = null;
-            try {
-                croppedFileName = createImageFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            File folder = new File(Environment.getExternalStorageDirectory() + "/test/");
-            File tempFile = new File(folder.toString(), croppedFileName.getName());
-
-            photoUri = FileProvider.getUriForFile(Activity_Owner_Add_Store.this,
-                    "com.example.win.a2vent.provider", tempFile);
-
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-
-
-            intent.putExtra("return-data", false);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-            intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString()); //Bitmap 형태로 받기 위해 해당 작업 진행
-
-            Intent i = new Intent(intent);
-            ResolveInfo res = list.get(0);
-            i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            i.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            grantUriPermission(res.activityInfo.packageName, photoUri,
-                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-            i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-            startActivityForResult(i, CROP_FROM_CAMERA);
-
-
-        }
-
-    }
-
 
     private class getManager extends AsyncTask<String, String, String> {
         @Override

@@ -1,17 +1,18 @@
 package com.example.win.a2vent;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.win.a2vent.databinding.ActivityOwnerEntryListBinding;
@@ -37,13 +38,15 @@ public class Activity_Owner_Entry_List extends AppCompatActivity {
     private TextView tvToday;
 
     private Button btnDetailsEvent;
-    private ImageButton btnSearch;
+
+    private SearchView searchView;
 
     private ActivityOwnerEntryListBinding binding;
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter recyclerViewAdapter;
+    private Owner_Entry_Adapter entryAdapter;
 
     private String mEvent_number;
+    private boolean flagRegisterReceiver = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +64,7 @@ public class Activity_Owner_Entry_List extends AppCompatActivity {
         tvEventName = binding.tvEventName;
         tvToday = binding.tvToday;
         btnDetailsEvent = binding.btnDetailsEvent;
-        btnSearch = binding.btnSearch;
+        searchView = binding.searchEntry;
 
         btnDetailsEvent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,20 +74,23 @@ public class Activity_Owner_Entry_List extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
+        if (!flagRegisterReceiver) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction("com.example.win.a2vent.Activity_Owner_Entry_List_Receiver");
+            mContext.registerReceiver(receiver, filter);
+            flagRegisterReceiver = true;
+        }
+
+        resume();
+    }
+
+    public void resume() {
         GetData getData = new GetData();
         getData.execute(mEvent_number);
     }
@@ -196,11 +202,22 @@ public class Activity_Owner_Entry_List extends AppCompatActivity {
                     arrayList.add(new Owner_Entry_Item(i+1, id, entry_name, entry_addr, strSex, entry_phone, is_entry));
                 }
 
-                recyclerViewAdapter = new Owner_Entry_Adapter(arrayList, Activity_Owner_Entry_List.this);
+                entryAdapter = new Owner_Entry_Adapter(arrayList, Activity_Owner_Entry_List.this, mEvent_number);
 
-                recyclerView.setAdapter(recyclerViewAdapter);
+                recyclerView.setAdapter(entryAdapter);
 
-                recyclerViewAdapter.notifyDataSetChanged();
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String s) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String s) {
+                        entryAdapter.getFilter().filter(s);
+                        return false;
+                    }
+                });
 
                 updateView(event_name);
 
@@ -238,4 +255,15 @@ public class Activity_Owner_Entry_List extends AppCompatActivity {
             tvToday.setText(today);
         }
     }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String value = intent.getExtras().getString("input_finish");
+
+            if (value.equals("success")) {
+                resume();
+            }
+        }
+    };
 }
