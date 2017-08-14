@@ -36,7 +36,7 @@
             android:id="@+id/eText_modify_pw2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="바꿀 비밀번호"
+            android:hint="변경할 비밀번호"
             android:inputType="textPassword"
             android:lines="1"
             android:singleLine="true"
