@@ -89,7 +89,7 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
         } else if (event_type == 1) {
             toast = Toast.makeText(Activity_User_Event_Details_Info.this, "결제 미구현", Toast.LENGTH_SHORT);
             toast.show();
-            //TODO 결제 부분 미구현
+            // 결제 부분 미구현
         }
     }
 
