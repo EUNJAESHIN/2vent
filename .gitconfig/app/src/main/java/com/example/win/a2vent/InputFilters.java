@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class InputFilters {
 
-    // 영문만 허용 (숫자 포함)
+    // 영문 (숫자 포함)
     protected static InputFilter filter = new InputFilter() {
 
         public CharSequence filter(CharSequence source, int start, int end,
@@ -24,7 +24,20 @@ public class InputFilters {
         }
     };
 
-    // 숫자만 허용
+    // 영문 (숫자,특수문자 포함)
+    protected static InputFilter filterPw = new InputFilter() {
+
+        public CharSequence filter(CharSequence source, int start, int end,
+                                   Spanned dest, int dstart, int dend) {
+            Pattern ps = Pattern.compile("^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?~`]+$");
+            if (!ps.matcher(source).matches()) {
+                return "";
+            }
+            return null;
+        }
+    };
+
+    // 숫자
     protected static InputFilter filterNum = new InputFilter() {
 
         public CharSequence filter(CharSequence source, int start, int end,
@@ -37,7 +50,7 @@ public class InputFilters {
         }
     };
 
-    // 한글만 허용
+    // 한글
     protected static InputFilter filterKor = new InputFilter() {
 
         public CharSequence filter(CharSequence source, int start, int end,
@@ -49,4 +62,5 @@ public class InputFilters {
             return null;
         }
     };
+
 }

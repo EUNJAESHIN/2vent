@@ -52,7 +52,7 @@ public class Activity_User_Login extends AppCompatActivity {
 
         // 정규표현식으로 문자열 입력 제한
         binding_userLogin.eTextLoginId.setFilters(new InputFilter[]{InputFilters.filter});
-        binding_userLogin.eTextLoginPw.setFilters(new InputFilter[]{InputFilters.filter});
+        binding_userLogin.eTextLoginPw.setFilters(new InputFilter[]{InputFilters.filterPw});
 
         GlobalData.setUserData(null,null,null,null,null,null,null,null);
     }

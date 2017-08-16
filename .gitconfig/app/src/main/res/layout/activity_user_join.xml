@@ -28,7 +28,7 @@
                 android:id="@+id/eText_join_pw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="비밀번호"
+                android:hint="비밀번호 (특수문자 허용)"
                 android:inputType="textPassword"
                 android:lines="1"
                 android:singleLine="true"

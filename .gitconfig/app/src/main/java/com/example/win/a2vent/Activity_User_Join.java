@@ -42,7 +42,7 @@ public class Activity_User_Join extends AppCompatActivity {
 
         // 정규표현식으로 문자열 입력 제한
         binding_userJoin.eTextJoinId.setFilters(new InputFilter[]{InputFilters.filter});
-        binding_userJoin.eTextJoinPw.setFilters(new InputFilter[]{InputFilters.filter});
+        binding_userJoin.eTextJoinPw.setFilters(new InputFilter[]{InputFilters.filterPw});
         binding_userJoin.eTextJoinName.setFilters(new InputFilter[]{InputFilters.filterKor});
         binding_userJoin.eTextJoinBirth.setFilters(new InputFilter[]{InputFilters.filterNum});
         binding_userJoin.eTextJoinPhone.setFilters(new InputFilter[]{InputFilters.filterNum});
