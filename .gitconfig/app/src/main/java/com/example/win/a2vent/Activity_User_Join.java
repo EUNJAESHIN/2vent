@@ -5,14 +5,19 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
+import android.text.*;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.win.a2vent.databinding.ActivityUserJoinBinding;
+
+import java.util.regex.Pattern;
 
 import static com.example.win.a2vent.Activity_User_Login.actList;
 import static com.example.win.a2vent.Activity_User_Login.toast;
@@ -35,7 +40,15 @@ public class Activity_User_Join extends AppCompatActivity {
         actList.add(this);
         binding_userJoin = DataBindingUtil.setContentView(this, R.layout.activity_user_join);
 
-//        라디오버튼 체크리스너
+        // 정규표현식으로 문자열 입력 제한
+        binding_userJoin.eTextJoinId.setFilters(new InputFilter[]{InputFilters.filter});
+        binding_userJoin.eTextJoinPw.setFilters(new InputFilter[]{InputFilters.filter});
+        binding_userJoin.eTextJoinName.setFilters(new InputFilter[]{InputFilters.filterKor});
+        binding_userJoin.eTextJoinBirth.setFilters(new InputFilter[]{InputFilters.filterNum});
+        binding_userJoin.eTextJoinPhone.setFilters(new InputFilter[]{InputFilters.filterNum});
+        binding_userJoin.eTextJoinAccountnumber.setFilters(new InputFilter[]{InputFilters.filterNum});
+
+        // 라디오버튼 체크리스너
         binding_userJoin.rGroupSex.setOnCheckedChangeListener
                 (new RadioGroup.OnCheckedChangeListener() {
                     @Override
@@ -168,5 +181,6 @@ public class Activity_User_Join extends AppCompatActivity {
         }
         super.onPause();
     }
+
 }
 

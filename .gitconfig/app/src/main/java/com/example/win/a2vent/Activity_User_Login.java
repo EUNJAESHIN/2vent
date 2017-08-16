@@ -10,6 +10,7 @@ import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputFilter;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -48,6 +49,10 @@ public class Activity_User_Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding_userLogin = DataBindingUtil.setContentView(this, R.layout.activity_user_login);
         getAppKeyHash();
+
+        // 정규표현식으로 문자열 입력 제한
+        binding_userLogin.eTextLoginId.setFilters(new InputFilter[]{InputFilters.filter});
+        binding_userLogin.eTextLoginPw.setFilters(new InputFilter[]{InputFilters.filter});
 
         GlobalData.setUserData(null,null,null,null,null,null,null,null);
     }

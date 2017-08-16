@@ -98,7 +98,7 @@ public class Activity_User_Event_Main extends AppCompatActivity {
     }
 
     public void onClick_Help(View v) {
-        toast = Toast.makeText(mContext, "도움말", Toast.LENGTH_SHORT);
+        toast = Toast.makeText(mContext, "도움말 미구현", Toast.LENGTH_SHORT);
         toast.show();
     }
 
