@@ -39,7 +39,7 @@ public class Activity_Owner_Event_Details_Info extends AppCompatActivity {
     private String mEvent_number;
     private String mResult;
 
-    private TextView tvType, tvStore, tvFixedPrice, tvDiscount, tvLimitPersons, tvStartDate,
+    private TextView tvContents, tvType, tvStore, tvFixedPrice, tvDiscount, tvLimitPersons, tvStartDate,
             tvStartTime, tvEndDate, tvEndTime, tvEventName, tvMinimumAge, tvMaximumAge, tvSex, tvLocation, tvPayment;
 
     private Switch swConditions;
@@ -63,6 +63,7 @@ public class Activity_Owner_Event_Details_Info extends AppCompatActivity {
 
         Log.d(TAG, "event_number: " + mEvent_number);
 
+        tvContents = binding.tvContents;
         tvType = binding.tvType;
         tvStore = binding.tvStore;
         tvFixedPrice = binding.tvFixedPrice;
@@ -170,7 +171,7 @@ public class Activity_Owner_Event_Details_Info extends AppCompatActivity {
 
             } else {
                 mResult = result;
-                new GetImageURI(getApplicationContext()).execute(mEvent_number, "0", "1");
+                new GetImageURI(getApplicationContext()).execute(mEvent_number, "0", "1", "");
             }
         }
     }
@@ -242,8 +243,8 @@ public class Activity_Owner_Event_Details_Info extends AppCompatActivity {
 
             mRecyclerViewAdapter.notifyDataSetChanged();
 
-            updateTextView(event_name, event_type, event_content, event_price, event_dis_price, event_people, event_startday, event_starttime,
-                    event_endday, event_endtime, event_payment, event_target, event_minage, event_maxage, event_sex, event_area, com_name);
+            updateTextView(event_name, event_type, event_content, event_price, event_dis_price, event_people, event_startday, event_endday,
+                    event_starttime, event_endtime, event_payment, event_target, event_minage, event_maxage, event_sex, event_area, com_name);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -256,7 +257,8 @@ public class Activity_Owner_Event_Details_Info extends AppCompatActivity {
         try {
 
             String tmp_year, tmp_month, tmp_day, tmp_hour, tmp_min;
-            StringTokenizer tokenDay, tokenTime;
+
+            tvContents.setText(content);
 
             if (type.equals("0")) {
                 tvType.setText("응모형");
@@ -281,8 +283,8 @@ public class Activity_Owner_Event_Details_Info extends AppCompatActivity {
             tvDiscount.setText(new DecimalFormat("###,###").format(Long.parseLong(dis_price)));
             tvLimitPersons.setText(new DecimalFormat("###,###").format(Long.parseLong(people)));
 
-            tokenDay = new StringTokenizer(startday, "-");
-            tokenTime = new StringTokenizer(starttime, ":");
+            StringTokenizer tokenDay = new StringTokenizer(startday, "-");
+            StringTokenizer tokenTime = new StringTokenizer(starttime, ":");
             try {
                 tmp_year = tokenDay.nextToken();
                 tmp_month = tokenDay.nextToken();
@@ -293,7 +295,6 @@ public class Activity_Owner_Event_Details_Info extends AppCompatActivity {
                 tvStartDate.setText(tmp_year.concat("년 ").concat(tmp_month).concat("월 ").concat(tmp_day).concat("일"));
                 tvStartTime.setText(tmp_hour.concat("시 ").concat(tmp_min).concat("분"));
             } catch (NoSuchElementException e) {
-
             }
 
             tokenDay = new StringTokenizer(endday, "-");
@@ -308,7 +309,6 @@ public class Activity_Owner_Event_Details_Info extends AppCompatActivity {
                 tvEndDate.setText(tmp_year.concat("년 ").concat(tmp_month).concat("월 ").concat(tmp_day).concat("일"));
                 tvEndTime.setText(tmp_hour.concat("시 ").concat(tmp_min).concat("분"));
             } catch (NoSuchElementException e) {
-
             }
 
             tvEventName.setText(name);

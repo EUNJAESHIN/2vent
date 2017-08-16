@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 import com.example.win.a2vent.databinding.ActivityOwnerEventMainBinding;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,7 +61,7 @@ public class Activity_Owner_Event_Main extends AppCompatActivity implements Navi
     private ArrayList arrListCompany;
     private ArrayList<Owner_Event_Simple_Item> arrListEvent;
 
-    private int flagNvigation = -1;
+    private static int flagNvigation = -1;
     private boolean flagRegisterReceiver = false;
     private boolean flagRegisterURIReceiver = false;
 
@@ -176,18 +178,27 @@ public class Activity_Owner_Event_Main extends AppCompatActivity implements Navi
         } else if (id == R.id.on_event) {
             nType = 1;
             flagNvigation = 1;
+            if (getEventTask != null) {
+                getEventTask = null;
+            }
             getEventTask = new GetEventTask();
             getEventTask.execute("0", GlobalData.getUserID());
             Log.d(TAG, "진행중 이벤트");
         } else if (id == R.id.temp_event) {
             nType = 1;
             flagNvigation = 2;
+            if (getEventTask != null) {
+                getEventTask = null;
+            }
             getEventTask = new GetEventTask();
             getEventTask.execute("1", GlobalData.getUserID());
             Log.d(TAG, "임시저장 이벤트");
         } else if (id == R.id.end_event) {
             nType = 1;
             flagNvigation = 3;
+            if (getEventTask != null) {
+                getEventTask = null;
+            }
             getEventTask = new GetEventTask();
             getEventTask.execute("2", GlobalData.getUserID());
             Log.d(TAG, "종료된 이벤트");
@@ -226,16 +237,30 @@ public class Activity_Owner_Event_Main extends AppCompatActivity implements Navi
     private void resume() {
         switch (flagNvigation) {
             case 0:
+                if (GetCompanyTask != null) {
+                    GetCompanyTask = null;
+                }
+                GetCompanyTask = new GetCompanyTask();
+                GetCompanyTask.execute();
                 break;
             case 1:
+                if (getEventTask != null) {
+                    getEventTask = null;
+                }
                 getEventTask = new GetEventTask();
                 getEventTask.execute("0", GlobalData.getUserID());
                 break;
             case 2:
+                if (getEventTask != null) {
+                    getEventTask = null;
+                }
                 getEventTask = new GetEventTask();
                 getEventTask.execute("1", GlobalData.getUserID());
                 break;
             case 3:
+                if (getEventTask != null) {
+                    getEventTask = null;
+                }
                 getEventTask = new GetEventTask();
                 getEventTask.execute("2", GlobalData.getUserID());
                 break;
@@ -417,7 +442,7 @@ public class Activity_Owner_Event_Main extends AppCompatActivity implements Navi
             } else {
                 mResult = result;
                 mEvent_stats = Integer.parseInt(event_stats);
-                new GetImageURI(getApplicationContext()).execute("0", event_stats, "0");
+                new GetImageURI(getApplicationContext()).execute("0", event_stats, "0", "");
             }
         }
     }

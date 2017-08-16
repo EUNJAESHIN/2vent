@@ -17,9 +17,7 @@
             <RelativeLayout
                 android:id="@+id/rlEventForm"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:focusable="true"
-                android:focusableInTouchMode="true">
+                android:layout_height="wrap_content">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rvContents"
@@ -29,10 +27,29 @@
                     app:layoutManager="LinearLayoutManager" />
 
                 <TextView
+                    android:id="@+id/tv0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="내용"
+                    android:layout_below="@id/rvContents"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="20dp"/>
+
+                <TextView
+                    android:id="@+id/tvContents"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv0"
+                    android:text="내용 들어감"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignLeft="@id/tv0" />
+
+
+                <TextView
                     android:id="@+id/tv1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/rvContents"
+                    android:layout_below="@id/tvContents"
                     android:layout_marginLeft="40dp"
                     android:layout_marginStart="40dp"
                     android:layout_marginTop="40dp"

@@ -246,7 +246,7 @@ public class Activity_User_Event_Main extends AppCompatActivity {
             } else {
                 Activity_User_Event_Main.this.result = result;
                 getImageURI = new GetImageURI(mContext);
-                getImageURI.execute("0", "0", "0");
+                getImageURI.execute("0", "0", "0","");
             }
         }
 

@@ -128,7 +128,7 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
             } else {
                 Activity_User_Event_Details_Info.this.result = result;
                 getImageURI = new GetImageURI(getApplicationContext());
-                getImageURI.execute(Integer.toString(event_number),"0", "1");
+                getImageURI.execute(Integer.toString(event_number),"0", "1","");
             }
         }
 

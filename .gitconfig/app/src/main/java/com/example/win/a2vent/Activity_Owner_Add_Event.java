@@ -1003,7 +1003,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
 
             } else {
                mResultTempData = result;
-                new GetImageURI(mContext).execute(event_number, "1", "1");
+                new GetImageURI(mContext).execute(event_number, "1", "1","");
             }
         }
     }
