@@ -6,7 +6,7 @@ import android.text.Spanned;
 import java.util.regex.Pattern;
 
 /**
- * Created by Administrator on 2017-08-16.
+ * Created by EUNJAESHIN on 2017-08-16.
  */
 
 public class InputFilters {
