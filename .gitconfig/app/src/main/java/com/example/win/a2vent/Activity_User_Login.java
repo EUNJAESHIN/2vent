@@ -151,10 +151,11 @@ public class Activity_User_Login extends AppCompatActivity {
                     actList.get(i).finish();
                 startActivity(intent_managerLogin);
                 finish();
-            } else {
-                toast = Toast.makeText(Activity_User_Login.this, "Account Error", Toast.LENGTH_SHORT);
-                toast.show();
             }
+//            else if (result.equals("ID 없음")) {
+//                toast = Toast.makeText(Activity_User_Login.this, "Account Error", Toast.LENGTH_SHORT);
+//                toast.show();
+//            }
 
             Log.d("DB", "POST response - " + result);
         }
