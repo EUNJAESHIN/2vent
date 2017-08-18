@@ -90,22 +90,22 @@ public class Activity_User_Event_Main extends AppCompatActivity {
     public void onClick_Accountinfo(View v) {
         Intent GoUserinfo = new Intent(this, Activity_User_Info.class);
         startActivity(GoUserinfo);
-    }
+    } // 계정 정보
 
-    public void onClick_Detailinfo(View v) {
+    public void onClick_Userentry(View v) {
         Intent GoUserentry = new Intent(this, Activity_User_Entry_List.class);
         startActivity(GoUserentry);
-    }
+    } // 사용자가 참여한 이벤트 목록
 
     public void onClick_Help(View v) {
         toast = Toast.makeText(mContext, "도움말 미구현", Toast.LENGTH_SHORT);
         toast.show();
-    }
+    } // 도움말 (미구현)
 
     public void onClick_goMap(View v) {
         Intent intent = new Intent(this, Activity_User_Map.class);
         startActivity(intent);
-    }
+    } // 지도보기
 
     public void onBackPressed() {
         if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
