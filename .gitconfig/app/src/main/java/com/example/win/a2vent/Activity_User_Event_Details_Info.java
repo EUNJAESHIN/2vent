@@ -13,8 +13,6 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.win.a2vent.databinding.ActivityUserEventDetailsInfoBinding;
@@ -22,7 +20,6 @@ import com.example.win.a2vent.databinding.ActivityUserEventDetailsInfoBinding;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -266,25 +263,25 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
             if (result.equals("성공")) {
                 finish();
                 Intent intent_EventOK = new Intent(Activity_User_Event_Details_Info.this,
-                        Activity_User_Event_OK.class);
+                        Activity_User_Event_Check.class);
                 intent_EventOK.putExtra("result", result); // result값을 intent로 보내준다
                 startActivity(intent_EventOK);
             } else if (result.equals("남은 자리 없음")) {
                 finish();
                 Intent intent_EventOK = new Intent(Activity_User_Event_Details_Info.this,
-                        Activity_User_Event_OK.class);
+                        Activity_User_Event_Check.class);
                 intent_EventOK.putExtra("result", result);
                 startActivity(intent_EventOK);
             } else if (result.equals("중복 에러")) {
                 finish();
                 Intent intent_EventOK = new Intent(Activity_User_Event_Details_Info.this,
-                        Activity_User_Event_OK.class);
+                        Activity_User_Event_Check.class);
                 intent_EventOK.putExtra("result", result);
                 startActivity(intent_EventOK);
             } else {
                 finish();
                 Intent intent_EventOK = new Intent(Activity_User_Event_Details_Info.this,
-                        Activity_User_Event_OK.class);
+                        Activity_User_Event_Check.class);
                 intent_EventOK.putExtra("result", result);
                 startActivity(intent_EventOK);
             }

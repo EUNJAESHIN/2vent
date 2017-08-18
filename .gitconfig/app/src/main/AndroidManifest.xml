@@ -75,7 +75,7 @@
             android:value="2e6d9d623b65ef058117c080f2e43112" />
 
         <activity
-            android:name=".Activity_User_Event_OK"
+            android:name=".Activity_User_Event_Check"
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
     </application>
 
