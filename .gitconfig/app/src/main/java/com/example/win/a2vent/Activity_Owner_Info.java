@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.example.win.a2vent.databinding.ActivityOwnerInfoBinding;
 
+import static com.example.win.a2vent.Activity_User_Login.actList;
+
 /**
  * Created by EUNJAESHIN on 2017-07-26.
  * 사업자(판매자) 상세정보 부분
@@ -27,8 +29,35 @@ public class Activity_Owner_Info extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        actList.add(this);
         binding_OwnerInfo = DataBindingUtil.setContentView(this, R.layout.activity_owner_info);
 
+        try {
+            binding_OwnerInfo.tvOwnerinfo1.append(GlobalData.getUserID());
+//            binding_OwnerInfo.tvOwnerinfo2.append("비밀번호 : " + GlobalData.getUserPW());
+            binding_OwnerInfo.tvOwnerinfo3.append(GlobalData.getUserName());
+            binding_OwnerInfo.tvOwnerinfo4.append(GlobalData.getUserAddr());
+            binding_OwnerInfo.tvOwnerinfo5.append(GlobalData.getUserBirth());
+            if (GlobalData.getUserSex().equals("0")) {
+                binding_OwnerInfo.tvOwnerinfo6.append("여성");
+            } else if (GlobalData.getUserSex().equals("1")) {
+                binding_OwnerInfo.tvOwnerinfo6.append("남성");
+            } else {
+                binding_OwnerInfo.tvOwnerinfo6.append("");
+            }
+            binding_OwnerInfo.tvOwnerinfo7.append(GlobalData.getUserPhone());
+            binding_OwnerInfo.tvOwnerinfo8.append(GlobalData.getUserAccountNum());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onClick_owner_ModifyInfo(View v) {
+        Intent intent_ModifyInfo = new Intent(Activity_Owner_Info.this, Activity_User_Info_Modify.class);
+        startActivity(intent_ModifyInfo);
+    } // 비밀번호 변경 버튼
+
+    public void onClick_owner_Withdrawal(View v) {
         builder_WithdrawalAlert = new AlertDialog.Builder(Activity_Owner_Info.this);
         builder_WithdrawalAlert
                 .setTitle("회원 탈퇴")
@@ -45,31 +74,12 @@ public class Activity_Owner_Info extends AppCompatActivity {
                 .setNegativeButton("취소", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                     }
                 });
 
-        binding_OwnerInfo.tvOwnerinfo1.append("아이디  : " + GlobalData.getUserID());
-        binding_OwnerInfo.tvOwnerinfo2.append("비밀번호 : " + GlobalData.getUserPW());
-        binding_OwnerInfo.tvOwnerinfo3.append("성명 : " + GlobalData.getUserName());
-        binding_OwnerInfo.tvOwnerinfo4.append("주소 : " + GlobalData.getUserAddr());
-        binding_OwnerInfo.tvOwnerinfo5.append("생년월일 : " + GlobalData.getUserBirth());
-        if (GlobalData.getUserSex().equals("0")) {
-            binding_OwnerInfo.tvOwnerinfo6.append("성별 : 여성");
-        } else if (GlobalData.getUserSex().equals("1")) {
-            binding_OwnerInfo.tvOwnerinfo6.append("성별 : 남성");
-        } else {
-            binding_OwnerInfo.tvOwnerinfo6.append("성별 : ");
-        }
-        binding_OwnerInfo.tvOwnerinfo7.append("전화번호 : " + GlobalData.getUserPhone());
-        binding_OwnerInfo.tvOwnerinfo8.append("계좌번호 : " + GlobalData.getUserAccountNum());
-
-    }
-
-    public void onClick_owner_Withdrawal(View v) {
         AlertDialog dialog_WithdrawalAlert = builder_WithdrawalAlert.create();
         dialog_WithdrawalAlert.show();
-    } // 탈퇴 버튼
+    } // Owner 탈퇴 버튼
 
     private class LeavingTask extends AsyncTask<String, Void, String> {
         ProgressDialog progressDialog;

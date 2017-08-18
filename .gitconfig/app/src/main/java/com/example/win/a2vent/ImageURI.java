@@ -23,7 +23,7 @@ import java.util.List;
  * Created by win on 2017-08-09.
  */
 
-public class ImageURI {
+public class ImageURI { // TODO
 
     private final String TAG = "테스트";
 

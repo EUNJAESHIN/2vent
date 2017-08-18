@@ -33,25 +33,6 @@ public class Activity_User_Info extends AppCompatActivity {
         actList.add(this);
         binding_UserInfo = DataBindingUtil.setContentView(this, R.layout.activity_user_info);
 
-        builder_WithdrawalAlert = new AlertDialog.Builder(Activity_User_Info.this);
-        builder_WithdrawalAlert
-                .setTitle("회원 탈퇴")
-                .setMessage("\n 탈퇴 시, 참여한 모든 이벤트가 삭제됩니다. \n 탈퇴하시겠습니까?")
-                .setCancelable(true)
-                .setPositiveButton("탈퇴", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        leavingTask = new LeavingTask();
-                        leavingTask.execute(GlobalData.getUserID());
-                    }
-                })
-                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-
         try {
             binding_UserInfo.tvInfo1.append(GlobalData.getUserID());
 //            binding_UserInfo.tvInfo2.append("비밀번호 : " + GlobalData.getUserPW());
@@ -75,12 +56,31 @@ public class Activity_User_Info extends AppCompatActivity {
     public void onClick_ModifyInfo(View v) {
         Intent intent_ModifyInfo = new Intent(Activity_User_Info.this, Activity_User_Info_Modify.class);
         startActivity(intent_ModifyInfo);
-    }
+    } // 비밀번호 변경 버튼
 
     public void onClick_Withdrawal(View v) {
+        builder_WithdrawalAlert = new AlertDialog.Builder(Activity_User_Info.this);
+        builder_WithdrawalAlert
+                .setTitle("회원 탈퇴")
+                .setMessage("\n 탈퇴 시, 참여한 모든 이벤트가 삭제됩니다. \n 탈퇴하시겠습니까?")
+                .setCancelable(true)
+                .setPositiveButton("탈퇴", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        leavingTask = new LeavingTask();
+                        leavingTask.execute(GlobalData.getUserID());
+                    }
+                })
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
         AlertDialog dialog_WithdrawalAlert = builder_WithdrawalAlert.create();
         dialog_WithdrawalAlert.show();
-    } // 탈퇴 버튼
+    } // User 탈퇴 버튼
 
     private class LeavingTask extends AsyncTask<String, Void, String> {
         ProgressDialog progressDialog;
@@ -89,8 +89,7 @@ public class Activity_User_Info extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = ProgressDialog.show(Activity_User_Info.this,
-                    "Bye Bye..", null, true, true);
+            progressDialog = ProgressDialog.show(Activity_User_Info.this, "Bye Bye..", null, true, true);
         }
 
         @Override

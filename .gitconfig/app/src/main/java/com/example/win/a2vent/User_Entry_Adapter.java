@@ -1,11 +1,14 @@
 package com.example.win.a2vent;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,14 +21,14 @@ import java.util.ArrayList;
 public class User_Entry_Adapter extends RecyclerView.Adapter<User_Entry_Holder> {
 
     DeleteUserEntry deleteUserEntry;
-    private Context context;
+    private Context mContext;
     private ArrayList<User_Entry_Item> mItems = new ArrayList<User_Entry_Item>();
     static int delete_event_number;
     AlertDialog.Builder builder_EntryDeleteAlert;
 
-    public User_Entry_Adapter(ArrayList items, Context mContext) {
+    public User_Entry_Adapter(ArrayList items, Context context) {
         mItems = items;
-        context = mContext;
+        mContext = context;
     }
 
     @Override
@@ -50,32 +53,63 @@ public class User_Entry_Adapter extends RecyclerView.Adapter<User_Entry_Holder> 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent_goDetail = new Intent(context, Activity_User_Event_Details_Info.class);
+                Intent intent_goDetail = new Intent(mContext, Activity_User_Event_Details_Info.class);
                 intent_goDetail.putExtra("event_number", mItems.get(position).getEventNum());
                 // Intent에 event_number값을 담기
-                context.startActivity(intent_goDetail);
+                mContext.startActivity(intent_goDetail);
             }
         });
-
+//        롱클릭하면 삭제
         holder.view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                delete_event_number = mItems.get(position).getEventNum();
-                deleteUserEntry = new DeleteUserEntry();
-                deleteUserEntry.
-                        execute(Integer.toString(mItems.get(position).getEventNum()), GlobalData.getUserID());
-                // 새로고침
-                Intent intent_Refresh = new Intent(context, Activity_User_Entry_List.class);
-                intent_Refresh.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                context.startActivity(intent_Refresh);
+                PopupMenu popupMenu = new PopupMenu(mContext, v);
+                popupMenu.inflate(R.menu.popup_menu);
+                popupMenu.setGravity(Gravity.RIGHT);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                        builder.setMessage(" 응모한 이벤트를 취소합니다.\n\n 취소할까요?")
+                                .setCancelable(false)
+                                .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        delete_event_number = mItems.get(position).getEventNum();
+                                        deleteUserEntry = new DeleteUserEntry();
+                                        deleteUserEntry.execute
+                                                (Integer.toString(mItems.get(position).getEventNum()),
+                                                        GlobalData.getUserID());
+                                        // 새로고침
+                                        Intent intent_Refresh =
+                                                new Intent(mContext, Activity_User_Entry_List.class);
+                                        intent_Refresh.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        mContext.startActivity(intent_Refresh);
+                                    }
+                                })
+                                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        return;
+                                    }
+                                });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+
+                        return true;
+                    }
+                });
+                popupMenu.show();
 
                 return true;
             }
         });
+
     }
 
     @Override
     public int getItemCount() {
         return mItems.size();
     }
+
 }

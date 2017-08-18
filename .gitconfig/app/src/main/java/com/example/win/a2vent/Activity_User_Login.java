@@ -248,7 +248,6 @@ public class Activity_User_Login extends AppCompatActivity {
                 Log.d("Hash key", something);
             }
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             Log.e("name not found", e.toString());
         }
     }

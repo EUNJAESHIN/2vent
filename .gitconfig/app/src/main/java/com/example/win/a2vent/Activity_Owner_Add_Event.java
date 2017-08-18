@@ -937,6 +937,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             setAdapter(arrListStore);
         }
 
+        // TODO
         public void setAdapter(final ArrayList<CharSequence> arrList) {
             ArrayAdapter<CharSequence> arrAdtSpinner = new ArrayAdapter<>(Activity_Owner_Add_Event.this, R.layout.support_simple_spinner_dropdown_item, arrList);
             spinStore = (Spinner) findViewById(R.id.spinStore);
@@ -1227,7 +1228,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
         }
     };
 
-    private void showImageDialog() {
+    private void showImageDialog() { // TODO
         AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Owner_Add_Event.this);
         builder.setTitle("이미지 삽입").setCancelable(true)
                 .setPositiveButton("앨범", new DialogInterface.OnClickListener() {

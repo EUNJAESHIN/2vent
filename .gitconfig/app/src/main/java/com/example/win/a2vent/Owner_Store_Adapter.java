@@ -105,7 +105,7 @@ public class Owner_Store_Adapter extends RecyclerView.Adapter<Owner_Store_Holder
         return mItems.size();
     }
 
-    private void setAnimation(View viewToAnimate, int position){
+    private void setAnimation(View viewToAnimate, int position) {
         if (position > lastPosition) {
             Animation animation = AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left);
             viewToAnimate.startAnimation(animation);

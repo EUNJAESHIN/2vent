@@ -262,6 +262,7 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             Log.d("echo", result);
+            //TODO 참여했는지 팝업으로 확인
             if (result.equals("성공")) {
                 toast = Toast.makeText(Activity_User_Event_Details_Info.this,
                         "참여 완료", Toast.LENGTH_SHORT);

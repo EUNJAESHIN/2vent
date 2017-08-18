@@ -125,7 +125,7 @@ public class Activity_User_Entry_List extends AppCompatActivity {
                 }
             }
 
-            rAdapter_UserEntryList = new User_Entry_Adapter(mCategory, getApplicationContext());
+            rAdapter_UserEntryList = new User_Entry_Adapter(mCategory, Activity_User_Entry_List.this);
             binding_UserEntryList.entryRviewContent.setAdapter(rAdapter_UserEntryList);
             rAdapter_UserEntryList.notifyDataSetChanged();
 
