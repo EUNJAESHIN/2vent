@@ -50,7 +50,7 @@
         <activity android:name=".Activity_User_Entry_List" />
         <activity
             android:name=".Activity_User_Info_Modify"
-            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog"></activity>
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -73,6 +73,10 @@
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="2e6d9d623b65ef058117c080f2e43112" />
+
+        <activity
+            android:name=".Activity_User_Event_OK"
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
     </application>
 
 </manifest>

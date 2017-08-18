@@ -61,7 +61,7 @@
                 android:layout_height="45dp"
                 android:layout_weight="2"
                 android:background="@drawable/button_shape_red"
-                android:onClick="onClick_ModifyCancle"
+                android:onClick="onClick_ModifyCancel"
                 android:text="취소"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp" />

@@ -7,20 +7,22 @@ import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.graphics.Paint;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.win.a2vent.databinding.ActivityUserEventDetailsInfoBinding;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -41,9 +43,8 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
     Context mContext;
     RecyclerView.Adapter rAdapter_image;
     ArrayList<User_Details_Item> image_All;
-    GetEventInfo getEventInfo;
-    GetImageURI getImageURI;
-    PutEntry putEntry;
+    GetEventInfo getEventInfo; GetImageURI getImageURI; PutEntry putEntry;
+    AlertDialog dialog; AlertDialog.Builder builder;
     int event_number, event_type;
     String com_number, result;
 
@@ -127,7 +128,7 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
             } else {
                 Activity_User_Event_Details_Info.this.result = result;
                 getImageURI = new GetImageURI(getApplicationContext());
-                getImageURI.execute(Integer.toString(event_number),"0", "1","");
+                getImageURI.execute(Integer.toString(event_number), "0", "1", "");
             }
         }
 
@@ -260,26 +261,34 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            Log.d("echo", result);
-            //TODO 참여했는지 팝업으로 확인
+            Log.d("PutEntry PostExecute", "response - " + result);
+
             if (result.equals("성공")) {
-                toast = Toast.makeText(Activity_User_Event_Details_Info.this,
-                        "참여 완료", Toast.LENGTH_SHORT);
-                toast.show();
                 finish();
+                Intent intent_EventOK = new Intent(Activity_User_Event_Details_Info.this,
+                        Activity_User_Event_OK.class);
+                intent_EventOK.putExtra("result", result);
+                startActivity(intent_EventOK);
             } else if (result.equals("남은 자리 없음")) {
-                toast = Toast.makeText(Activity_User_Event_Details_Info.this,
-                        "이미 모집이 완료된 이벤트입니다", Toast.LENGTH_SHORT);
-                toast.show();
+                finish();
+                Intent intent_EventOK = new Intent(Activity_User_Event_Details_Info.this,
+                        Activity_User_Event_OK.class);
+                intent_EventOK.putExtra("result", result);
+                startActivity(intent_EventOK);
             } else if (result.equals("중복 에러")) {
-                toast = Toast.makeText(Activity_User_Event_Details_Info.this,
-                        "이미 참여한 이벤트입니다", Toast.LENGTH_SHORT);
-                toast.show();
+                finish();
+                Intent intent_EventOK = new Intent(Activity_User_Event_Details_Info.this,
+                        Activity_User_Event_OK.class);
+                intent_EventOK.putExtra("result", result);
+                startActivity(intent_EventOK);
             } else {
-                toast = Toast.makeText(Activity_User_Event_Details_Info.this,
-                        "응모/결제 오류", Toast.LENGTH_SHORT);
-                toast.show();
+                finish();
+                Intent intent_EventOK = new Intent(Activity_User_Event_Details_Info.this,
+                        Activity_User_Event_OK.class);
+                intent_EventOK.putExtra("result", result);
+                startActivity(intent_EventOK);
             }
+
         }
 
     } // 응모형일때 이벤트 참여시 사용자 데이터 보냄

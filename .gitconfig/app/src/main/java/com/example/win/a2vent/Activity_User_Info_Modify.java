@@ -19,6 +19,10 @@ import com.example.win.a2vent.databinding.ActivityUserInfoModifyBinding;
 import static com.example.win.a2vent.Activity_User_Login.actList;
 import static com.example.win.a2vent.Activity_User_Login.toast;
 
+/**
+ * Created by EUNJAESHIN on 2017-08-16
+ */
+
 public class Activity_User_Info_Modify extends Activity {
 
     ActivityUserInfoModifyBinding binding_UserInfoModify;
@@ -33,6 +37,7 @@ public class Activity_User_Info_Modify extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         binding_UserInfoModify = DataBindingUtil.setContentView(this, R.layout.activity_user_info_modify);
+        this.setFinishOnTouchOutside(false); // 다이얼로그 액티비티 외부 터치시 finish false
 
     }
 
@@ -62,7 +67,7 @@ public class Activity_User_Info_Modify extends Activity {
         }
     } // 비밀번호 변경
 
-    public void onClick_ModifyCancle(View v) {
+    public void onClick_ModifyCancel(View v) {
         this.finish();
     } // 비밀번호 변경 취소
 
