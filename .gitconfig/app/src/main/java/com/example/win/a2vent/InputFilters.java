@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 /**
  * Created by EUNJAESHIN on 2017-08-16.
+ * 정규표현식으로 문자열 제한에 사용
  */
 
 public class InputFilters {
