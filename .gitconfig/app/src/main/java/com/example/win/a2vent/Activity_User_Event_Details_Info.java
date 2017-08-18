@@ -267,7 +267,7 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
                 finish();
                 Intent intent_EventOK = new Intent(Activity_User_Event_Details_Info.this,
                         Activity_User_Event_OK.class);
-                intent_EventOK.putExtra("result", result);
+                intent_EventOK.putExtra("result", result); // result값을 intent로 보내준다
                 startActivity(intent_EventOK);
             } else if (result.equals("남은 자리 없음")) {
                 finish();

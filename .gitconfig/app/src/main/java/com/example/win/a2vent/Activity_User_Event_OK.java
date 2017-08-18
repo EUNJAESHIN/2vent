@@ -29,6 +29,7 @@ public class Activity_User_Event_OK extends Activity {
 
         Intent intent_getIsEntry = getIntent();
         result = intent_getIsEntry.getExtras().getString("result");
+        // 이벤트 참여시 가져온 result값을 받아온다
 
         if (result.equals("성공")) {
             binding_UserEventOK.eventOkImageView.setImageResource(R.drawable.user_info);
@@ -42,7 +43,7 @@ public class Activity_User_Event_OK extends Activity {
         } else {
             binding_UserEventOK.eventOkImageView.setImageResource(R.drawable.user_info);
             binding_UserEventOK.eventOkTextView.append("Entry Error");
-        }
+        } // result값에 따라 정보 표시
     }
 
     public void onClick_Confirm(View v) { this.finish(); } // 확인 후 닫기 버튼
