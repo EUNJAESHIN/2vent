@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -546,13 +546,15 @@
                     android:text="이미지 등록" />
 
                 <LinearLayout
+                    android:id="@+id/linearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_alignLeft="@id/etContents"
                     android:layout_alignRight="@id/etContents"
                     android:layout_below="@id/tvImage"
                     android:layout_marginTop="14dp"
-                    android:background="#d7d7d7d7" />
+                    android:background="#d7d7d7d7"
+                    android:orientation="horizontal" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rvContents"
@@ -733,48 +735,55 @@
             </RelativeLayout>
         </ScrollView>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="0dip"
-            android:layout_weight="15">
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="15"
+            android:gravity="center"
+            android:weightSum="8">
 
             <Button
-                android:id="@+id/btnAddSubmit"
-                android:layout_width="wrap_content"
+                android:id="@+id/btnReview"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="20dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:text="등록"
+                android:layout_margin="5dp"
+                android:layout_weight="2"
+                android:text="미리보기"
+                android:textAlignment="center"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/btnAddCancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="2"
+                android:text="취소"
                 android:textAlignment="center"
                 tools:ignore="HardcodedText" />
 
             <Button
                 android:id="@+id/btnAddTemp"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/btnAddSubmit"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="20dp"
-                android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@id/btnAddSubmit"
+                android:layout_margin="5dp"
+                android:layout_weight="2"
                 android:text="임시저장"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                tools:ignore="HardcodedText" />
 
             <Button
-                android:id="@+id/btnAddCancel"
-                android:layout_width="wrap_content"
+                android:id="@+id/btnAddSubmit"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/btnAddSubmit"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="20dp"
-                android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@id/btnAddTemp"
-                android:text="취소"
-                android:textAlignment="center" />
-        </RelativeLayout>
+                android:layout_margin="5dp"
+                android:layout_weight="2"
+                android:text="등록"
+                android:textAlignment="center"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
     </LinearLayout>
 </layout>
 

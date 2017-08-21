@@ -293,6 +293,13 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                 Activity_Owner_Add_Event.this.onBackPressed();
             }
         });
+        //TODO 이벤트 등록시 미리보기
+        binding.btnReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext, "고객들이 보는 화면입니다", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         invisiblePayment();
 
