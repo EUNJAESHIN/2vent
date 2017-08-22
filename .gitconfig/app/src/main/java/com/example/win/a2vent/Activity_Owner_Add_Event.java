@@ -33,14 +33,10 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,42 +70,23 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
 
     private Context mContext;
 
-    private RelativeLayout rlEventForm;
-
-    private RadioGroup rgType;
     private int type = 0;
     private int status;
 
     private String strComNo;
     private ArrayList<CharSequence> arrListStore, arrListComNo;
     private Spinner spinStore;
-    private EditText etFixedPrice, etDiscount, etLimitPersons;
 
-    private EditText etStartDateYear, etStartDateMonth, etStartDateDay, etStartHour, etStartMin, etEndDateYear, etEndDateMonth, etEndDateDay, etEndHour, etEndMin;
-
-    private RadioGroup rgPayment;
-    private RadioButton rbCashPayment, rbCardPayment;
     private int payment = 0;
 
-    private EditText etEventName, etMinimumAge, etMaximumAge, etContents;
-
-    private RecyclerView rvContents;
     private RecyclerView.Adapter<Owner_Add_Event_Holder> rvAdtContents;
     private ArrayList<Owner_Add_Event_Item> arrayListContents;
     private int arrayPosition = 0;
     private final int MAX_IMAGE_LIST = 3;
     private ImageURI imageURI;
-
-    private Switch swConditions;
+    byte[] bytes;
     private int conditions = 0;
-
-    private RadioGroup rgSex;
-    private RadioButton rbMale, rbFemale, rbAllSex;
     private int sex = 2;
-
-    private Spinner spinLocation;
-
-    private Button btnAddSubmit, btnAddTemp, btnAddCancel;
 
     private ActivityOwnerAddEventBinding binding;
 
@@ -134,16 +111,14 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                 .detectNetwork()
                 .penaltyLog().build());
 
-        rlEventForm = binding.rlEventForm;
-        rlEventForm.setOnClickListener(new View.OnClickListener() {
+        binding.rlEventForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 hideSoftKeyboard();
             }
         });
 
-        rgType = binding.rgType;
-        rgType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        binding.rgType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 switch (checkedId) {
@@ -159,30 +134,11 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             }
         });
 
-        etFixedPrice = binding.etFixedPrice;
-        etDiscount = binding.etDiscount;
-        etFixedPrice.addTextChangedListener(new TextWatcher_MoneyToComma(etFixedPrice));
-        etDiscount.addTextChangedListener(new TextWatcher_MoneyToComma(etDiscount));
+        binding.etFixedPrice.addTextChangedListener(new TextWatcher_MoneyToComma(binding.etFixedPrice));
+        binding.etDiscount.addTextChangedListener(new TextWatcher_MoneyToComma(binding.etDiscount));
+        binding.etLimitPersons.addTextChangedListener(new TextWatcher_MoneyToComma(binding.etLimitPersons));
 
-        etLimitPersons = binding.etLimitPersons;
-        etLimitPersons.addTextChangedListener(new TextWatcher_MoneyToComma(etLimitPersons));
-
-        etStartDateYear = binding.etStartDateYear;
-        etStartDateMonth = binding.etStartDateMonth;
-        etStartDateDay = binding.etStartDateDay;
-        etStartHour = binding.etStartHour;
-        etStartMin = binding.etStartMin;
-
-        etEndDateYear = binding.etEndDateYear;
-        etEndDateMonth = binding.etEndDateMonth;
-        etEndDateDay = binding.etEndDateDay;
-        etEndHour = binding.etEndHour;
-        etEndMin = binding.etEndMin;
-
-        rbCashPayment = binding.rbCashPayment;
-        rbCardPayment = binding.rbCardPayment;
-        rgPayment = binding.rgPayment;
-        rgPayment.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        binding.rgPayment.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 switch (checkedId) {
@@ -198,10 +154,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             }
         });
 
-        etEventName = binding.etEventName;
-
-        etContents = binding.etContents;
-        etContents.setOnTouchListener(new View.OnTouchListener() {
+        binding.etContents.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 v.getParent().requestDisallowInterceptTouchEvent(true);
@@ -215,12 +168,10 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
         });
 
         imageURI = new ImageURI(Activity_Owner_Add_Event.this);
-        rvContents = binding.rvContents;
         arrayListContents = new ArrayList<>();
         addImageList(null, null, null);
 
-        swConditions = binding.swConditions;
-        swConditions.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        binding.swConditions.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 checkedConditions(isChecked);
@@ -232,14 +183,8 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             }
         });
 
-        etMinimumAge = binding.etMinimumAge;
-        etMaximumAge = binding.etMaximumAge;
 
-        rbMale = binding.rbMale;
-        rbFemale = binding.rbFemale;
-        rbAllSex = binding.rbAllSex;
-        rgSex = binding.rgSex;
-        rgSex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        binding.rgSex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 switch (checkedId) {
@@ -257,9 +202,9 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
         });
 
         ArrayAdapter<CharSequence> arrAdtLocations = ArrayAdapter.createFromResource(Activity_Owner_Add_Event.this, R.array.locations, R.layout.support_simple_spinner_dropdown_item);
-        spinLocation = binding.spinLocation;
-        spinLocation.setAdapter(arrAdtLocations);
-        spinLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        binding.spinLocation.setAdapter(arrAdtLocations);
+        binding.spinLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
@@ -270,24 +215,21 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
 
             }
         });
-        spinLocation.setEnabled(false);
+        binding.spinLocation.setEnabled(false);
 
-        btnAddSubmit = binding.btnAddSubmit;
-        btnAddSubmit.setOnClickListener(new View.OnClickListener() {
+        binding.btnAddSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClick_AddSubmit();
             }
         });
-        btnAddTemp = binding.btnAddTemp;
-        btnAddTemp.setOnClickListener(new View.OnClickListener() {
+        binding.btnAddTemp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClick_AddTemp();
             }
         });
-        btnAddCancel = binding.btnAddCancel;
-        btnAddCancel.setOnClickListener(new View.OnClickListener() {
+        binding.btnAddCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Activity_Owner_Add_Event.this.onBackPressed();
@@ -297,6 +239,8 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
         binding.btnReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 String date = binding.etStartDateYear.getText().toString() + "-" +
                         binding.etStartDateMonth.getText().toString() + "-" +
                         binding.etStartDateDay.getText().toString() + " " +
@@ -307,10 +251,13 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                         binding.etEndDateDay.getText().toString() + " " +
                         binding.etEndHour.getText().toString() + ":" +
                         binding.etEndMin.getText().toString() + ":00";
+
                 Intent intent_goReview = new Intent(mContext, Activity_Owner_Add_Event_Review.class);
+                intent_goReview.putExtra("event_img", bytes);
                 intent_goReview.putExtra("event_name", binding.etEventName.getText().toString());
                 intent_goReview.putExtra("event_price", binding.etFixedPrice.getText().toString());
                 intent_goReview.putExtra("event_dis_price", binding.etDiscount.getText().toString());
+                intent_goReview.putExtra("event_people", binding.etLimitPersons.getText().toString());
                 intent_goReview.putExtra("event_date", date);
                 intent_goReview.putExtra("event_content", binding.etContents.getText().toString());
                 startActivity(intent_goReview);
@@ -428,6 +375,9 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                 Bitmap thumbImage = ThumbnailUtils.extractThumbnail(bitmap, 128, 128);
                 ByteArrayOutputStream bs = new ByteArrayOutputStream();
                 thumbImage.compress(Bitmap.CompressFormat.JPEG, 100, bs); //이미지가 클 경우 OutOfMemoryException 발생이 예상되어 압축
+                Bitmap bitmap2 = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageURI.getPhotoUri());
+                bitmap2.compress(Bitmap.CompressFormat.PNG, 40, bs);
+                bytes = bs.toByteArray();
 
                 setImageList(arrayPosition, imageURI.getFileName(), imageURI.getFileDir().concat(imageURI.getFileName()), bitmap);
             } catch (Exception e) {
@@ -454,17 +404,17 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
         tvAge1.setTextColor(darkGray);
         tvSex.setTextColor(darkGray);
         tvLocations.setTextColor(darkGray);
-        etMinimumAge.setEnabled(true);
-        etMinimumAge.setTextColor(darkGray);
-        etMaximumAge.setEnabled(true);
-        etMaximumAge.setTextColor(darkGray);
-        rbMale.setEnabled(true);
-        rbMale.setTextColor(darkGray);
-        rbFemale.setEnabled(true);
-        rbFemale.setTextColor(darkGray);
-        rbAllSex.setEnabled(true);
-        rbAllSex.setTextColor(darkGray);
-        spinLocation.setEnabled(true);
+        binding.etMinimumAge.setEnabled(true);
+        binding.etMinimumAge.setTextColor(darkGray);
+        binding.etMaximumAge.setEnabled(true);
+        binding.etMaximumAge.setTextColor(darkGray);
+        binding.rbMale.setEnabled(true);
+        binding.rbMale.setTextColor(darkGray);
+        binding.rbFemale.setEnabled(true);
+        binding.rbFemale.setTextColor(darkGray);
+        binding.rbAllSex.setEnabled(true);
+        binding.rbAllSex.setTextColor(darkGray);
+        binding.spinLocation.setEnabled(true);
     }
 
     private void inActiveContents() {
@@ -476,33 +426,33 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
         tvAge1.setTextColor(Color.LTGRAY);
         tvSex.setTextColor(Color.LTGRAY);
         tvLocations.setTextColor(Color.LTGRAY);
-        etMinimumAge.setEnabled(false);
-        etMinimumAge.setTextColor(Color.LTGRAY);
-        etMaximumAge.setEnabled(false);
-        etMaximumAge.setTextColor(Color.LTGRAY);
-        rbMale.setEnabled(false);
-        rbMale.setTextColor(Color.LTGRAY);
-        rbFemale.setEnabled(false);
-        rbFemale.setTextColor(Color.LTGRAY);
-        rbAllSex.setEnabled(false);
-        rbAllSex.setTextColor(Color.LTGRAY);
-        spinLocation.setEnabled(false);
+        binding.etMinimumAge.setEnabled(false);
+        binding.etMinimumAge.setTextColor(Color.LTGRAY);
+        binding.etMaximumAge.setEnabled(false);
+        binding.etMaximumAge.setTextColor(Color.LTGRAY);
+        binding.rbMale.setEnabled(false);
+        binding.rbMale.setTextColor(Color.LTGRAY);
+        binding.rbFemale.setEnabled(false);
+        binding.rbFemale.setTextColor(Color.LTGRAY);
+        binding.rbAllSex.setEnabled(false);
+        binding.rbAllSex.setTextColor(Color.LTGRAY);
+        binding.spinLocation.setEnabled(false);
     }
 
     private void visiblePayment() {
         TextView tvPayment = (TextView) findViewById(R.id.tvPayment);
         tvPayment.setVisibility(View.VISIBLE);
-        rgPayment.setVisibility(View.VISIBLE);
-        rbCashPayment.setEnabled(true);
-        rbCardPayment.setEnabled(true);
+        binding.rgPayment.setVisibility(View.VISIBLE);
+        binding.rbCashPayment.setEnabled(true);
+        binding.rbCardPayment.setEnabled(true);
     }
 
     private void invisiblePayment() {
         TextView tvPayment = (TextView) findViewById(R.id.tvPayment);
         tvPayment.setVisibility(View.GONE);
-        rgPayment.setVisibility(View.GONE);
-        rbCashPayment.setEnabled(false);
-        rbCardPayment.setEnabled(false);
+        binding.rgPayment.setVisibility(View.GONE);
+        binding.rbCashPayment.setEnabled(false);
+        binding.rbCardPayment.setEnabled(false);
     }
 
     private void onClick_AddSubmit() {
@@ -522,17 +472,23 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
         if (msg != null) {
             Toast.makeText(Activity_Owner_Add_Event.this, msg, Toast.LENGTH_SHORT).show();
         } else {
-            String _name = etEventName.getText().toString();
+            String _name = binding.etEventName.getText().toString();
             String _type = String.valueOf(type);
             String _stats = String.valueOf(status);
-            String _content = etContents.getText().toString();
-            String _price = etFixedPrice.getText().toString().trim().replaceAll(",", "");
-            String _dis_price = etDiscount.getText().toString().trim().replaceAll(",", "");
-            String _people = etLimitPersons.getText().toString().trim().replaceAll(",", "");
-            String _startday = etStartDateYear.getText().toString().trim() + etStartDateMonth.getText().toString().trim() + etStartDateDay.getText().toString().trim();
-            String _endday = etEndDateYear.getText().toString().trim() + etEndDateMonth.getText().toString().trim() + etEndDateDay.getText().toString().trim();
-            String _starttime = etStartHour.getText().toString().trim() + etStartMin.getText().toString().trim() + "00";
-            String _endtime = etEndHour.getText().toString().trim() + etEndMin.getText().toString().trim() + "00";
+            String _content = binding.etContents.getText().toString();
+            String _price = binding.etFixedPrice.getText().toString().trim().replaceAll(",", "");
+            String _dis_price = binding.etDiscount.getText().toString().trim().replaceAll(",", "");
+            String _people = binding.etLimitPersons.getText().toString().trim().replaceAll(",", "");
+            String _startday = binding.etStartDateYear.getText().toString().trim() +
+                    binding.etStartDateMonth.getText().toString().trim() +
+                    binding.etStartDateDay.getText().toString().trim();
+            String _endday = binding.etEndDateYear.getText().toString().trim() +
+                    binding.etEndDateMonth.getText().toString().trim() +
+                    binding.etEndDateDay.getText().toString().trim();
+            String _starttime = binding.etStartHour.getText().toString().trim() +
+                    binding.etStartMin.getText().toString().trim() + "00";
+            String _endtime = binding.etEndHour.getText().toString().trim() +
+                    binding.etEndMin.getText().toString().trim() + "00";
             String _payment = String.valueOf(payment);
             String _target = String.valueOf(conditions);
             String _minage;
@@ -543,10 +499,10 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             String _id = GlobalData.getUserID();
 
             if (conditions == 1) {
-                _minage = etMinimumAge.getText().toString().trim();
-                _maxage = etMaximumAge.getText().toString().trim();
+                _minage = binding.etMinimumAge.getText().toString().trim();
+                _maxage = binding.etMaximumAge.getText().toString().trim();
                 _sex = String.valueOf(sex);
-                _area = spinLocation.getSelectedItem().toString();
+                _area = binding.spinLocation.getSelectedItem().toString();
             } else {
                 _minage = "";
                 _maxage = "";
@@ -569,28 +525,35 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
     }
 
     private String checkInputData() {
-        if (isEmptyEditText(etFixedPrice)) {
+        if (isEmptyEditText(binding.etFixedPrice)) {
             return "정상가를 입력하세요";
-        } else if (isEmptyEditText(etDiscount)) {
+        } else if (isEmptyEditText(binding.etDiscount)) {
             return "할인가를 입력하세요";
-        } else if (isEmptyEditText(etLimitPersons)) {
+        } else if (isEmptyEditText(binding.etLimitPersons)) {
             return "인원제한을 입력하세요";
-        } else if (isEmptyEditText(etStartDateYear) || isEmptyEditText(etStartDateMonth) || isEmptyEditText(etStartDateDay) || isEmptyEditText(etStartHour) || isEmptyEditText(etStartMin)) {
+        } else if (isEmptyEditText(binding.etStartDateYear) || isEmptyEditText(binding.etStartDateMonth)
+                || isEmptyEditText(binding.etStartDateDay) || isEmptyEditText(binding.etStartHour)
+                || isEmptyEditText(binding.etStartMin)) {
             return "이벤트 시작일시를 확인하세요";
-        } else if (!checkStartDate(etStartDateYear, etStartDateMonth, etStartDateDay, etStartHour, etStartMin)) {
+        } else if (!checkStartDate(binding.etStartDateYear, binding.etStartDateMonth,
+                binding.etStartDateDay, binding.etStartHour, binding.etStartMin)) {
             return "현재 날짜보다 이전입니다";
-        } else if (isEmptyEditText(etEndDateYear) || isEmptyEditText(etEndDateMonth) || isEmptyEditText(etEndDateDay) || isEmptyEditText(etEndHour) || isEmptyEditText(etEndMin)) {
+        } else if (isEmptyEditText(binding.etEndDateYear) || isEmptyEditText(binding.etEndDateMonth)
+                || isEmptyEditText(binding.etEndDateDay) || isEmptyEditText(binding.etEndHour)
+                || isEmptyEditText(binding.etEndMin)) {
             return "이벤트 종료일시를 확인하세요";
-        } else if (!checkEndDate(etStartDateYear, etStartDateMonth, etStartDateDay, etStartHour, etStartMin, etEndDateYear, etEndDateMonth, etEndDateDay, etEndHour, etEndMin)) {
+        } else if (!checkEndDate(binding.etStartDateYear, binding.etStartDateMonth, binding.etStartDateDay,
+                binding.etStartHour, binding.etStartMin, binding.etEndDateYear, binding.etEndDateMonth,
+                binding.etEndDateDay, binding.etEndHour, binding.etEndMin)) {
             return "종료 날짜가 시작 날짜보다 이전입니다";
-        } else if (isEmptyEditText(etEventName)) {
+        } else if (isEmptyEditText(binding.etEventName)) {
             return "이벤트 명을 입력하세요";
-        } else if (swConditions.isChecked()) {
-            if (isEmptyEditText(etMinimumAge) && isEmptyEditText(etMaximumAge)) {
+        } else if (binding.swConditions.isChecked()) {
+            if (isEmptyEditText(binding.etMinimumAge) && isEmptyEditText(binding.etMaximumAge)) {
                 return "참가 나이를 입력하세요";
             } else {
-                int maxAge = Integer.parseInt(etMaximumAge.getText().toString().trim());
-                int minAge = Integer.parseInt(etMinimumAge.getText().toString().trim());
+                int maxAge = Integer.parseInt(binding.etMaximumAge.getText().toString().trim());
+                int minAge = Integer.parseInt(binding.etMinimumAge.getText().toString().trim());
 
                 if (maxAge < minAge) {
                     return "참가 나이를 확인하세요";
@@ -602,11 +565,11 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
     }
 
     private String checkInputTempData() {
-        if (isEmptyEditText(etFixedPrice)) {
+        if (isEmptyEditText(binding.etFixedPrice)) {
             return "정상가를 입력하세요";
-        } else if (isEmptyEditText(etDiscount)) {
+        } else if (isEmptyEditText(binding.etDiscount)) {
             return "할인가를 입력하세요";
-        } else if (isEmptyEditText(etEventName)) {
+        } else if (isEmptyEditText(binding.etEventName)) {
             return "이벤트 명을 입력하세요";
         }
 
@@ -708,22 +671,22 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
     private void hideSoftKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        imm.hideSoftInputFromWindow(etFixedPrice.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(etDiscount.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(etLimitPersons.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(etStartDateYear.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(etStartDateMonth.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(etStartDateDay.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(etStartHour.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(etStartMin.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(etEndDateYear.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(etEndDateMonth.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(etEndDateDay.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(etEndHour.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(etEndMin.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(etEventName.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(etMinimumAge.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(etMaximumAge.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(binding.etFixedPrice.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(binding.etDiscount.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(binding.etLimitPersons.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(binding.etStartDateYear.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(binding.etStartDateMonth.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(binding.etStartDateDay.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(binding.etStartHour.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(binding.etStartMin.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(binding.etEndDateYear.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(binding.etEndDateMonth.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(binding.etEndDateDay.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(binding.etEndHour.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(binding.etEndMin.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(binding.etEventName.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(binding.etMinimumAge.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(binding.etMaximumAge.getWindowToken(), 0);
     }
 
     private class InsertData extends AsyncTask<String, Void, String> {
@@ -1072,11 +1035,11 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             }
 
             if (event_type.equals("0")) {
-                rgType.check(R.id.rbTypeEnter);
+                binding.rgType.check(R.id.rbTypeEnter);
                 invisiblePayment();
                 type = 0;
             } else if (event_type.equals("1")) {
-                rgType.check(R.id.rbTypePay);
+                binding.rgType.check(R.id.rbTypePay);
                 visiblePayment();
                 type = 1;
             }
@@ -1087,9 +1050,9 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                 }
             }
 
-            etFixedPrice.setText(format.format(Long.parseLong(event_price)));
-            etDiscount.setText(format.format(Long.parseLong(event_dis_price)));
-            etLimitPersons.setText(format.format(Long.parseLong(event_people)));
+            binding.etFixedPrice.setText(format.format(Long.parseLong(event_price)));
+            binding.etDiscount.setText(format.format(Long.parseLong(event_dis_price)));
+            binding.etLimitPersons.setText(format.format(Long.parseLong(event_people)));
 
             StringTokenizer tokenDay;
             StringTokenizer tokenTime;
@@ -1102,9 +1065,9 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                     tmp_month = tokenDay.nextToken();
                     tmp_day = tokenDay.nextToken();
 
-                    etStartDateYear.setText(tmp_year);
-                    etStartDateMonth.setText(tmp_month);
-                    etStartDateDay.setText(tmp_day);
+                    binding.etStartDateYear.setText(tmp_year);
+                    binding.etStartDateMonth.setText(tmp_month);
+                    binding.etStartDateDay.setText(tmp_day);
                 } catch (NoSuchElementException e) {
 
                 }
@@ -1117,8 +1080,8 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                     tmp_hour = tokenTime.nextToken();
                     tmp_min = tokenTime.nextToken();
 
-                    etStartHour.setText(tmp_hour);
-                    etStartMin.setText(tmp_min);
+                    binding.etStartHour.setText(tmp_hour);
+                    binding.etStartMin.setText(tmp_min);
                 } catch (NoSuchElementException e) {
 
                 }
@@ -1132,9 +1095,9 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                     tmp_month = tokenDay.nextToken();
                     tmp_day = tokenDay.nextToken();
 
-                    etEndDateYear.setText(tmp_year);
-                    etEndDateMonth.setText(tmp_month);
-                    etEndDateDay.setText(tmp_day);
+                    binding.etEndDateYear.setText(tmp_year);
+                    binding.etEndDateMonth.setText(tmp_month);
+                    binding.etEndDateDay.setText(tmp_day);
                 } catch (NoSuchElementException e) {
 
                 }
@@ -1147,36 +1110,36 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                     tmp_hour = tokenTime.nextToken();
                     tmp_min = tokenTime.nextToken();
 
-                    etEndHour.setText(tmp_hour);
-                    etEndMin.setText(tmp_min);
+                    binding.etEndHour.setText(tmp_hour);
+                    binding.etEndMin.setText(tmp_min);
                 } catch (NoSuchElementException e) {
 
                 }
             }
 
-            etEventName.setText(event_name);
+            binding.etEventName.setText(event_name);
 
-            etContents.setText(event_content);
+            binding.etContents.setText(event_content);
 
             if (event_target.equals("0")) {
-                swConditions.setChecked(false);
+                binding.swConditions.setChecked(false);
                 inActiveContents();
             } else if (event_target.equals("1")) {
-                swConditions.setChecked(true);
+                binding.swConditions.setChecked(true);
                 activeContents();
-                if (!event_minage.equals("0")) etMinimumAge.setText(event_minage);
-                if (!event_maxage.equals("0")) etMaximumAge.setText(event_maxage);
+                if (!event_minage.equals("0")) binding.etMinimumAge.setText(event_minage);
+                if (!event_maxage.equals("0")) binding.etMaximumAge.setText(event_maxage);
                 if (event_sex.equals("0")) {
-                    rgSex.check(R.id.rbFemale);
+                    binding.rgSex.check(R.id.rbFemale);
                 } else if (event_sex.equals("1")) {
-                    rgSex.check(R.id.rbMale);
+                    binding.rgSex.check(R.id.rbMale);
                 } else if (event_sex.equals("2")) {
-                    rgSex.check(R.id.rbAllSex);
+                    binding.rgSex.check(R.id.rbAllSex);
                 }
                 if (!event_area.equals("")) {
-                    for (int i = 0; i < spinLocation.getCount(); i++) {
-                        if (spinLocation.getItemAtPosition(i).equals(event_area)) {
-                            spinLocation.setSelection(i);
+                    for (int i = 0; i < binding.spinLocation.getCount(); i++) {
+                        if (binding.spinLocation.getItemAtPosition(i).equals(event_area)) {
+                            binding.spinLocation.setSelection(i);
                         }
                     }
                 }
@@ -1277,7 +1240,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             //Toast.makeText(Activity_Owner_Add_Event.this, "이미지는 3개까지만 등록 가능합니다.", Toast.LENGTH_SHORT).show();
         }
         rvAdtContents = new Owner_Add_Event_Adapter(arrayListContents, Activity_Owner_Add_Event.this);
-        rvContents.setAdapter(rvAdtContents);
+        binding.rvContents.setAdapter(rvAdtContents);
         rvAdtContents.notifyDataSetChanged();
     }
 
@@ -1290,7 +1253,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
 
         } else {
             rvAdtContents = new Owner_Add_Event_Adapter(arrayListContents, Activity_Owner_Add_Event.this);
-            rvContents.setAdapter(rvAdtContents);
+            binding.rvContents.setAdapter(rvAdtContents);
             rvAdtContents.notifyDataSetChanged();
         }
 
@@ -1310,7 +1273,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                 arrayListContents.remove(position);
 
                 rvAdtContents = new Owner_Add_Event_Adapter(arrayListContents, Activity_Owner_Add_Event.this);
-                rvContents.setAdapter(rvAdtContents);
+                binding.rvContents.setAdapter(rvAdtContents);
                 rvAdtContents.notifyDataSetChanged();
             }
         }
