@@ -2,11 +2,10 @@ package com.example.win.a2vent;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -26,8 +25,6 @@ public class Activity_Owner_Add_Event_Review extends AppCompatActivity {
     ActivityOwnerAddEventReviewBinding binding_Review;
     RecyclerView.Adapter rAdatper_reviewimg;
     ArrayList<Owner_Review_Item> image_All = new ArrayList<>();
-    byte[] bytes;
-    Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +34,10 @@ public class Activity_Owner_Add_Event_Review extends AppCompatActivity {
 
         Intent intent_getReviewinfo = getIntent();
 
-        bytes = intent_getReviewinfo.getByteArrayExtra("event_img");
-        bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-        image_All.add(new Owner_Review_Item(bitmap));
+        String img_dir = intent_getReviewinfo.getExtras().getString("event_img_dir");
+
+        image_All.add(new Owner_Review_Item(img_dir));
+        Log.d("DIR", img_dir);
         binding_Review.tvOwnerReview1.append(intent_getReviewinfo.getExtras().getString("event_name"));
         binding_Review.tvOwnerReview2.append(intent_getReviewinfo.getExtras().getString("event_price"));
         binding_Review.tvOwnerReview3.append(intent_getReviewinfo.getExtras().getString("event_dis_price"));
@@ -55,4 +53,6 @@ public class Activity_Owner_Add_Event_Review extends AppCompatActivity {
     public void onClick_review_participation(View v) {
         Toast.makeText(this, "남은 자리를 확인하고 이벤트에 참여하는 버튼입니다", Toast.LENGTH_SHORT).show();
     }
+
+
 }

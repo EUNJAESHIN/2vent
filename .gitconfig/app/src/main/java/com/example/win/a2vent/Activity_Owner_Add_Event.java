@@ -10,6 +10,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.media.MediaScannerConnection;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
@@ -28,6 +29,7 @@ import android.text.Selection;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -240,7 +242,6 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
                 String date = binding.etStartDateYear.getText().toString() + "-" +
                         binding.etStartDateMonth.getText().toString() + "-" +
                         binding.etStartDateDay.getText().toString() + " " +
@@ -253,7 +254,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                         binding.etEndMin.getText().toString() + ":00";
 
                 Intent intent_goReview = new Intent(mContext, Activity_Owner_Add_Event_Review.class);
-                intent_goReview.putExtra("event_img", bytes);
+                intent_goReview.putExtra("event_img_dir", imageURI.getFileDir().concat(imageURI.getFileName()));
                 intent_goReview.putExtra("event_name", binding.etEventName.getText().toString());
                 intent_goReview.putExtra("event_price", binding.etFixedPrice.getText().toString());
                 intent_goReview.putExtra("event_dis_price", binding.etDiscount.getText().toString());

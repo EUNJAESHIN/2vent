@@ -1,7 +1,6 @@
 package com.example.win.a2vent;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -36,7 +36,8 @@ public class Owner_Review_Adapter extends RecyclerView.Adapter<Owner_Review_Hold
 
     @Override
     public void onBindViewHolder(Owner_Review_Holder holder, int position) {
-        holder.imageView.setImageBitmap(mItems.get(position).event_IMG);
+        Picasso.with(context).load(new File(mItems.get(position).getEventIMG())).
+                placeholder(R.drawable.event_default).into(holder.imageView);
     }
 
     @Override
