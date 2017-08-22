@@ -44,6 +44,7 @@
         <activity android:name=".Activity_Owner_Add_Store" />
         <activity android:name=".Activity_Owner_Add_Store_WebView" />
         <activity android:name=".Activity_Owner_Add_Event" />
+        <activity android:name=".Activity_Owner_Add_Event_Review" />
         <activity android:name=".Activity_Owner_Store_Event_List" />
         <activity android:name=".Activity_Owner_Entry_List" />
         <activity android:name=".Activity_Owner_Info" />

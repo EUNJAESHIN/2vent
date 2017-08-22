@@ -297,7 +297,23 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
         binding.btnReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "고객들이 보는 화면입니다", Toast.LENGTH_SHORT).show();
+                String date = binding.etStartDateYear.getText().toString() + "-" +
+                        binding.etStartDateMonth.getText().toString() + "-" +
+                        binding.etStartDateDay.getText().toString() + " " +
+                        binding.etStartHour.getText().toString() + ":" +
+                        binding.etStartMin.getText().toString() + ":00 ~ \n                  " +
+                        binding.etEndDateYear.getText().toString() + "-" +
+                        binding.etEndDateMonth.getText().toString() + "-" +
+                        binding.etEndDateDay.getText().toString() + " " +
+                        binding.etEndHour.getText().toString() + ":" +
+                        binding.etEndMin.getText().toString() + ":00";
+                Intent intent_goReview = new Intent(mContext, Activity_Owner_Add_Event_Review.class);
+                intent_goReview.putExtra("event_name", binding.etEventName.getText().toString());
+                intent_goReview.putExtra("event_price", binding.etFixedPrice.getText().toString());
+                intent_goReview.putExtra("event_dis_price", binding.etDiscount.getText().toString());
+                intent_goReview.putExtra("event_date", date);
+                intent_goReview.putExtra("event_content", binding.etContents.getText().toString());
+                startActivity(intent_goReview);
             }
         });
 
@@ -773,7 +789,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                 if (arrayListContents.get(0).getFileName() != null) {
                     for (int i = 0; i < arrayListContents.size(); i++) {
                         if (arrayListContents.get(i).getFileName() != null) {
-                            serverConnector.addPostData("event_URI"+i, arrayListContents.get(i).getFileName());
+                            serverConnector.addPostData("event_URI" + i, arrayListContents.get(i).getFileName());
                         }
                     }
                 }
@@ -786,7 +802,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                         if (arrayListContents.get(i).getURI() != null) {
                             Log.d(TAG, "uploadedPath: " + arrayListContents.get(i).getURI());
 
-                            serverConnector.addFileData("uploaded_file"+i, arrayListContents.get(i).getURI());
+                            serverConnector.addFileData("uploaded_file" + i, arrayListContents.get(i).getURI());
 
                             serverConnector.writeFileData(arrayListContents.get(i).getURI());
                         }
@@ -798,7 +814,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
 
                 return serverConnector.response();
 
-            }  catch (Exception e) {
+            } catch (Exception e) {
                 Log.d(TAG, "InsertData: Error", e);
 
                 return new String("Error: " + e.getMessage());
@@ -1010,8 +1026,8 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             if (result == null) {
 
             } else {
-               mResultTempData = result;
-                new GetImageURI(mContext).execute(event_number, "1", "1","");
+                mResultTempData = result;
+                new GetImageURI(mContext).execute(event_number, "1", "1", "");
             }
         }
     }
@@ -1268,7 +1284,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
     private void setImageList(int index, String fileName, String uri, Bitmap bitmap) {
         arrayListContents.set(index, new Owner_Add_Event_Item(fileName, uri, bitmap));
 
-        if (arrayListContents.get(arrayListContents.size()-1).getBitmap() != null) {
+        if (arrayListContents.get(arrayListContents.size() - 1).getBitmap() != null) {
 
             addImageList(null, null, null);
 
@@ -1285,7 +1301,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
         if (arrayListContents.size() > 1) {
 
             if ((arrayListContents.size() == MAX_IMAGE_LIST)
-                    && (arrayListContents.get(arrayListContents.size()-1).getBitmap() != null)) {
+                    && (arrayListContents.get(arrayListContents.size() - 1).getBitmap() != null)) {
 
                 arrayListContents.remove(position);
                 addImageList(null, null, null);

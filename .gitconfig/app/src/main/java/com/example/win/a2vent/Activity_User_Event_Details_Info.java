@@ -55,6 +55,9 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
         Intent intent_getEventinfo = getIntent();
         event_number = intent_getEventinfo.getExtras().getInt("event_number");
         // Intent에 담긴 event_number값 받기
+
+        getEventInfo = new GetEventInfo();
+        getEventInfo.execute(Integer.toString(event_number));
     }
 
     @Override
@@ -66,8 +69,6 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
             mContext.registerReceiver(broadcastReceiver, filter);
             flagRegisterReceiver = true;
         }
-        getEventInfo = new GetEventInfo();
-        getEventInfo.execute(Integer.toString(event_number));
     }
 
     public void onClick_participation(View v) {
