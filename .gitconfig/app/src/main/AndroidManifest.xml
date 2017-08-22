@@ -27,30 +27,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity_User_Login">
+        <activity android:name=".user.account.Activity_User_Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity_User_Join" />
-        <activity android:name=".Activity_User_Event_Main" />
-        <activity android:name=".Activity_User_Event_Details_Info" />
-        <activity android:name=".Activity_User_Info" />
-        <activity android:name=".Activity_User_Map" />
-        <activity android:name=".Activity_Owner_Event_Main" />
-        <activity android:name=".Activity_Owner_Event_Details_Info" />
-        <activity android:name=".Activity_Owner_Add_Store" />
-        <activity android:name=".Activity_Owner_Add_Store_WebView" />
-        <activity android:name=".Activity_Owner_Add_Event" />
-        <activity android:name=".Activity_Owner_Add_Event_Review" />
-        <activity android:name=".Activity_Owner_Store_Event_List" />
-        <activity android:name=".Activity_Owner_Entry_List" />
-        <activity android:name=".Activity_Owner_Info" />
-        <activity android:name=".Activity_User_Entry_List" />
+        <activity android:name=".user.account.Activity_User_Join" />
+        <activity android:name=".user.main.Activity_User_Event_Main" />
+        <activity android:name=".user.details_info.Activity_User_Event_Details_Info" />
+        <activity android:name=".user.main.Activity_User_Info" />
+        <activity android:name=".user.map.Activity_User_Map" />
+        <activity android:name=".onwer.main.Activity_Owner_Event_Main" />
+        <activity android:name=".onwer.details_info.Activity_Owner_Event_Details_Info" />
+        <activity android:name=".onwer.add_store.Activity_Owner_Add_Store" />
+        <activity android:name=".onwer.add_store.Activity_Owner_Add_Store_WebView" />
+        <activity android:name=".onwer.add_event.Activity_Owner_Add_Event" />
+        <activity android:name=".onwer.add_event.Activity_Owner_Add_Event_Review" />
+        <activity android:name=".onwer.add_store.Activity_Owner_Store_Event_List" />
+        <activity android:name=".onwer.entry_list.Activity_Owner_Entry_List" />
+        <activity android:name=".onwer.main.Activity_Owner_Info" />
+        <activity android:name=".user.entry_list.Activity_User_Entry_List" />
         <activity
-            android:name=".Activity_User_Info_Modify"
+            android:name=".user.main.Activity_User_Info_Modify"
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
 
         <provider
@@ -64,7 +64,7 @@
         </provider>
 
         <service
-            android:name=".ServiceGPSInfo"
+            android:name=".util.ServiceGPSInfo"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.example.win.a2vent.SERVICE_GPS_INFO" />
@@ -76,7 +76,7 @@
             android:value="2e6d9d623b65ef058117c080f2e43112" />
 
         <activity
-            android:name=".Activity_User_Event_Check"
+            android:name=".user.details_info.Activity_User_Event_Check"
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
     </application>
 

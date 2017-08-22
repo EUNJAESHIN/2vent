@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.win.a2vent.Activity_Owner_Add_Store_WebView">
+    tools:context="com.example.win.a2vent.onwer.add_store.Activity_Owner_Add_Store_WebView">
 
     <WebView
         android:id="@+id/webView"
