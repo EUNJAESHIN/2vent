@@ -1,4 +1,4 @@
-package com.example.win.a2vent.onwer.entry_list;
+package com.example.win.a2vent.onwer.main;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

@@ -1,4 +1,4 @@
-package com.example.win.a2vent.onwer.entry_list;
+package com.example.win.a2vent.onwer.main;
 
 /**
  * Created by win on 2017-07-25.

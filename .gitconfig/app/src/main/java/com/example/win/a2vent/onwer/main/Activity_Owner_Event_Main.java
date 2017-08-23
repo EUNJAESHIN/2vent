@@ -24,8 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.win.a2vent.onwer.entry_list.Owner_Event_Simple_Adapter;
-import com.example.win.a2vent.onwer.entry_list.Owner_Event_Simple_Item;
 import com.example.win.a2vent.onwer.add_event.Activity_Owner_Add_Event;
 import com.example.win.a2vent.onwer.add_store.Activity_Owner_Add_Store;
 import com.example.win.a2vent.onwer.add_store.Owner_Store_Adapter;
