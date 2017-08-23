@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -165,14 +166,19 @@ public class Activity_User_Event_Main extends AppCompatActivity {
             @Override
             public void onTabChanged(String tabId) {
                 if (tabId == "전체") {
+                    isNoItemCateogry(category_All, binding_UserMain.rviewContent1, rAdapter1);
                     rAdapter1.notifyDataSetChanged();
                 } else if (tabId == "문화") {
+                    isNoItemCateogry(category_Culture, binding_UserMain.rviewContent2, rAdapter2);
                     rAdapter2.notifyDataSetChanged();
                 } else if (tabId == "외식") {
+                    isNoItemCateogry(category_Meal, binding_UserMain.rviewContent3, rAdapter3);
                     rAdapter3.notifyDataSetChanged();
                 } else if (tabId == "뷰티") {
+                    isNoItemCateogry(category_Beauty, binding_UserMain.rviewContent4, rAdapter4);
                     rAdapter4.notifyDataSetChanged();
                 } else if (tabId == "패션") {
+                    isNoItemCateogry(category_Fashion, binding_UserMain.rviewContent5, rAdapter5);
                     rAdapter5.notifyDataSetChanged();
                 }
             }
@@ -319,18 +325,28 @@ public class Activity_User_Event_Main extends AppCompatActivity {
             rAdapter4 = new User_Event_Adapter(category_Beauty, mContext);
             rAdapter5 = new User_Event_Adapter(category_Fashion, mContext);
 
-            binding_UserMain.rviewContent1.setAdapter(rAdapter1);
-            binding_UserMain.rviewContent2.setAdapter(rAdapter2);
-            binding_UserMain.rviewContent3.setAdapter(rAdapter3);
-            binding_UserMain.rviewContent4.setAdapter(rAdapter4);
-            binding_UserMain.rviewContent5.setAdapter(rAdapter5);
+            isNoItemCateogry(category_All, binding_UserMain.rviewContent1, rAdapter1);
+            isNoItemCateogry(category_Culture, binding_UserMain.rviewContent2, rAdapter2);
+            isNoItemCateogry(category_Meal, binding_UserMain.rviewContent3, rAdapter3);
+            isNoItemCateogry(category_Beauty, binding_UserMain.rviewContent4, rAdapter4);
+            isNoItemCateogry(category_Fashion, binding_UserMain.rviewContent5, rAdapter5);
 
         } catch (JSONException e) {
             Log.d(TAG, "addItemInCategory Error : ", e);
         }
     } // JSON 데이터를 카테고리에 저장
 
-    private boolean isGpsServiceRunning(Context context, String serviceName){
+    public void isNoItemCateogry(ArrayList<User_Event_Item> Arrlist,
+                                 RecyclerView rView, RecyclerView.Adapter rAdapter) {
+        if (Arrlist.size() > 0) {
+            rView.setAdapter(rAdapter);
+        } else {
+            rView.setBackgroundResource(R.drawable.no_event);
+        }
+    }
+    // 아이템(이벤트)이 없는 카테고리면 이벤트가 없다는 이미지를 표시하도록
+
+    private boolean isGpsServiceRunning(Context context, String serviceName) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
 
         for (ActivityManager.RunningServiceInfo serviceInfo : activityManager.getRunningServices(Integer.MAX_VALUE)) {
