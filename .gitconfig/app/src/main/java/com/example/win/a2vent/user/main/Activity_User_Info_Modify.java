@@ -50,13 +50,19 @@ public class Activity_User_Info_Modify extends Activity {
                 && !binding_UserInfoModify.eTextModifyPw2.getText().toString().equals("")) {
             modifyPW = new ModifyPW();
             modifyPW.execute(GlobalData.getUserID(), pw1, pw2);
-        } else if (!pw1.equals(GlobalData.getUserPW())) {
+        } else if (!pw1.equals(GlobalData.getUserPW()) &&
+                !binding_UserInfoModify.eTextModifyPw1.getText().toString().equals("")) {
             binding_UserInfoModify.eTextModifyPw1.setText("");
             binding_UserInfoModify.eTextModifyPw1.setHint("현재 비밀번호가 일치하지 않음");
             vibe.vibrate(150);
         } else if (pw1.equals(GlobalData.getUserPW()) && pw2.equals(GlobalData.getUserPW())) {
             binding_UserInfoModify.eTextModifyPw2.setText("");
             binding_UserInfoModify.eTextModifyPw2.setHint("바꿀 비밀번호가 현재 비밀번호와 같음");
+            vibe.vibrate(150);
+        } else if (!pw1.equals(GlobalData.getUserPW()) &&
+                binding_UserInfoModify.eTextModifyPw1.getText().toString().equals("")) {
+            binding_UserInfoModify.eTextModifyPw1.setText("");
+            binding_UserInfoModify.eTextModifyPw1.setHint("현재 비밀번호 미입력");
             vibe.vibrate(150);
         } else if (pw1.equals(GlobalData.getUserPW()) && !pw2.equals(GlobalData.getUserPW())
                 && binding_UserInfoModify.eTextModifyPw2.getText().toString().equals("")) {

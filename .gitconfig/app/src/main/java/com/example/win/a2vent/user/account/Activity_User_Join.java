@@ -79,6 +79,7 @@ public class Activity_User_Join extends AppCompatActivity {
     }
 
     public void onClick_joinOK(View view) {
+        //TODO 여백 입력 제한
         try {
             id = binding_userJoin.eTextJoinId.getText().toString();
             pw = binding_userJoin.eTextJoinPw.getText().toString();
