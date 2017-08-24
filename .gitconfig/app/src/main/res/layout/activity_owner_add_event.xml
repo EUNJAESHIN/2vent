@@ -495,7 +495,6 @@
                     android:layout_alignLeft="@id/tvEndTime"
                     android:layout_below="@id/tvEndTime"
                     android:layout_marginTop="40dp"
-                    android:maxLines="1"
                     android:text="이벤트 명"
                     tools:ignore="HardcodedText" />
 
@@ -506,7 +505,10 @@
                     android:layout_alignBaseline="@id/tvEventName"
                     android:layout_alignLeft="@id/rlEndTime"
                     android:ems="10"
-                    android:nextFocusDown="@+id/etMinimumAge"
+                    android:inputType="text"
+                    android:lines="1"
+                    android:nextFocusDown="@+id/etContents"
+                    android:singleLine="true"
                     android:textAlignment="center" />
 
                 <TextView

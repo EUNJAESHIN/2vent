@@ -30,14 +30,13 @@ public class Activity_User_Event_Check extends Activity {
         // 이벤트 참여시 가져온 result값을 받아온다
 
         if (result.equals("성공")) {
-//            binding_UserEventCheck.eventOkImageView.setImageResource(R.drawable.event_default);
+            Glide.with(this).load(R.drawable.clap).into(binding_UserEventCheck.eventOkImageView);
             binding_UserEventCheck.eventOkTextView.append("이벤트 참여 성공!");
         } else if (result.equals("남은 자리 없음")) {
-//            binding_UserEventCheck.eventOkImageView.setImageResource(R.drawable.event_default);
+            Glide.with(this).load(R.drawable.clap).into(binding_UserEventCheck.eventOkImageView);
             binding_UserEventCheck.eventOkTextView.append("이미 모집이 끝났습니다..");
         } else if (result.equals("중복 에러")) {
             Glide.with(this).load(R.drawable.clap).into(binding_UserEventCheck.eventOkImageView);
-//            binding_UserEventCheck.eventOkImageView.setImageResource(R.drawable.event_default);
             binding_UserEventCheck.eventOkTextView.append("이미 참여한 이벤트입니다.");
         } else {
             binding_UserEventCheck.eventOkImageView.setImageResource(R.drawable.event_default);
