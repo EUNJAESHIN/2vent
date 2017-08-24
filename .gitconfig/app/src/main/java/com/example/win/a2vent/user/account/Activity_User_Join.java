@@ -43,13 +43,13 @@ public class Activity_User_Join extends AppCompatActivity {
         Activity_User_Login.actList.add(this);
         binding_userJoin = DataBindingUtil.setContentView(this, R.layout.activity_user_join);
 
-        // 정규표현식으로 문자열 입력 제한
         binding_userJoin.eTextJoinId.setFilters(new InputFilter[]{InputFilters.filter});
         binding_userJoin.eTextJoinPw.setFilters(new InputFilter[]{InputFilters.filterPw});
         binding_userJoin.eTextJoinName.setFilters(new InputFilter[]{InputFilters.filterKor});
         binding_userJoin.eTextJoinBirth.setFilters(new InputFilter[]{InputFilters.filterNum});
         binding_userJoin.eTextJoinPhone.setFilters(new InputFilter[]{InputFilters.filterNum});
         binding_userJoin.eTextJoinAccountnumber.setFilters(new InputFilter[]{InputFilters.filterNum});
+        // 정규표현식으로 문자열 입력 제한
 
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         binding_userJoin.layoutJoin.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +116,7 @@ public class Activity_User_Join extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-    }
+    } // 검색한 주소값 받아옴
 
     public void onClick_joinOK(View view) {
         //TODO 여백 입력 제한
