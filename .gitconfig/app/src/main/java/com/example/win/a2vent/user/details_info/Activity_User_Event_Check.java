@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 
+import com.bumptech.glide.Glide;
 import com.example.win.a2vent.R;
 import com.example.win.a2vent.databinding.ActivityUserEventCheckBinding;
 import com.example.win.a2vent.user.account.Activity_User_Login;
@@ -29,14 +30,15 @@ public class Activity_User_Event_Check extends Activity {
         // 이벤트 참여시 가져온 result값을 받아온다
 
         if (result.equals("성공")) {
-            binding_UserEventCheck.eventOkImageView.setImageResource(R.drawable.event_default);
-            binding_UserEventCheck.eventOkTextView.append("이벤트 참여 성공");
+//            binding_UserEventCheck.eventOkImageView.setImageResource(R.drawable.event_default);
+            binding_UserEventCheck.eventOkTextView.append("이벤트 참여 성공!");
         } else if (result.equals("남은 자리 없음")) {
-            binding_UserEventCheck.eventOkImageView.setImageResource(R.drawable.event_default);
+//            binding_UserEventCheck.eventOkImageView.setImageResource(R.drawable.event_default);
             binding_UserEventCheck.eventOkTextView.append("이미 모집이 끝났습니다..");
         } else if (result.equals("중복 에러")) {
-            binding_UserEventCheck.eventOkImageView.setImageResource(R.drawable.event_default);
-            binding_UserEventCheck.eventOkTextView.append("이미 참여한 이벤트입니다");
+            Glide.with(this).load(R.drawable.clap).into(binding_UserEventCheck.eventOkImageView);
+//            binding_UserEventCheck.eventOkImageView.setImageResource(R.drawable.event_default);
+            binding_UserEventCheck.eventOkTextView.append("이미 참여한 이벤트입니다.");
         } else {
             binding_UserEventCheck.eventOkImageView.setImageResource(R.drawable.event_default);
             binding_UserEventCheck.eventOkTextView.append("Entry Error");

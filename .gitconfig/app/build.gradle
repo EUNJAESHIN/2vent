@@ -43,5 +43,8 @@ dependencies {
     compile 'com.gordonwong:material-sheet-fab:1.2.1'
     compile 'gun0912.ted:tedpermission:1.0.3'
     compile 'com.google.maps.android:android-maps-utils:0.4.+'
+
+    compile 'com.github.bumptech.glide:glide:4.0.0' // Glide 
+
     testCompile 'junit:junit:4.12'
 }

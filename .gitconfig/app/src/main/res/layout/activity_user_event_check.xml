@@ -12,8 +12,10 @@
             android:id="@+id/event_ok_imageView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_gravity="center"
             android:layout_weight="2.4"
-            android:scaleType="fitCenter" />
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY" />
 
         <TextView
             android:id="@+id/event_ok_textView"
@@ -21,7 +23,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="italic" />
 
         <LinearLayout
@@ -30,16 +32,16 @@
             android:layout_weight="0.6"
             android:gravity="right"
             android:orientation="horizontal"
-            android:padding="5dp">
+            android:padding="7dp">
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:onClick="onClick_Confirm"
-                android:text="닫기"
+                android:text="확인"
                 android:textColor="@color/colorAccent"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
