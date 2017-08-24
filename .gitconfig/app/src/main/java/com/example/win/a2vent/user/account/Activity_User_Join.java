@@ -108,8 +108,10 @@ public class Activity_User_Join extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SEARCH_ADDRESS) {
             try {
-                binding_userJoin.eTextJoinAddr.setTextColor(Color.BLACK);
                 binding_userJoin.eTextJoinAddr.setText(data.getStringExtra("addr"));
+                if (data.getStringExtra("addr")!="") {
+                    binding_userJoin.eTextJoinAddr.setTextColor(Color.BLACK);
+                }
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
