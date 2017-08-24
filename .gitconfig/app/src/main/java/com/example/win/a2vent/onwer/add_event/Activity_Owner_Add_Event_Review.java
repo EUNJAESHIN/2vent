@@ -2,6 +2,7 @@ package com.example.win.a2vent.onwer.add_event;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -35,12 +36,18 @@ public class Activity_Owner_Add_Event_Review extends AppCompatActivity {
 
         Intent intent_getReviewinfo = getIntent();
 
-        String img_dir = intent_getReviewinfo.getExtras().getString("event_img_dir");
+        for (int i = 0; intent_getReviewinfo.getExtras().getString("event_img_dir" +
+                Integer.toString(i)) != null; i++) {
+            String img_dir = intent_getReviewinfo.getExtras().getString("event_img_dir" +
+                    Integer.toString(i));
+            image_All.add(new Owner_Review_Item(img_dir));
+        }
 
-        image_All.add(new Owner_Review_Item(img_dir));
-        Log.d("DIR", img_dir);
+
         binding_Review.tvOwnerReview1.append(intent_getReviewinfo.getExtras().getString("event_name"));
         binding_Review.tvOwnerReview2.append(intent_getReviewinfo.getExtras().getString("event_price"));
+        binding_Review.tvOwnerReview2.setPaintFlags
+                (binding_Review.tvOwnerReview2.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         binding_Review.tvOwnerReview3.append(intent_getReviewinfo.getExtras().getString("event_dis_price"));
         binding_Review.tvOwnerReview4.append(intent_getReviewinfo.getExtras().getString("event_date"));
         binding_Review.tvOwnerReview5.append(intent_getReviewinfo.getExtras().getString("event_content"));

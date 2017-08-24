@@ -206,7 +206,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             }
         });
 
-        ArrayAdapter<CharSequence> arrAdtLocations = ArrayAdapter.createFromResource(Activity_Owner_Add_Event.this, R.array.locations, R.layout.support_simple_spinner_dropdown_item);
+        final ArrayAdapter<CharSequence> arrAdtLocations = ArrayAdapter.createFromResource(Activity_Owner_Add_Event.this, R.array.locations, R.layout.support_simple_spinner_dropdown_item);
 
         binding.spinLocation.setAdapter(arrAdtLocations);
         binding.spinLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -240,7 +240,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                 Activity_Owner_Add_Event.this.onBackPressed();
             }
         });
-        //TODO 이벤트 등록시 미리보기
+
         binding.btnReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -257,7 +257,19 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                         binding.etEndMin.getText().toString() + ":00";
 
                 Intent intent_goReview = new Intent(mContext, Activity_Owner_Add_Event_Review.class);
-                intent_goReview.putExtra("event_img_dir", imageURI.getFileDir().concat(imageURI.getFileName()));
+
+                if (arrayListContents.size() != 3) {
+                    for (int i = 0; i < arrayListContents.size() - 1; i++) {
+                        intent_goReview.putExtra("event_img_dir" +
+                                Integer.toString(i), arrayListContents.get(i).getURI());
+                    }
+                } else if (arrayListContents.size() == 3) {
+                    for (int i = 0; i < arrayListContents.size(); i++) {
+                        intent_goReview.putExtra("event_img_dir" +
+                                Integer.toString(i), arrayListContents.get(i).getURI());
+                    }
+                }
+
                 intent_goReview.putExtra("event_name", binding.etEventName.getText().toString());
                 intent_goReview.putExtra("event_price", binding.etFixedPrice.getText().toString());
                 intent_goReview.putExtra("event_dis_price", binding.etDiscount.getText().toString());
