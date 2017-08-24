@@ -2,7 +2,6 @@ package com.example.win.a2vent.util;
 
 import android.app.Activity;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
@@ -139,8 +138,25 @@ public class ImageURI { // TODO
                     Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
             i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
 
-            Log.d(TAG, "ImageURI - startActivityForResult CROP_FROM_CAMERA");
+            Log.d(TAG, "ImageURI - CROP_FROM_CAMERA");
             mActivity.startActivityForResult(i, CROP_FROM_CAMERA);
+        }
+    }
+
+    public void deleteCroppedImage() {
+        Log.d(TAG, "deleteCroppedImage 호출");
+        File fileDir = new File(Environment.getExternalStorageDirectory() + "/2vent/Images/");
+        String[] children = fileDir.list();
+        File file;
+
+        if (children != null) {
+            for (int i = 0; i < children.length; i++) {
+                file = new File(fileDir + "/" + children[i]);
+                if (file.exists()) {
+                    Log.d(TAG, "finish - delete file : " + file.toString());
+                    file.delete();
+                }
+            }
         }
     }
 

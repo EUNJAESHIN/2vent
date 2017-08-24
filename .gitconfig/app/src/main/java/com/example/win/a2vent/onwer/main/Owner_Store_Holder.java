@@ -1,4 +1,4 @@
-package com.example.win.a2vent.onwer.add_store;
+package com.example.win.a2vent.onwer.main;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

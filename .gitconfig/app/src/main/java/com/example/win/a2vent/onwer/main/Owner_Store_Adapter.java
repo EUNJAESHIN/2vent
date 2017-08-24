@@ -1,4 +1,4 @@
-package com.example.win.a2vent.onwer.add_store;
+package com.example.win.a2vent.onwer.main;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.example.win.a2vent.R;
+import com.example.win.a2vent.onwer.add_store.Activity_Owner_Store_Event_List;
 import com.example.win.a2vent.util.DeleteData;
 import com.example.win.a2vent.util.GlobalData;
 import com.squareup.picasso.Picasso;
@@ -48,7 +49,8 @@ public class Owner_Store_Adapter extends RecyclerView.Adapter<Owner_Store_Holder
         Picasso.with(mContext).load(GlobalData.getURL() + mItems.get(position).getCom_URI())
                 .placeholder(R.drawable.store_default)
                 .into(holder.getCom_imageView());
-        holder.getCom_addr().setText(mItems.get(position).getCom_addr());
+        holder.getCom_addr().setText(mItems.get(position).getCom_addr().concat("   ")
+                .concat(mItems.get(position).getCom_detail_addr()));
         holder.getCom_name().setText(mItems.get(position).getCom_name());
         holder.getCom_manager().setText(mItems.get(position).getCom_manager());
         holder.getCom_category().setText(mItems.get(position).getCom_category());

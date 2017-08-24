@@ -26,8 +26,6 @@ import android.widget.Toast;
 
 import com.example.win.a2vent.onwer.add_event.Activity_Owner_Add_Event;
 import com.example.win.a2vent.onwer.add_store.Activity_Owner_Add_Store;
-import com.example.win.a2vent.onwer.add_store.Owner_Store_Adapter;
-import com.example.win.a2vent.onwer.add_store.Owner_Store_Item;
 import com.example.win.a2vent.user.account.Activity_User_Login;
 import com.example.win.a2vent.util.GetImageURI;
 import com.example.win.a2vent.util.GlobalData;
@@ -131,18 +129,8 @@ public class Activity_Owner_Event_Main extends AppCompatActivity implements Navi
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                nType = 1;
-                if (getEventTask != null) {
-                    getEventTask = null;
-                }
-                getEventTask = new GetEventTask();
-                getEventTask.execute("0", GlobalData.getUserID());
-            }
-        }, 100);
-
+        nType = 1;
+        flagNvigation = 1;
     }
 
     public void onClick_owner_Accountinfo(View v) {
@@ -222,7 +210,7 @@ public class Activity_Owner_Event_Main extends AppCompatActivity implements Navi
 
         if (!flagRegisterReceiver) {
             IntentFilter filter = new IntentFilter();
-            filter.addAction("com.example.win.a2vent.Activity_Owner_Event_Main_Receiver");
+            filter.addAction(GlobalData.OWNER_MAIN_RECEIVER);
             registerReceiver(broadcastReceiver, filter);
             flagRegisterReceiver = true;
 
@@ -371,6 +359,7 @@ public class Activity_Owner_Event_Main extends AppCompatActivity implements Navi
                     String com_number = item.getString("com_number");
                     String com_name = item.getString("com_name");
                     String com_addr = item.getString("com_addr");
+                    String com_detail_addr = item.getString("com_detail_addr");
                     String com_category = item.getString("com_category");
                     String com_manager = item.getString("com_manager");
                     String com_URI = item.getString("com_URI");
@@ -378,20 +367,19 @@ public class Activity_Owner_Event_Main extends AppCompatActivity implements Navi
 
                     if (GlobalData.getUserID().equals(id)) { // equals 객체의 내용 자체를 비교하지만 == 연산자는 대상의 주소값을 비교한다
                         if (com_category.equals("0")) {
-                            arrListCompany.add(new Owner_Store_Item(com_number, com_name, com_addr,
+                            arrListCompany.add(new Owner_Store_Item(com_number, com_name, com_addr, com_detail_addr,
                                     com_manager, "문화", com_URI, id));
                         } else if (com_category.equals("1")) {
-                            arrListCompany.add(new Owner_Store_Item(com_number, com_name, com_addr,
+                            arrListCompany.add(new Owner_Store_Item(com_number, com_name, com_addr, com_detail_addr,
                                     com_manager, "외식", com_URI, id));
                         } else if (com_category.equals("2")) {
-                            arrListCompany.add(new Owner_Store_Item(com_number, com_name, com_addr,
+                            arrListCompany.add(new Owner_Store_Item(com_number, com_name, com_addr, com_detail_addr,
                                     com_manager, "뷰티", com_URI, id));
                         } else if (com_category.equals("3")) {
-                            arrListCompany.add(new Owner_Store_Item(com_number, com_name, com_addr,
+                            arrListCompany.add(new Owner_Store_Item(com_number, com_name, com_addr, com_detail_addr,
                                     com_manager, "패션", com_URI, id));
                         }
                     }
-
                 }
 
                 mRecyclerViewAdapter = new Owner_Store_Adapter(arrListCompany, Activity_Owner_Event_Main.this);
@@ -565,28 +553,49 @@ public class Activity_Owner_Event_Main extends AppCompatActivity implements Navi
     }
 
 
-
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            final String value = intent.getExtras().getString("finish");
+            final int value = intent.getExtras().getInt("result");
+            final String key = intent.getExtras().getString("keyValue");
 
-            if (value.equals("event_delete_success")) {
-                Toast.makeText(Activity_Owner_Event_Main.this, "삭제가 완료되었습니다", Toast.LENGTH_SHORT).show();
-                resume();
-            } else if (value.equals("store_delete_success")) {
-                Toast.makeText(Activity_Owner_Event_Main.this, "삭제가 완료되었습니다", Toast.LENGTH_SHORT).show();
-                resume();
-            } else if (value.equals("store_delete_failure")) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Owner_Event_Main.this);
-                builder.setMessage("삭제를 완료할 수 없습니다.\n해당 매장에서 등록 된 이벤트가 존재합니다.").setCancelable(false)
-                        .setPositiveButton("닫기", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        });
-                AlertDialog dialog = builder.create();
-                dialog.show();
+            Log.d(TAG, "value : " + value);
+            Log.d(TAG, "key : " + key);
+
+            if (key.equals("EventKey")) {
+                if (value == 0) {
+                    Toast.makeText(Activity_Owner_Event_Main.this, "삭제가 완료되었습니다", Toast.LENGTH_SHORT).show();
+                    resume();
+                } else if (value == 11) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Owner_Event_Main.this);
+                    builder.setMessage("삭제를 완료할 수 없습니다.\n이벤트에 참여된 인원이 있습니다.").setCancelable(false)
+                            .setPositiveButton("닫기", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                } else if (value == 1) {
+
+                }
+            } else if (key.equals("StoreKey")) {
+                if (value == 0) {
+                    Toast.makeText(Activity_Owner_Event_Main.this, "삭제가 완료되었습니다", Toast.LENGTH_SHORT).show();
+                    resume();
+                } else if (value == 11) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Owner_Event_Main.this);
+                    builder.setMessage("삭제를 완료할 수 없습니다.\n해당 매장에서 등록 된 이벤트가 존재합니다.").setCancelable(false)
+                            .setPositiveButton("닫기", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                } else if (value == 1) {
+
+                }
             }
         }
     };

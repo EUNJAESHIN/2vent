@@ -343,6 +343,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        imageURI.deleteCroppedImage();
                         Activity_Owner_Add_Event.this.finish();
                     }
                 }).setNegativeButton("닫기", new DialogInterface.OnClickListener() {
@@ -643,7 +644,8 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
         return true;
     }
 
-    private boolean checkEndDate(EditText etYear1, EditText etMonth1, EditText etDay1, EditText etHour1, EditText etMin1, EditText etYear2, EditText etMonth2, EditText etDay2, EditText etHour2, EditText etMin2) {
+    private boolean checkEndDate(EditText etYear1, EditText etMonth1, EditText etDay1, EditText etHour1, EditText etMin1,
+                                 EditText etYear2, EditText etMonth2, EditText etDay2, EditText etHour2, EditText etMin2) {
         int year1 = Integer.parseInt(etYear1.getText().toString().trim());
         int month1 = Integer.parseInt(etMonth1.getText().toString().trim());
         int day1 = Integer.parseInt(etDay1.getText().toString().trim());
@@ -811,9 +813,11 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             if (result.equals("SQL문 처리 성공")) {
                 switch (status) {
                     case 0:
+                        imageURI.deleteCroppedImage();
                         Toast.makeText(Activity_Owner_Add_Event.this, "등록이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                         break;
                     case 1:
+                        imageURI.deleteCroppedImage();
                         Toast.makeText(Activity_Owner_Add_Event.this, "임시저장 되었습니다.", Toast.LENGTH_SHORT).show();
                         break;
                 }

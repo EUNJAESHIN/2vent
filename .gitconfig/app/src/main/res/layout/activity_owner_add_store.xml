@@ -1,218 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:baselineAligned="false">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:baselineAligned="false">
 
-        <RelativeLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/com_form_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginEnd="48dp"
-                android:layout_marginRight="48dp"
-                android:layout_marginTop="25dp"
-                android:ems="10"
-                android:hint="Company"
-                android:inputType="textPersonName" />
-
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignTop="@+id/com_form_name"
-                android:layout_marginLeft="19dp"
-                android:layout_marginStart="19dp"
-                android:text="업소명 :" />
-
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/textView6"
-                android:layout_alignStart="@+id/textView6"
-                android:layout_below="@+id/textView6"
-                android:layout_marginTop="32dp"
-                android:text="주소 :" />
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/textView7"
-                android:layout_alignStart="@+id/textView7"
-                android:layout_below="@+id/com_form_addr"
-                android:layout_marginTop="39dp"
-                android:text="카테고리" />
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/textView8"
-                android:layout_alignStart="@+id/textView8"
-                android:layout_below="@+id/com_form_radio"
-                android:layout_marginTop="25dp"
-                android:text="매니저" />
-
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/textView9"
-                android:layout_alignStart="@+id/textView9"
-                android:layout_below="@+id/com_form_manager"
-                android:layout_marginTop="11dp"
-                android:text="사업자 등록번호" />
-
-            <EditText
-                android:id="@+id/com_form_addr"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/com_form_name"
-                android:layout_alignStart="@+id/com_form_name"
-                android:layout_alignTop="@+id/textView7"
-                android:ems="10"
-                android:hint="Name"
-                android:inputType="textPersonName" />
-
-            <EditText
-                android:id="@+id/com_form_addr2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/com_form_radio"
-                android:layout_alignEnd="@+id/com_form_addr"
-                android:layout_alignLeft="@+id/com_form_addr"
-                android:layout_alignRight="@+id/com_form_addr"
-                android:layout_alignStart="@+id/com_form_addr"
-                android:layout_below="@+id/com_form_addr"
-                android:ems="10"
-                android:hint="나머지 주소" />
-
-            <RadioGroup
-                android:id="@+id/com_form_radio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/com_form_addr"
-                android:layout_alignStart="@+id/com_form_addr"
-                android:layout_alignTop="@+id/textView8"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/com_form_radio_culture"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="문화" />
-
-                <RadioButton
-                    android:id="@+id/com_form_radio_meal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="외식" />
-
-                <RadioButton
-                    android:id="@+id/com_form_radio_beauty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="뷰티" />
-
-                <RadioButton
-                    android:id="@+id/com_form_radio_fashion"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="패션" />
-            </RadioGroup>
-
-            <Spinner
-                android:id="@+id/com_form_manager"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/com_form_radio"
-                android:layout_alignStart="@+id/com_form_radio"
-                android:layout_alignTop="@+id/textView9" />
+                android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/com_form_iv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/com_form_number"
-                app:srcCompat="@mipmap/ic_launcher" />
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="19dp"
+                    android:layout_marginStart="19dp"
+                    android:layout_marginTop="25dp"
+                    android:text="업소명" />
 
-            <Button
-                android:id="@+id/com_btn_picture"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/com_btn_gall"
-                android:layout_alignBottom="@+id/com_btn_gall"
-                android:layout_marginLeft="57dp"
-                android:layout_marginStart="57dp"
-                android:layout_toEndOf="@+id/com_btn_gall"
-                android:layout_toRightOf="@+id/com_btn_gall"
-                android:text="사진 촬영" />
+                <EditText
+                    android:id="@+id/etComName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@id/textView6"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="48dp"
+                    android:layout_marginRight="48dp"
+                    android:layout_marginTop="25dp"
+                    android:ems="10" />
 
-            <EditText
-                android:id="@+id/com_form_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/com_form_manager"
-                android:layout_alignStart="@+id/com_form_manager"
-                android:layout_alignTop="@+id/textView10"
-                android:ems="10"
-                android:hint=""
-                android:inputType="textPersonName" />
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/textView6"
+                    android:layout_below="@id/textView6"
+                    android:layout_marginTop="40dp"
+                    android:text="주소" />
 
-            <Button
-                android:id="@+id/com_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/com_btn_picture"
-                android:layout_marginTop="28dp"
-                android:layout_toEndOf="@+id/com_btn_gall"
-                android:layout_toRightOf="@+id/com_btn_gall"
-                android:text="등록" />
+                <TextView
+                    android:id="@+id/etComAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@id/textView7"
+                    android:layout_alignLeft="@id/etComName"
+                    android:ems="10"
+                    android:hint="주소 검색"
+                    android:textSize="18sp"
+                    android:background="?attr/editTextBackground"/>
 
-            <Button
-                android:id="@+id/com_btn_gall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/com_form_iv"
-                android:layout_marginTop="22dp"
-                android:layout_toEndOf="@+id/textView7"
-                android:layout_toRightOf="@+id/textView7"
-                android:text="갤러리" />
+                <EditText
+                    android:id="@+id/etComDetailAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/etComAddress"
+                    android:layout_alignRight="@id/etComAddress"
+                    android:layout_below="@id/etComAddress"
+                    android:ems="10"
+                    android:hint="상세 주소" />
 
-            <Button
-                android:id="@+id/com_btn_search_addr"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/com_form_radio"
-                android:layout_below="@+id/com_form_name"
-                android:layout_toEndOf="@+id/com_form_addr"
-                android:layout_toRightOf="@+id/com_form_addr"
-                android:text="검색" />
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/textView7"
+                    android:layout_below="@id/textView7"
+                    android:layout_marginTop="80dp"
+                    android:text="카테고리" />
 
-        </RelativeLayout>
-    </ScrollView>
+                <RadioGroup
+                    android:id="@+id/rgComCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/textView8"
+                    android:layout_below="@id/textView8"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
 
-</LinearLayout>
+                    <RadioButton
+                        android:id="@+id/rbComCulture"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="문화" />
+
+                    <RadioButton
+                        android:id="@+id/rbComFood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="외식" />
+
+                    <RadioButton
+                        android:id="@+id/rbComBeauty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="뷰티" />
+
+                    <RadioButton
+                        android:id="@+id/rbComFashion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="패션" />
+                </RadioGroup>
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/textView8"
+                    android:layout_below="@id/rgComCategory"
+                    android:layout_marginTop="30dp"
+                    android:text="매니저" />
+
+                <Spinner
+                    android:id="@+id/spinComManager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/etComDetailAddress"
+                    android:layout_alignTop="@id/textView9" />
+
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/textView9"
+                    android:layout_below="@id/spinComManager"
+                    android:layout_marginTop="30dp"
+                    android:text="사업자 등록번호" />
+
+                <EditText
+                    android:id="@+id/etComNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@id/textView10"
+                    android:layout_alignLeft="@id/spinComManager"
+                    android:ems="10"
+                    android:inputType="number" />
+
+
+                <LinearLayout
+                    android:id="@+id/llComImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/etComNumber"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:background="@drawable/border">
+
+                    <ImageView
+                        android:id="@+id/ivComImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        app:srcCompat="@drawable/add" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignLeft="@id/llComImage"
+                    android:layout_alignRight="@id/llComImage"
+                    android:layout_below="@id/etComNumber"
+                    android:layout_marginTop="19dp"
+                    android:background="#d7d7d7d7"
+                    android:orientation="horizontal" />
+
+
+                <Button
+                    android:id="@+id/btnSubmit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/llComImage"
+                    android:layout_alignRight="@id/llComImage"
+                    android:layout_below="@id/llComImage"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="25dp"
+                    android:text="등록" />
+
+            </RelativeLayout>
+        </ScrollView>
+
+    </LinearLayout>
+</layout>
