@@ -2,6 +2,7 @@ package com.example.win.a2vent.user.account;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -14,6 +15,7 @@ import android.text.InputFilter;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.example.win.a2vent.user.main.Activity_User_Event_Main;
@@ -33,7 +35,7 @@ import java.util.ArrayList;
 /**
  * Created by EUNJAESHIN on 2017-07-10.
  * 로그인 부분 (첫 액티비티)
- *
+ * <p>
  * 스택에 쌓인 액티비티 모두 종료하기 (2017-08-02)
  * 참고 http://neoroid.tistory.com/201
  */
@@ -48,6 +50,7 @@ public class Activity_User_Login extends AppCompatActivity {
     ActivityUserLoginBinding binding_userLogin;
     LoginDB loginDB;
     GetUserInfo getUserInfo;
+    InputMethodManager imm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +58,24 @@ public class Activity_User_Login extends AppCompatActivity {
         binding_userLogin = DataBindingUtil.setContentView(this, R.layout.activity_user_login);
         getAppKeyHash();
 
+        imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        binding_userLogin.layoutLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GlobalData.hideKeyboard(imm, v);
+            }
+        }); // 빈화면 터치시 키보드 내림
+
         // 정규표현식으로 문자열 입력 제한
         binding_userLogin.eTextLoginId.setFilters(new InputFilter[]{InputFilters.filter});
         binding_userLogin.eTextLoginPw.setFilters(new InputFilter[]{InputFilters.filterPw});
 
-        GlobalData.setUserData(null,null,null,null,null,null,null,null);
+        GlobalData.setUserData(null, null, null, null, null, null, null, null);
     }
 
     public void onClick_login(View view) {
+        GlobalData.hideKeyboard(imm, view);
         try {
             sId = binding_userLogin.eTextLoginId.getText().toString();
             sPw = binding_userLogin.eTextLoginPw.getText().toString();
@@ -83,7 +96,7 @@ public class Activity_User_Login extends AppCompatActivity {
     public void onBackPressed() {
         if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
             backKeyPressedTime = System.currentTimeMillis();
-            if(toast != null)
+            if (toast != null)
                 toast.cancel();
             toast = Toast.makeText(Activity_User_Login.this,
                     "'뒤로' 버튼을 한번 더 누르시면 종료됩니다", Toast.LENGTH_SHORT);
@@ -92,7 +105,7 @@ public class Activity_User_Login extends AppCompatActivity {
         }
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
             toast.cancel();
-            for(int i=0; i<actList.size(); i++)
+            for (int i = 0; i < actList.size(); i++)
                 actList.get(i).finish();
             finish();
             android.os.Process.killProcess(android.os.Process.myPid()); // 현재 프로세스 및 서비스 종료
@@ -145,14 +158,14 @@ public class Activity_User_Login extends AppCompatActivity {
             } else if (result.equals("1")) {
                 getUserInfo.execute(binding_userLogin.eTextLoginId.getText().toString());
                 Intent intent_userLogin = new Intent(Activity_User_Login.this, Activity_User_Event_Main.class);
-                for(int i=0; i<actList.size(); i++)
+                for (int i = 0; i < actList.size(); i++)
                     actList.get(i).finish();
                 startActivity(intent_userLogin);
                 finish();
             } else if (result.equals("2")) {
                 getUserInfo.execute(binding_userLogin.eTextLoginId.getText().toString());
                 Intent intent_managerLogin = new Intent(Activity_User_Login.this, Activity_Owner_Event_Main.class);
-                for(int i=0; i<actList.size(); i++)
+                for (int i = 0; i < actList.size(); i++)
                     actList.get(i).finish();
                 startActivity(intent_managerLogin);
                 finish();

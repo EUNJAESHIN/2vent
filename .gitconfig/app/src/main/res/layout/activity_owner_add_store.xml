@@ -36,7 +36,9 @@
                     android:layout_marginEnd="48dp"
                     android:layout_marginRight="48dp"
                     android:layout_marginTop="25dp"
-                    android:ems="10" />
+                    android:ems="10"
+                    android:lines="1"
+                    android:singleLine="true" />
 
                 <TextView
                     android:id="@+id/textView7"
@@ -53,10 +55,10 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBaseline="@id/textView7"
                     android:layout_alignLeft="@id/etComName"
+                    android:background="?attr/editTextBackground"
                     android:ems="10"
                     android:hint="주소 검색"
-                    android:textSize="18sp"
-                    android:background="?attr/editTextBackground"/>
+                    android:textSize="18sp" />
 
                 <EditText
                     android:id="@+id/etComDetailAddress"
@@ -158,8 +160,8 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="20dp"
-                    android:gravity="center"
-                    android:background="@drawable/border">
+                    android:background="@drawable/border"
+                    android:gravity="center">
 
                     <ImageView
                         android:id="@+id/ivComImage"

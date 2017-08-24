@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
+        android:id="@+id/layout_join"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -44,14 +45,13 @@
                 android:singleLine="true"
                 android:textSize="18sp" />
 
-            <EditText
+            <TextView
                 android:id="@+id/eText_join_addr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="주소"
-                android:inputType="textPostalAddress"
-                android:lines="1"
-                android:singleLine="true"
+                android:background="?attr/editTextBackground"
+                android:text="주소"
+                android:textColor="#9c9a9a"
                 android:textSize="18sp" />
 
             <EditText

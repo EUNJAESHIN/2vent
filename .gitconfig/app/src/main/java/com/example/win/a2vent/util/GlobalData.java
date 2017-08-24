@@ -1,5 +1,8 @@
 package com.example.win.a2vent.util;
 
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -64,6 +67,11 @@ public class GlobalData {
         UserSex = sex;
         UserPhone = phone;
         UserAccountNum = acc;
+    }
+
+    public static void hideKeyboard(InputMethodManager imm, View v) {
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
     public static String setSHA256(String str) {

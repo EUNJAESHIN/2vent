@@ -12,8 +12,7 @@ import com.example.win.a2vent.util.GlobalData;
 import com.example.win.a2vent.R;
 
 public class Activity_Owner_Add_Store_WebView extends AppCompatActivity {
-    private static final int SERCH_ADDR = 4; //가져온 사진을 자르기 위한 변수
-    //주소 검색
+    private static final int SERCH_ADDR = 4; //주소 검색
     WebView webview;
     private Handler handler;
     String v_com_addr=null;
@@ -30,9 +29,6 @@ public class Activity_Owner_Add_Store_WebView extends AppCompatActivity {
 
         // 핸들러를 통한 JavaScript 이벤트 반응
         handler = new Handler();
-
-
-
 
     }
 

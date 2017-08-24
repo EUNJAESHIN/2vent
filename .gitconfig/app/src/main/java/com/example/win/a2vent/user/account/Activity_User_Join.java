@@ -1,8 +1,10 @@
 package com.example.win.a2vent.user.account;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -10,10 +12,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.win.a2vent.R;
+import com.example.win.a2vent.onwer.add_store.Activity_Owner_Add_Store;
+import com.example.win.a2vent.onwer.add_store.Activity_Owner_Add_Store_WebView;
+import com.example.win.a2vent.util.GlobalData;
 import com.example.win.a2vent.util.ServerConnector;
 import com.example.win.a2vent.databinding.ActivityUserJoinBinding;
 
@@ -25,9 +31,11 @@ import com.example.win.a2vent.databinding.ActivityUserJoinBinding;
 public class Activity_User_Join extends AppCompatActivity {
 
     ActivityUserJoinBinding binding_userJoin;
+    private static final int SEARCH_ADDRESS = 4;
     String sex, user_type;
     String id, pw, name, addr, birthday, phone, account_number; // 회원가입 시 사용될 String 변수
     JoinDB joinDB;
+    InputMethodManager imm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +50,23 @@ public class Activity_User_Join extends AppCompatActivity {
         binding_userJoin.eTextJoinBirth.setFilters(new InputFilter[]{InputFilters.filterNum});
         binding_userJoin.eTextJoinPhone.setFilters(new InputFilter[]{InputFilters.filterNum});
         binding_userJoin.eTextJoinAccountnumber.setFilters(new InputFilter[]{InputFilters.filterNum});
+
+        imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        binding_userJoin.layoutJoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GlobalData.hideKeyboard(imm, v);
+            }
+        }); // 빈화면 터치시 키보드 내림
+
+        binding_userJoin.eTextJoinAddr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GlobalData.hideKeyboard(imm, v);
+                Intent i = new Intent(Activity_User_Join.this, Activity_Owner_Add_Store_WebView.class);
+                startActivityForResult(i, SEARCH_ADDRESS);
+            }
+        }); // 주소입력창 클릭시 주소검색 웹뷰로
 
         // 라디오버튼 체크리스너
         binding_userJoin.rGroupSex.setOnCheckedChangeListener
@@ -76,6 +101,19 @@ public class Activity_User_Join extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SEARCH_ADDRESS) {
+            try {
+                binding_userJoin.eTextJoinAddr.setTextColor(Color.BLACK);
+                binding_userJoin.eTextJoinAddr.setText(data.getStringExtra("addr"));
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void onClick_joinOK(View view) {
