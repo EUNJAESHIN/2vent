@@ -740,7 +740,7 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             String id = params[18];
             String event_number = params[19];
 
-            String phpPage = "2ventAddevent.php";
+            String phpPage = "2ventAddEvent.php";
 
             try {
 

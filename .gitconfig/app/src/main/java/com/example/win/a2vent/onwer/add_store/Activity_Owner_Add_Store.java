@@ -202,7 +202,7 @@ public class Activity_Owner_Add_Store extends AppCompatActivity {
             String id = params[7];
             String sourceFileUri = params[8];
 
-            String phpPage = "2ventAddstore.php";
+            String phpPage = "2ventAddStore.php";
 
             try {
                 ServerConnector serverConnector = new ServerConnector(phpPage);
@@ -323,7 +323,7 @@ public class Activity_Owner_Add_Store extends AppCompatActivity {
         protected String doInBackground(String... args) {
 
             try {
-                ServerConnector serverConnector = new ServerConnector("2ventAddstoreGetManager.php");
+                ServerConnector serverConnector = new ServerConnector("2ventAddStoreGetManager.php");
 
                 serverConnector.addDelimiter();
                 serverConnector.writePostData();
