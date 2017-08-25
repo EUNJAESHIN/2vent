@@ -1,19 +1,15 @@
 package com.example.win.a2vent.user.map;
 
-import android.Manifest;
 import android.app.ProgressDialog;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,15 +22,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.win.a2vent.user.account.Activity_User_Login;
 import com.example.win.a2vent.user.details_info.Activity_User_Event_Details_Info;
+import com.example.win.a2vent.user.main.Activity_User_Event_Main;
 import com.example.win.a2vent.util.GlobalData;
 import com.example.win.a2vent.R;
 import com.example.win.a2vent.util.ServerConnector;
 import com.example.win.a2vent.util.ServiceGPSInfo;
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -93,10 +88,8 @@ public class Activity_User_Map extends AppCompatActivity implements MapView.MapV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Activity_User_Login.actList.add(this);
         setContentView(R.layout.activity_user_map);
-
-        // 권한 부여
-        setPermission();
 
         // 맵뷰 생성 및 뷰컨테이너에 추가
         MapLayout mapLayout = new MapLayout(this);
@@ -104,8 +97,6 @@ public class Activity_User_Map extends AppCompatActivity implements MapView.MapV
 
         mMapView.setMapViewEventListener(this);
         mMapView.setDrawingCacheEnabled(true);
-        mMapView.setCurrentLocationTrackingMode
-                (MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving);
 
         ViewGroup mapViewContainer = (RelativeLayout) findViewById(R.id.mapView);
         mapViewContainer.addView(mapLayout);
@@ -114,7 +105,8 @@ public class Activity_User_Map extends AppCompatActivity implements MapView.MapV
         mFabMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent_goMain = new Intent(Activity_User_Map.this, Activity_User_Event_Main.class);
+                startActivity(intent_goMain);
             }
         });
         mFabMap.bringToFront();
@@ -170,34 +162,6 @@ public class Activity_User_Map extends AppCompatActivity implements MapView.MapV
     public void onBackPressed() {
         super.onBackPressed();
         //this.finish();
-    }
-
-    private void setPermission() {
-        //권한 부여
-        PermissionListener permissionListener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-
-            }
-
-            @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Toast.makeText(Activity_User_Map.this, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-            }
-        };
-
-        new TedPermission(this).setPermissionListener(permissionListener)
-                .setPermissions(Manifest.permission.INTERNET,
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_WIFI_STATE,
-                        Manifest.permission.CHANGE_WIFI_STATE).check();
-
-        if (Build.VERSION.SDK_INT >= 23 &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    0);
-        }
     }
 
     private void makeMarker(MapView mapView, double latitude, double longitude, String comName, int eventNumber) {
@@ -474,8 +438,12 @@ public class Activity_User_Map extends AppCompatActivity implements MapView.MapV
     public void onMapViewInitialized(MapView mapView) {
         Log.d(TAG, "onMapViewInitialized");
 
+        ServiceGPSInfo.getLocation();
+
         {
-            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(ServiceGPSInfo.getLatitue(), ServiceGPSInfo.getLongitue()), false);
+            mapView.setCurrentLocationTrackingMode
+                    (MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving);
+            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(ServiceGPSInfo.getLatitude(), ServiceGPSInfo.getLongitude()), false);
             mapView.setZoomLevel(3, true);
             mapView.setCurrentLocationRadius(500);
             mapView.setCurrentLocationRadiusFillColor(Color.argb(20, 255, 255, 255));
@@ -534,7 +502,17 @@ public class Activity_User_Map extends AppCompatActivity implements MapView.MapV
     @Override
     public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
         Log.d(TAG, "onMapViewMoveFinished");
+        while (ServiceGPSInfo.getLatitude() == 0 && ServiceGPSInfo.getLongitude() == 0) {
+            try {
+                ServiceGPSInfo.getLocation();
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
 
+            }
+            mapView.setCurrentLocationTrackingMode
+                    (MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving);
+            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(ServiceGPSInfo.getLatitude(), ServiceGPSInfo.getLongitude()), false);
+        }
     }
 
     //============================================================================================

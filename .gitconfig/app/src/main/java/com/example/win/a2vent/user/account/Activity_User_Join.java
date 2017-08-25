@@ -126,7 +126,7 @@ public class Activity_User_Join extends AppCompatActivity {
         account_number = binding_userJoin.eTextJoinAccountnumber.getText().toString();
 
         if (id.equals("") || pw.equals("") || name.equals("") || addr.equals("") ||
-                birthday.equals("") || sex.equals("") || phone.equals("") || user_type.equals("") ||
+                birthday.equals("") || sex == null || phone.equals("") || user_type == null ||
                 account_number.equals("")) {
             checkBlank(); // 공백 체크
         } else {
@@ -154,13 +154,13 @@ public class Activity_User_Join extends AppCompatActivity {
             binding_userJoin.eTextJoinBirth.setHint("생년월일을 입력해주세요 ex)19900101");
             binding_userJoin.eTextJoinBirth.requestFocus();
             GlobalData.showKeyboard(imm);
-        } else if (sex.equals("")) {
+        } else if (sex == null) {
             Toast.makeText(this, "성별을 선택해주세요", Toast.LENGTH_SHORT).show();
         } else if (phone.equals("")) {
             binding_userJoin.eTextJoinPhone.setHint("전화번호를 입력해주세요 ('-' 없이)");
             binding_userJoin.eTextJoinPhone.requestFocus();
             GlobalData.showKeyboard(imm);
-        } else if (user_type.equals("")) {
+        } else if (user_type == null) {
             Toast.makeText(this, "사용자 유형을 선택해주세요", Toast.LENGTH_SHORT).show();
         } else if (account_number.equals("")) {
             binding_userJoin.eTextJoinAccountnumber.setHint("계좌번호를 입력해주세요 ('-' 없이)");

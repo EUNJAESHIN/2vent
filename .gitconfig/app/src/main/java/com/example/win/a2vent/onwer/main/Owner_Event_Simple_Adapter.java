@@ -20,6 +20,7 @@ import com.example.win.a2vent.onwer.add_event.Activity_Owner_Add_Event;
 import com.example.win.a2vent.onwer.details_info.Activity_Owner_Event_Details_Info;
 import com.example.win.a2vent.util.DeleteData;
 import com.example.win.a2vent.util.GlobalData;
+import com.example.win.a2vent.util.ModifyData;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -111,34 +112,54 @@ public class Owner_Event_Simple_Adapter extends RecyclerView.Adapter<Owner_Event
 
                         new AlertDialog.Builder(mContext).setTitle(mEvent_list.get(position).getEvent_name())
                                 .setItems(item, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (which) {
-                                    case 0:
-                                        break;
-                                    case 1:
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                                        builder.setTitle(mEvent_list.get(position).getEvent_name() + "삭제")
-                                                .setMessage("삭제 하시겠습니까?").setCancelable(false)
-                                                .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        switch (which) {
+                                            case 0: {
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                                builder.setTitle(mEvent_list.get(position).getEvent_name() + " 수정")
+                                                        .setMessage("수정 하시겠습니까?").setCancelable(false)
+                                                        .setPositiveButton("수정", new DialogInterface.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                ModifyData modifyData =
+                                                                        new ModifyData(mContext, mEvent_list.get(position).getEvent_number());
+                                                                modifyData.execute("2ventModifyEvent.php");
+                                                            }
+                                                        }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
-                                                        DeleteData deleteData = new DeleteData(mContext, "EventKey", "event_number", mEvent_list.get(position).getEvent_number());
-                                                        deleteData.execute("2ventDeleteEvent.php");
+                                                        return;
                                                     }
-                                                }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                return;
+                                                });
+                                                AlertDialog d = builder.create();
+                                                d.show();
                                             }
-                                        });
-                                        AlertDialog d = builder.create();
-                                        d.show();
-
-                                        break;
-                                }
-                            }
-                        }).show();
+                                            break;
+                                            case 1: {
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                                builder.setTitle(mEvent_list.get(position).getEvent_name() + "삭제")
+                                                        .setMessage("삭제 하시겠습니까?").setCancelable(false)
+                                                        .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                DeleteData deleteData =
+                                                                        new DeleteData(mContext, "EventKey", "event_number", mEvent_list.get(position).getEvent_number());
+                                                                deleteData.execute("2ventDeleteEvent.php");
+                                                            }
+                                                        }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        return;
+                                                    }
+                                                });
+                                                AlertDialog d = builder.create();
+                                                d.show();
+                                            }
+                                            break;
+                                        }
+                                    }
+                                }).show();
                         break;
                     case 1:
                     case 2:
@@ -153,7 +174,8 @@ public class Owner_Event_Simple_Adapter extends RecyclerView.Adapter<Owner_Event
                                         .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                DeleteData deleteData = new DeleteData(mContext, "EventKey", "event_number", mEvent_list.get(position).getEvent_number());
+                                                DeleteData deleteData =
+                                                        new DeleteData(mContext, "EventKey", "event_number", mEvent_list.get(position).getEvent_number());
                                                 deleteData.execute("2ventDeleteEvent.php");
                                             }
                                         }).setNegativeButton("취소", new DialogInterface.OnClickListener() {

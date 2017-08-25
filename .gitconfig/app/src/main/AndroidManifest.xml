@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 카메라 권한 -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <!-- 네트 워크 상태 -->
+    <!-- 네트워크 상태 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
@@ -40,7 +40,9 @@
         <activity android:name=".onwer.main.Activity_Owner_Event_Main" />
         <activity android:name=".onwer.details_info.Activity_Owner_Event_Details_Info" />
         <activity android:name=".onwer.add_store.Activity_Owner_Add_Store" />
-        <activity android:name=".onwer.add_store.Activity_Owner_Add_Store_WebView" />
+        <activity
+            android:name=".onwer.add_store.Activity_Owner_Add_Store_WebView"
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
         <activity android:name=".onwer.add_event.Activity_Owner_Add_Event" />
         <activity android:name=".onwer.add_event.Activity_Owner_Add_Event_Review" />
         <activity android:name=".onwer.add_store.Activity_Owner_Store_Event_List" />

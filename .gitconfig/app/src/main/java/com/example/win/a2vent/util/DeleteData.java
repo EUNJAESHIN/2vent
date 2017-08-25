@@ -12,8 +12,6 @@ import android.util.Log;
 public class DeleteData extends AsyncTask<String, Void, String> {
 
     private final String TAG = "테스트";
-    private final String EVENT_KEY = "EventKey";
-    private final String STORE_KEY = "StoreKey";
 
     private String mKey;
     private String mColumnKey;
@@ -62,11 +60,14 @@ public class DeleteData extends AsyncTask<String, Void, String> {
 
         Log.d(TAG, "response - " + result);
 
-        Intent intent = new Intent(GlobalData.OWNER_MAIN_RECEIVER);
+        try {
+            Intent intent = new Intent(GlobalData.OWNER_MAIN_RECEIVER);
+            intent.putExtra("result", Integer.parseInt(result.trim().toString()));
+            intent.putExtra("keyValue", mKey);
+            mContext.sendBroadcast(intent);
+        } catch (NumberFormatException e) {
 
-        intent.putExtra("result", Integer.parseInt(result.trim().toString()));
-        intent.putExtra("keyValue", mKey);
-        mContext.sendBroadcast(intent);
+        }
 
         /*
         if (mKey.equals(EVENT_KEY)) {

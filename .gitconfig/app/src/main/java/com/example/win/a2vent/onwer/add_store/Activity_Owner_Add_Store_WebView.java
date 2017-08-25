@@ -1,9 +1,11 @@
 package com.example.win.a2vent.onwer.add_store;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Window;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -11,7 +13,7 @@ import android.webkit.WebView;
 import com.example.win.a2vent.util.GlobalData;
 import com.example.win.a2vent.R;
 
-public class Activity_Owner_Add_Store_WebView extends AppCompatActivity {
+public class Activity_Owner_Add_Store_WebView extends Activity {
     private static final int SERCH_ADDR = 4; //주소 검색
     WebView webview;
     private Handler handler;
@@ -22,7 +24,9 @@ public class Activity_Owner_Add_Store_WebView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_owner_add_store_webview);
+        this.setFinishOnTouchOutside(false);
 
         // WebView 초기화
         init_webView();

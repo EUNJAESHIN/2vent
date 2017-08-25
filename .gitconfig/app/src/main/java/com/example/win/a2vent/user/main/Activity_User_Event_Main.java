@@ -23,6 +23,7 @@ import com.example.win.a2vent.util.GetImageURI;
 import com.example.win.a2vent.util.GlobalData;
 import com.example.win.a2vent.R;
 import com.example.win.a2vent.databinding.ActivityUserEventMainBinding;
+import com.example.win.a2vent.util.ServiceGPSInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +39,6 @@ import java.util.ArrayList;
 /**
  * Created by EUNJAESHIN on 2017-07-10.
  * 사용자 메인 화면
- * <p>
  * Android & PHP & MySQL 예제
  * http://webnautes.tistory.com/category/Android/DATABASE
  * 데이터 바인딩 라이브러리
@@ -46,8 +46,9 @@ import java.util.ArrayList;
  */
 
 public class Activity_User_Event_Main extends AppCompatActivity {
-    private String TAG = "Main";
+    private String TAG = "UserMain";
 
+    private boolean flagRegisterURIReceiver = false;
     private boolean flagRegisterReceiver = false;
     private long backKeyPressedTime = 0;
 
@@ -67,6 +68,8 @@ public class Activity_User_Event_Main extends AppCompatActivity {
         set_TabHost(this);
 
         mContext = getApplicationContext();
+
+        startGpsService(getApplicationContext());
     }
 
     @Override
@@ -74,14 +77,18 @@ public class Activity_User_Event_Main extends AppCompatActivity {
         super.onResume();
         if (!flagRegisterReceiver) {
             IntentFilter filter = new IntentFilter();
-            filter.addAction(GlobalData.GET_URI_RECEIVER);
+            filter.addAction(GlobalData.USER_MAIN_RECEIVER);
             mContext.registerReceiver(broadcastReceiver, filter);
             flagRegisterReceiver = true;
         }
+        if (!flagRegisterURIReceiver) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(GlobalData.GET_URI_RECEIVER);
+            mContext.registerReceiver(broadcastURIReceiver, filter);
+            flagRegisterURIReceiver = true;
+        }
         getEventDB = new GetEventDB();
         getEventDB.execute(GlobalData.getURL() + "2ventGetEventAll.php"); // AsyncTask 실행
-
-        startGpsService(getApplicationContext());
     }
 
     public void onClick_Accountinfo(View v) {
@@ -254,11 +261,22 @@ public class Activity_User_Event_Main extends AppCompatActivity {
 
     } // EventDB 받는 AsyncTask
 
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver broadcastURIReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String value = intent.getExtras().getString("finish");
             addItemInCategory(result, value);
+        }
+    };
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "onReceive");
+            ServiceGPSInfo.setPermission(Activity_User_Event_Main.this, Activity_User_Event_Main.this);
+            if (!ServiceGPSInfo.isGetLocation()) {
+                ServiceGPSInfo.showSettingsAlert(Activity_User_Event_Main.this);
+            }
         }
     };
 
@@ -366,6 +384,10 @@ public class Activity_User_Event_Main extends AppCompatActivity {
     protected void onPause() {
         if (getEventDB != null) {
             getEventDB.cancel(true);
+        }
+        if (flagRegisterURIReceiver) {
+            mContext.unregisterReceiver(broadcastURIReceiver);
+            flagRegisterURIReceiver = false;
         }
         if (flagRegisterReceiver) {
             mContext.unregisterReceiver(broadcastReceiver);

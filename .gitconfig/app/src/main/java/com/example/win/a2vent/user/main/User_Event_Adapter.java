@@ -68,6 +68,7 @@ public class User_Event_Adapter extends RecyclerView.Adapter<User_Event_Holder> 
             @Override
             public void onClick(View v) {
                 Intent intent_goDetail = new Intent(context, Activity_User_Event_Details_Info.class);
+                intent_goDetail.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent_goDetail.putExtra("event_number", mItems.get(position).getEventNum());
                 // Intent에 event_number값을 담기
                 context.startActivity(intent_goDetail);

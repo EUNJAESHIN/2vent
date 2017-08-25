@@ -1,23 +1,34 @@
 package com.example.win.a2vent.util;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.SphericalUtil;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
+
+import java.util.ArrayList;
 
 /**
  * Created by win on 2017-08-04.
@@ -27,7 +38,7 @@ public class ServiceGPSInfo extends Service implements LocationListener {
 
     private final static String TAG = "테스트";
 
-    private static Context mContext;
+    private static Context mServiceContext;
 
     // 현재 GPS 사용 유무
     private static boolean isGPSEnabled = false;
@@ -59,7 +70,7 @@ public class ServiceGPSInfo extends Service implements LocationListener {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "Service- onCreate");
-        mContext = getApplicationContext();
+        mServiceContext = getApplicationContext();
         serviceGPSInfo = this;
     }
 
@@ -73,6 +84,7 @@ public class ServiceGPSInfo extends Service implements LocationListener {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "Service - onStartCommand");
+
         getLocation();
 
         if (!flagRegisterReceiver) {
@@ -81,6 +93,10 @@ public class ServiceGPSInfo extends Service implements LocationListener {
             registerReceiver(broadcastReceiver, filter);
             flagRegisterReceiver = true;
         }
+
+        Intent i = new Intent(GlobalData.USER_MAIN_RECEIVER);
+        sendBroadcast(i);
+
         return START_NOT_STICKY;
     }
 
@@ -94,6 +110,34 @@ public class ServiceGPSInfo extends Service implements LocationListener {
         }
 
         super.onDestroy();
+    }
+
+    public static void setPermission(final Context context, Activity activity) {
+        //권한 부여
+        PermissionListener permissionListener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                Toast.makeText(context, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        new TedPermission(context).setPermissionListener(permissionListener)
+                .setPermissions(Manifest.permission.INTERNET,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_WIFI_STATE,
+                        Manifest.permission.CHANGE_WIFI_STATE).check();
+
+        if (Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    0);
+        }
     }
 
     public static double checkDistance(double toLatitude, double toLongitude) {
@@ -125,7 +169,7 @@ public class ServiceGPSInfo extends Service implements LocationListener {
 
     public static Location getLocation() {
         try {
-            mLocationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
+            mLocationManager = (LocationManager) mServiceContext.getSystemService(LOCATION_SERVICE);
 
             // GPS 정보 가져오기
             isGPSEnabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -169,7 +213,7 @@ public class ServiceGPSInfo extends Service implements LocationListener {
                     }
                 }
 
-                Log.d(TAG,"위도: " + getLatitue() + ", 경도: " + getLongitue());
+                Log.d(TAG, "위도: " + getLatitude() + ", 경도: " + getLongitude());
             }
         } catch (SecurityException e) {
             e.printStackTrace();
@@ -185,7 +229,7 @@ public class ServiceGPSInfo extends Service implements LocationListener {
         }
     }
 
-    public static double getLatitue() {
+    public static double getLatitude() {
         if (mLocation != null) {
             mLatitude = mLocation.getLatitude();
         }
@@ -193,7 +237,7 @@ public class ServiceGPSInfo extends Service implements LocationListener {
         return mLatitude;
     }
 
-    public static double getLongitue() {
+    public static double getLongitude() {
         if (mLocation != null) {
             mLongitude = mLocation.getLongitude();
         }
@@ -202,18 +246,19 @@ public class ServiceGPSInfo extends Service implements LocationListener {
     }
 
     public static boolean isGetLocation() {
+        getLocation();
         // GPS나 wifi 정보가 켜져있는지 확인
         return isGetLocation;
     }
 
-    public static void showSettingsAlert() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+    public static void showSettingsAlert(final Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("GPS Setting").setMessage("GPS 설정창으로 가시겠습니까?").setCancelable(false)
                 .setPositiveButton("설정", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        mContext.startActivity(intent);
+                        context.startActivity(intent);
                     }
                 }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
             @Override
