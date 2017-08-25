@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -43,7 +42,6 @@ public class Activity_Owner_Add_Event_Review extends AppCompatActivity {
             image_All.add(new Owner_Review_Item(img_dir));
         }
 
-
         binding_Review.tvOwnerReview1.append(intent_getReviewinfo.getExtras().getString("event_name"));
         binding_Review.tvOwnerReview2.append(intent_getReviewinfo.getExtras().getString("event_price"));
         binding_Review.tvOwnerReview2.setPaintFlags
@@ -53,13 +51,14 @@ public class Activity_Owner_Add_Event_Review extends AppCompatActivity {
         binding_Review.tvOwnerReview5.append(intent_getReviewinfo.getExtras().getString("event_content"));
         binding_Review.tvOwnerReview9.append(intent_getReviewinfo.getExtras().getString("event_people"));
 
+
         rAdatper_reviewimg = new Owner_Review_Adapter(image_All, Activity_Owner_Add_Event_Review.this);
         binding_Review.rviewOwnerReview.setAdapter(rAdatper_reviewimg);
         rAdatper_reviewimg.notifyDataSetChanged();
     }
 
     public void onClick_review_participation(View v) {
-        Toast.makeText(this, "남은 자리를 확인하고 이벤트에 참여하는 버튼입니다", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "이벤트에 참여하는 버튼입니다", Toast.LENGTH_SHORT).show();
     }
 
 

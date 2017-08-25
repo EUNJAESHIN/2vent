@@ -14,7 +14,7 @@ import com.example.win.a2vent.R;
 public class User_Entry_Holder extends RecyclerView.ViewHolder {
 
     public View view;
-    public TextView textView1,textView2,textView3,textView4,textView5;
+    public TextView textView1,textView2,textView3,textView4;
 
     public User_Entry_Holder(View itemView) {
         super(itemView);

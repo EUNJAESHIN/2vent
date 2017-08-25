@@ -43,7 +43,6 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
     RecyclerView.Adapter rAdapter_image;
     ArrayList<User_Details_Item> image_All;
     GetEventInfo getEventInfo; GetImageURI getImageURI; PutEntry putEntry;
-    AlertDialog dialog; AlertDialog.Builder builder;
     int event_number, event_type;
     String com_number, result;
 
@@ -209,7 +208,7 @@ public class Activity_User_Event_Details_Info extends AppCompatActivity {
 
                 //type이 응모형인지 결제형 이벤트인지 구분해서 버튼 텍스트 변경
                 if (event_type == 0) {
-                    binding_UserDetail.btDetail.setText("응모");
+                    binding_UserDetail.btDetail.setText("참여");
                 } else if (event_type == 1) {
                     binding_UserDetail.btDetail.setText("결제");
                 }

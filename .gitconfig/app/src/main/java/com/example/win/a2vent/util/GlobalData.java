@@ -67,12 +67,16 @@ public class GlobalData {
         UserSex = sex;
         UserPhone = phone;
         UserAccountNum = acc;
-    }
+    } // 유저 데이터 설정
 
     public static void hideKeyboard(InputMethodManager imm, View v) {
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-    }
+    } // 키보드 내림
+
+    public static void showKeyboard(InputMethodManager imm) {
+        imm.toggleSoftInput(imm.HIDE_IMPLICIT_ONLY, 0);
+    } // 키보드 올림
 
     public static String setSHA256(String str) {
         String SHA = "";
@@ -92,6 +96,6 @@ public class GlobalData {
             SHA = null;
         }
         return SHA;
-    }
+    } // 파라미터 SHA-256 암호화
 
 }

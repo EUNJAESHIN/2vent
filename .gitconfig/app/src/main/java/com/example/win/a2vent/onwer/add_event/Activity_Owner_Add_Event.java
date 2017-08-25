@@ -206,7 +206,8 @@ public class Activity_Owner_Add_Event extends AppCompatActivity {
             }
         });
 
-        final ArrayAdapter<CharSequence> arrAdtLocations = ArrayAdapter.createFromResource(Activity_Owner_Add_Event.this, R.array.locations, R.layout.support_simple_spinner_dropdown_item);
+        final ArrayAdapter<CharSequence> arrAdtLocations = ArrayAdapter.createFromResource
+                (Activity_Owner_Add_Event.this, R.array.locations, R.layout.support_simple_spinner_dropdown_item);
 
         binding.spinLocation.setAdapter(arrAdtLocations);
         binding.spinLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

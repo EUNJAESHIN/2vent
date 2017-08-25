@@ -28,7 +28,6 @@ public class User_Entry_Adapter extends RecyclerView.Adapter<User_Entry_Holder> 
     private Context mContext;
     private ArrayList<User_Entry_Item> mItems = new ArrayList<User_Entry_Item>();
     static int delete_event_number;
-    AlertDialog.Builder builder_EntryDeleteAlert;
 
     public User_Entry_Adapter(ArrayList items, Context context) {
         mItems = items;

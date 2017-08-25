@@ -10,7 +10,6 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AlertDialog;
@@ -22,7 +21,6 @@ import android.widget.ArrayAdapter;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.example.win.a2vent.onwer.add_event.Activity_Owner_Add_Event;
 import com.example.win.a2vent.util.GlobalData;
 import com.example.win.a2vent.util.ImageURI;
 import com.example.win.a2vent.R;

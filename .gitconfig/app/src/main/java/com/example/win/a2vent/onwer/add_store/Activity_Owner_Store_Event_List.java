@@ -36,9 +36,7 @@ public class Activity_Owner_Store_Event_List extends AppCompatActivity {
     private final String TAG = "테스트";
 
     private Context mContext;
-
     private ImageView imgStore;
-
     private TextView tvStoreName;
 
     private ActivityOwnerStoreEventListBinding binding;
@@ -46,9 +44,7 @@ public class Activity_Owner_Store_Event_List extends AppCompatActivity {
     private RecyclerView.Adapter recyclerViewAdapter;
 
     private String mCom_number;
-
     private String mComName, mComURI;
-
     private String mResult;
 
     private boolean flagRegisterReceiver = false;

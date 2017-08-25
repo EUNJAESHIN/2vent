@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -17,7 +16,6 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.win.a2vent.R;
-import com.example.win.a2vent.onwer.add_store.Activity_Owner_Add_Store;
 import com.example.win.a2vent.onwer.add_store.Activity_Owner_Add_Store_WebView;
 import com.example.win.a2vent.util.GlobalData;
 import com.example.win.a2vent.util.ServerConnector;
@@ -100,7 +98,6 @@ public class Activity_User_Join extends AppCompatActivity {
                         }
                     }
                 });
-
     }
 
     @Override
@@ -109,9 +106,10 @@ public class Activity_User_Join extends AppCompatActivity {
         if (requestCode == SEARCH_ADDRESS) {
             try {
                 binding_userJoin.eTextJoinAddr.setText(data.getStringExtra("addr"));
-                if (data.getStringExtra("addr")!="") {
-                    binding_userJoin.eTextJoinAddr.setTextColor(Color.BLACK);
-                }
+                if (data.getStringExtra("addr") != "") {
+                    binding_userJoin.eTextJoinBirth.requestFocus();
+                    GlobalData.showKeyboard(imm);
+                } // 주소입력되면 다음 항목에 포커스주고 키보드 올림
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
@@ -119,22 +117,57 @@ public class Activity_User_Join extends AppCompatActivity {
     } // 검색한 주소값 받아옴
 
     public void onClick_joinOK(View view) {
-        //TODO 여백 입력 제한
-        try {
-            id = binding_userJoin.eTextJoinId.getText().toString();
-            pw = binding_userJoin.eTextJoinPw.getText().toString();
-            name = binding_userJoin.eTextJoinName.getText().toString();
-            addr = binding_userJoin.eTextJoinAddr.getText().toString();
-            birthday = binding_userJoin.eTextJoinBirth.getText().toString();
-            phone = binding_userJoin.eTextJoinPhone.getText().toString();
-            account_number = binding_userJoin.eTextJoinAccountnumber.getText().toString();
-        } catch (NullPointerException e) {
-            Log.e("Join Error : ", e.getMessage());
-        }
+        id = binding_userJoin.eTextJoinId.getText().toString();
+        pw = binding_userJoin.eTextJoinPw.getText().toString();
+        name = binding_userJoin.eTextJoinName.getText().toString();
+        addr = binding_userJoin.eTextJoinAddr.getText().toString();
+        birthday = binding_userJoin.eTextJoinBirth.getText().toString();
+        phone = binding_userJoin.eTextJoinPhone.getText().toString();
+        account_number = binding_userJoin.eTextJoinAccountnumber.getText().toString();
 
-        joinDB = new JoinDB();
-        joinDB.execute(id, pw, name, addr, birthday, sex, phone, user_type, account_number);
+        if (id.equals("") || pw.equals("") || name.equals("") || addr.equals("") ||
+                birthday.equals("") || sex.equals("") || phone.equals("") || user_type.equals("") ||
+                account_number.equals("")) {
+            checkBlank(); // 공백 체크
+        } else {
+            joinDB = new JoinDB();
+            joinDB.execute(id, pw, name, addr, birthday, sex, phone, user_type, account_number);
+        }
     } // 회원가입 버튼
+
+    public void checkBlank() {
+        if (id.equals("")) {
+            binding_userJoin.eTextJoinId.setHint("아이디를 입력해주세요 (영문, 숫자)");
+            binding_userJoin.eTextJoinId.requestFocus();
+            GlobalData.showKeyboard(imm);
+        } else if (pw.equals("")) {
+            binding_userJoin.eTextJoinPw.setHint("비밀번호를 입력해주세요 (특수문자 허용)");
+            binding_userJoin.eTextJoinPw.requestFocus();
+            GlobalData.showKeyboard(imm);
+        } else if (name.equals("")) {
+            binding_userJoin.eTextJoinName.setHint("성함을 입력해주세요");
+            binding_userJoin.eTextJoinName.requestFocus();
+            GlobalData.showKeyboard(imm);
+        } else if (addr.equals("")) {
+            Toast.makeText(this, "주소를 입력해주세요", Toast.LENGTH_SHORT).show();
+        } else if (birthday.equals("")) {
+            binding_userJoin.eTextJoinBirth.setHint("생년월일을 입력해주세요 ex)19900101");
+            binding_userJoin.eTextJoinBirth.requestFocus();
+            GlobalData.showKeyboard(imm);
+        } else if (sex.equals("")) {
+            Toast.makeText(this, "성별을 선택해주세요", Toast.LENGTH_SHORT).show();
+        } else if (phone.equals("")) {
+            binding_userJoin.eTextJoinPhone.setHint("전화번호를 입력해주세요 ('-' 없이)");
+            binding_userJoin.eTextJoinPhone.requestFocus();
+            GlobalData.showKeyboard(imm);
+        } else if (user_type.equals("")) {
+            Toast.makeText(this, "사용자 유형을 선택해주세요", Toast.LENGTH_SHORT).show();
+        } else if (account_number.equals("")) {
+            binding_userJoin.eTextJoinAccountnumber.setHint("계좌번호를 입력해주세요 ('-' 없이)");
+            binding_userJoin.eTextJoinAccountnumber.requestFocus();
+            GlobalData.showKeyboard(imm);
+        }
+    } // 공백 체크
 
     private class JoinDB extends AsyncTask<String, Void, String> {
         ProgressDialog progressDialog;

@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
+        android:id="@+id/layoutModify"
         android:layout_width="325dp"
         android:layout_height="200dp"
         android:background="#FFFFFF"
@@ -21,6 +22,7 @@
             android:id="@+id/eText_modify_pw1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
             android:hint="현재 비밀번호"
             android:inputType="textPassword"
             android:lines="1"
@@ -36,6 +38,7 @@
             android:id="@+id/eText_modify_pw2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
             android:hint="변경할 비밀번호"
             android:inputType="textPassword"
             android:lines="1"

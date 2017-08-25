@@ -75,13 +75,20 @@ public class Activity_User_Login extends AppCompatActivity {
     }
 
     public void onClick_login(View view) {
-        GlobalData.hideKeyboard(imm, view);
-        try {
-            sId = binding_userLogin.eTextLoginId.getText().toString();
-            sPw = binding_userLogin.eTextLoginPw.getText().toString();
-        } catch (NullPointerException e) {
-            Log.e("onClick_login Error :", e.getMessage());
-        }
+        sId = binding_userLogin.eTextLoginId.getText().toString();
+        sPw = binding_userLogin.eTextLoginPw.getText().toString();
+
+        if (sId.equals("") || sPw.equals("")) {
+            if (sId.equals("")) {
+                binding_userLogin.eTextLoginId.setHint("아이디를 입력하세요");
+                binding_userLogin.eTextLoginId.requestFocus();
+                GlobalData.showKeyboard(imm);
+            } else if (sPw.equals("")) {
+                binding_userLogin.eTextLoginId.setHint("비밀번호를 입력하세요");
+                binding_userLogin.eTextLoginId.requestFocus();
+                GlobalData.showKeyboard(imm);
+            }
+        } // 공백 체크
 
         loginDB = new LoginDB();
         getUserInfo = new GetUserInfo();
@@ -268,7 +275,7 @@ public class Activity_User_Login extends AppCompatActivity {
         } catch (Exception e) {
             Log.e("name not found", e.toString());
         }
-    }
+    } // 키해시값 얻기
 
     @Override
     protected void onDestroy() {

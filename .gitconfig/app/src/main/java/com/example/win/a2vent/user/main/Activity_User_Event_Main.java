@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -47,16 +46,7 @@ import java.util.ArrayList;
  */
 
 public class Activity_User_Event_Main extends AppCompatActivity {
-    private String TAG = "테스트";
-    private final String TAG_JSON = "Event";
-    private final String TAG_NUM = "event_number";
-    private final String TAG_NAME = "event_name";
-    private final String TAG_CONTENT = "event_content";
-    private final String TAG_CATEGORY = "com_category";
-    private final String TAG_PRICE = "event_price";
-    private final String TAG_DISPRICE = "event_dis_price";
-    private final String TAG_STARTDAY = "event_startday";
-    private final String TAG_ENDDAY = "event_endday";
+    private String TAG = "Main";
 
     private boolean flagRegisterReceiver = false;
     private long backKeyPressedTime = 0;
@@ -281,7 +271,7 @@ public class Activity_User_Event_Main extends AppCompatActivity {
 
         try {
             JSONObject jsonObject = new JSONObject(result);
-            JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+            JSONArray jsonArray = jsonObject.getJSONArray("Event");
             JSONObject jsonObject2 = new JSONObject(value);
             JSONArray jsonArray2 = jsonObject2.getJSONArray("EventMainImage");
 
@@ -289,14 +279,14 @@ public class Activity_User_Event_Main extends AppCompatActivity {
                 JSONObject item = jsonArray.getJSONObject(i);
                 JSONObject item2 = jsonArray2.getJSONObject(i);
 
-                int event_number = item.getInt(TAG_NUM);
-                String event_name = item.getString(TAG_NAME);
-                String event_content = item.getString(TAG_CONTENT);
-                int com_category = item.getInt(TAG_CATEGORY);
-                String event_price = item.getString(TAG_PRICE);
-                String event_dis_price = item.getString(TAG_DISPRICE);
-                String event_startday = item.getString(TAG_STARTDAY);
-                String event_endday = item.getString(TAG_ENDDAY);
+                int event_number = item.getInt("event_number");
+                String event_name = item.getString("event_name");
+                String event_content = item.getString("event_content");
+                int com_category = item.getInt("com_category");
+                String event_price = item.getString("event_price");
+                String event_dis_price = item.getString("event_dis_price");
+                String event_startday = item.getString("event_startday");
+                String event_endday = item.getString("event_endday");
                 String event_URI = item2.getString("event_URI");
 
                 // 전체 항목에는 모두 저장

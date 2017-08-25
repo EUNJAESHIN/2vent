@@ -5,11 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
-import android.os.Vibrator;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.example.win.a2vent.user.account.Activity_User_Login;
@@ -25,19 +25,26 @@ import com.example.win.a2vent.databinding.ActivityUserInfoModifyBinding;
 public class Activity_User_Info_Modify extends Activity {
 
     ActivityUserInfoModifyBinding binding_UserInfoModify;
-    Vibrator vibe;
     String pw1, pw2;
     ModifyPW modifyPW;
+    InputMethodManager imm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Activity_User_Login.actList.add(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         binding_UserInfoModify = DataBindingUtil.setContentView(this, R.layout.activity_user_info_modify);
         this.setFinishOnTouchOutside(false); // 다이얼로그 액티비티 외부 터치시 finish false
 
+        imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        binding_UserInfoModify.layoutModify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GlobalData.hideKeyboard(imm, v);
+            }
+        }); // 빈화면 터치시 키보드 내림
     }
 
     public void onClick_ModifyDone(View v) {
@@ -54,23 +61,27 @@ public class Activity_User_Info_Modify extends Activity {
                 !binding_UserInfoModify.eTextModifyPw1.getText().toString().equals("")) {
             binding_UserInfoModify.eTextModifyPw1.setText("");
             binding_UserInfoModify.eTextModifyPw1.setHint("현재 비밀번호가 일치하지 않음");
-            vibe.vibrate(150);
+            binding_UserInfoModify.eTextModifyPw1.requestFocus();
+            GlobalData.showKeyboard(imm);
         } else if (pw1.equals(GlobalData.getUserPW()) && pw2.equals(GlobalData.getUserPW())) {
             binding_UserInfoModify.eTextModifyPw2.setText("");
             binding_UserInfoModify.eTextModifyPw2.setHint("바꿀 비밀번호가 현재 비밀번호와 같음");
-            vibe.vibrate(150);
+            binding_UserInfoModify.eTextModifyPw2.requestFocus();
+            GlobalData.showKeyboard(imm);
         } else if (!pw1.equals(GlobalData.getUserPW()) &&
                 binding_UserInfoModify.eTextModifyPw1.getText().toString().equals("")) {
             binding_UserInfoModify.eTextModifyPw1.setText("");
             binding_UserInfoModify.eTextModifyPw1.setHint("현재 비밀번호 미입력");
-            vibe.vibrate(150);
+            binding_UserInfoModify.eTextModifyPw1.requestFocus();
+            GlobalData.showKeyboard(imm);
         } else if (pw1.equals(GlobalData.getUserPW()) && !pw2.equals(GlobalData.getUserPW())
                 && binding_UserInfoModify.eTextModifyPw2.getText().toString().equals("")) {
             binding_UserInfoModify.eTextModifyPw2.setText("");
             binding_UserInfoModify.eTextModifyPw2.setHint("변경할 비밀번호 미입력");
-            vibe.vibrate(150);
+            binding_UserInfoModify.eTextModifyPw2.requestFocus();
+            GlobalData.showKeyboard(imm);
         }
-    } // 비밀번호 변경
+    } // 비밀번호 수정 버튼
 
     public void onClick_ModifyCancel(View v) {
         this.finish();
