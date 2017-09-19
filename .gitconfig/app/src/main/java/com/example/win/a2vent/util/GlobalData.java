@@ -72,7 +72,12 @@ public class GlobalData {
 
     public static void hideKeyboard(InputMethodManager imm, View v) {
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        /*
+        InputMethodManager inputManager =
+                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+        */
     } // 키보드 내림
 
     public static void showKeyboard(InputMethodManager imm) {
