@@ -12,7 +12,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class GlobalData {
     //private final static String URL = "http://121.151.63.53:8080/EventApp/";
-    private final static String URL = "http://192.168.0.16/EventApp/";
+    private final static String URL = "http://192.168.0.16:8080/EventApp/";
     public final static String OWNER_MAIN_RECEIVER = "com.example.win.a2vent.OwnerEventMainReceiver";
     public final static String USER_MAIN_RECEIVER = "com.example.win.a2vent.UserEventMainReceiver";
     public final static String GET_URI_RECEIVER = "com.example.win.a2vent.GetURI_Receiver";
