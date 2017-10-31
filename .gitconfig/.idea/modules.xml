@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.gitconfig.iml" filepath="$PROJECT_DIR$/.gitconfig.iml" />
+      <module fileurl="file://C:\Users\admin\Documents\GitHub\2vent\.gitconfig\.gitconfig.iml" filepath="C:\Users\admin\Documents\GitHub\2vent\.gitconfig\.gitconfig.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\admin\Documents\GitHub\2vent\.gitconfig\app\app.iml" filepath="C:\Users\admin\Documents\GitHub\2vent\.gitconfig\app\app.iml" />
     </modules>
   </component>
 </project>
